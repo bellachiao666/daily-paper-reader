@@ -128,6 +128,7 @@
           var link = document.createElement('link');
           link.rel = 'preload';
           link.as = 'fetch';
+          link.crossOrigin = 'anonymous';
           link.href = url;
           link.setAttribute('data-dpr-docsify-preload', '1');
           document.head.appendChild(link);
