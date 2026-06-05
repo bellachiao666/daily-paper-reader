@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "extractor": "papercropper",
+  "figures": [
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-001.webp",
+      "caption": "",
+      "page": 0,
+      "index": 1,
+      "width": 1067,
+      "height": 800,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-002.webp",
+      "caption": "",
+      "page": 0,
+      "index": 2,
+      "width": 1767,
+      "height": 645,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-003.webp",
+      "caption": "",
+      "page": 0,
+      "index": 3,
+      "width": 1521,
+      "height": 531,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-004.webp",
+      "caption": "",
+      "page": 0,
+      "index": 4,
+      "width": 413,
+      "height": 304,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-005.webp",
+      "caption": "",
+      "page": 0,
+      "index": 5,
+      "width": 675,
+      "height": 337,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-006.webp",
+      "caption": "",
+      "page": 0,
+      "index": 6,
+      "width": 747,
+      "height": 439,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-007.webp",
+      "caption": "",
+      "page": 0,
+      "index": 7,
+      "width": 859,
+      "height": 385,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-008.webp",
+      "caption": "",
+      "page": 0,
+      "index": 8,
+      "width": 509,
+      "height": 374,
+      "label": "Figure"
+    },
+    {
+      "url": "assets/figures/openreview/openreview-icml-2025-cbtsxtjqek/fig-009.webp",
+      "caption": "",
+      "page": 0,
+      "index": 9,
+      "width": 513,
+      "height": 373,
+      "label": "Figure"
+    }
+  ]
+}

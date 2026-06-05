@@ -1,0 +1,8120 @@
+Title: Incentivize without Bonus: Provably Efficient Model-based  Online Multi-agent RL for Markov Games
+
+URL Source: https://openreview.net/pdf?id=ciUHD7jcT9
+
+Number of Pages: 41
+
+Markdown Content:
+# Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Tong Yang 1 Bo Dai 2 Lin Xiao 3 Yuejie Chi 1 3 
+
+## Abstract 
+
+Multi-agent reinforcement learning (MARL) lies at the heart of a plethora of applications involving the interaction of a group of agents in a shared unknown environment. A prominent framework for studying MARL is Markov games, with the goal of finding various notions of equilibria in a sample-efficient manner, such as the Nash equi-librium (NE) and the coarse correlated equilib-rium (CCE). However, existing sample-efficient approaches either require tailored uncertainty es-timation under function approximation, or careful coordination of the players. In this paper, we pro-pose a novel model-based algorithm, called VMG ,that incentivizes exploration via biasing the em-pirical estimate of the model parameters towards those with a higher collective best-response values of all the players when fixing the other players’ policies, thus encouraging the policy to deviate from its current equilibrium for more exploration. 
+
+VMG is oblivious to different forms of function approximation, and permits simultaneous and un-coupled policy updates of all players. Theoret-ically, we also establish that VMG achieves a near-optimal regret for finding both the NEs of two-player zero-sum Markov games and CCEs of multi-player general-sum Markov games under linear function approximation in an online envi-ronment, which nearly match their counterparts with sophisticated uncertainty quantification.       
+
+> 1Department of Electrical and Computer Engineering, Carnegie Mellon University, Pittsburgh, PA, USA 2School of Computa-tional Science and Engineering, Georgia Institute of Technology, Atlanta, GA, USA 3Meta AI. Correspondence to: Yuejie Chi
+> <ychi@meta.com >.
+> Proceedings of the 42 nd International Conference on Machine Learning , Vancouver, Canada. PMLR 267, 2025. Copyright 2025 by the author(s).
+
+## 1. Introduction 
+
+Multi-agent reinforcement learning (MARL) is emerging as a crucial paradigm for solving complex decision-making problems in various domains, including robotics, game the-ory, and machine learning (Busoniu et al., 2008). While single-agent reinforcement learning (RL) has been exten-sively studied and theoretically analyzed, MARL is still in its infancy, and many fundamental questions remain unan-swered. Due to the interplay of multiple agents in an un-known environment, one of the key challenges is the design of efficient strategies for exploration that can be seamlessly implemented in the presence of a large number of agents 1
+
+without the need of complicated coordination among the agents. In addition, due to the large dimensionality of the state and action spaces, which grows exponentially with respect to the number of agents in MARL, it necessitate the adoption of function approximation to enable tractable planning in modern RL regimes. A de facto approach in exploration in RL is the principle of optimism in the face of uncertainty (Lai, 1987), which argues the importance of quantifying the uncertainty, known as the bonus term, in the pertinent objects, e.g., the value functions, and using their upper confidence bound (UCB) to guide action selection. This principle has been embraced in the MARL literature, leading a flurry of algorithmic devel-opments (Liu et al., 2021; Bai et al., 2021; Song et al., 2021; Jin et al., 2021; Li et al., 2022; Ni et al., 2022; Cui et al., 2023; Wang et al., 2023; Dai et al., 2024) that claim prov-able efficiency in solving Markov games (Littman, 1994), a standard model for MARL. However, a major downside of this approach is that constructing the uncertainty sets quickly becomes intractable as the complexity of function approximation increases, which often requiring a tailored approach. For example, near-optimal techniques for con-structing the bonus function in the tabular setting cannot be applied for general function approximation using neural networks. Therefore, it is of great interest to explore alternative ex-ploration strategies without resorting to explicit uncertainty 
+
+> 1In this paper, we use the term agent and player interchange-ably.
+
+1Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+quantification, and can be adopted even for general func-tion approximation. Our work is inspired by the pioneer-ing work of Kumar & Becker (1982), which identified the need to regularize the maximum-likelihood estimator of the model parameters using its optimal value function to incentivize exploration, and has been successfully applied to bandits and single-agent RL problems (Liu et al., 2020; Hung et al., 2021; Mete et al., 2021; Liu et al., 2024) with matching performance of their UCB counterparts. However, this strategy of value-incentivized exploration has not yet been fully realized in the Markov game setting; a few re-cent attempts (Liu et al., 2024; Xiong et al., 2024) made progress in establishing its statistical efficiency but fell short in designing computationally tractable algorithms. These limitations motivate the development of computationally efficient algorithms for the general MARL setting while enabling symmetric and independent updates of the players. We address the following question: 
+
+Can we develop provably efficient algorithms for online multi-player general-sum Markov games with function approximation using value-incentivized exploration? 
+
+1.1. Contribution 
+
+In this paper, we propose a provably-efficient model-based framework, named VMG (Value-incentivized Markov Game solver ), for solving online multi-player general-sum Markov games with function approximation. VMG incentivizes ex-ploration via biasing the empirical estimate of the model parameters towards those with a higher collective best-response values of all the players when fixing the other players’ policies, thus encouraging the policy to deviate from the equilibrium of the current model estimate for more exploration. This approach is oblivious to different forms of function approximation, bypassing the need of design-ing tailored bonus functions to quantity the uncertainty in standard approaches. VMG also permits simultaneous and uncoupled policy updates of all players, making it more suitable when the number of players scales. Theoretically, we also establish that VMG achieves a near-optimal regret for a number of game-theoretic settings under linear func-tion approximation, which are on par to their counterparts requiring explicit uncertainty quantification. Specifically, our main results are as follows. • For two-player zero-sum matrix games, VMG achieves a near-optimal regret on the order of eO(d√T ),2 where 
+
+d is the dimension of the feature space and T is the number of iterations for model updates. This translates to a sample complexity of eO(d2/ε 2) for finding an 
+
+ε-optimal NE in terms of the duality gap.   
+
+> 2The notation eO(·)hides logarithmic factors in the standard order-wise notation.
+
+• For finite-horizon multi-player general-sum Markov games, under the linear mixture model of the transi-tion kernel, VMG achieves a near-optimal regret on the order of eO(d√H3T ), where H is the horizon length, and T is the number of iterations for model updates. This translates to a near-optimal — up to a factor of H — complexity of eO(N d 2H4/ε 2) samples or eO(N d 2H3/ε 2) trajectories for finding an ε-optimal CCE in terms of the optimality gap, which is also appli-cable to finding ε-optimal NE for two-player zero-sum Markov games. We also extend VMG to the infinite-horizon setting, which achieves a sample complexity of eO(N d 2/((1 − γ)4ε2)) to achieve ε-optimality. • The unified framework of VMG allows its reduction to important special cases such as symmetric matrix games, linear bandits and single-agent RL, which not only recovers the existing reward-biased MLE frame-work but also discovers new formulation that might be of independent interest. 
+
+1.2. Related work 
+
+We discuss a few threads of related work, focusing on those with theoretical guarantees. 
+
+Two-player matrix games. Finding the equilibrium of two-player zero-sum matrix games has been studied extensively in the literature, e.g., Mertikopoulos et al. (2018); Shapley (1953); Daskalakis & Panageas (2018); Wei et al. (2020), where faster last-iterate linear convergence is achieved in the presence of KL regularization (Cen et al., 2021; Zhan et al., 2023). Many of the proposed algorithms focus on the tabu-lar setting with full information, where the expected returns in each iteration can be computed exactly when the payoff matrix is given. More pertinent to our work, O’Donoghue et al. (2021) considered matrix games with bandit feedback under the tabular setting, where only a noisy payoff from the players’ actions is observed at each round, and proposed to estimate the payoff matrix using the upper confidence bounds (UCB) in an entry-wise manner (Lai, 1987; Boun-effouf, 2016), as well as K-learning (O’Donoghue, 2021) that is akin to Thompson sampling (Russo et al., 2018). Our work goes beyond the tabular setting, and proposes an alter-native to UCB-based exploration that work seamlessly with different forms of function approximation. 
+
+Multi-player general-sum Markov games. General-sum Markov games are an important class of multi-agent RL (MARL) problems (Littman, 1994), and a line of recent works (Liu et al., 2021; Bai et al., 2021; Mao & Ba s¸ ar, 2023; Song et al., 2021; Jin et al., 2021; Li et al., 2022; Sessa et al., 2022) studied the non-asymptotic sample complex-ity for learning various equilibria in general-sum Markov games for the tabular setting under different data generation mechanisms. These works again rely heavily on carefully 2Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+constructing confidence bounds of the value estimates to guide data collection and obtain tight sample complexity bounds. In addition, policy optimization algorithms have also been developed assuming full information of the under-lying Markov games, e.g., Erez et al. (2023); Zhang et al. (2022); Cen et al. (2023). 
+
+MARL with linear function approximation. Modern MARL problems often involve large state and action spaces, and thus require function approximation to generalize from limited data. Most theoretical results focus on linear func-tion approximation, where the transition kernel, reward or value functions are assumed to be linear functions of some known feature maps. The linear mixture model of the tran-sition kernel considered herein follows a line of existing works in both single-agent and multi-agent settings, e.g., Ayoub et al. (2020); Chen et al. (2022); Modi et al. (2020); Jia et al. (2020); Chen et al. (2022); Liu et al. (2024), which is subtly different from another popular linear model (Jin et al., 2020; Wang et al., 2019; Yang & Wang, 2019; Xie et al., 2020), and these two models are not mutually ex-clusive in general (Chen et al., 2022). Moreover, Ni et al. (2022); Huang et al. (2022) considered general function ap-proximation and Cui et al. (2023); Wang et al. (2023); Dai et al. (2024) considered independent function approxima-tion to allow more expressive function classes that lead to stronger statistical guarantees, which usually require solving complicated constrained optimization problems to construct the bonus functions. 
+
+Exploration in online RL. Uncertainty estimation is crucial for efficient exploration in online RL. Common approaches are constructing the confidence set of the model parameters based on the observed data, which have been demonstrated to be provably near-optimal in the tabular and linear func-tion approximation settings (Jin et al., 2018; Agarwal et al., 2023) but have limited success in the presence of func-tion approximation in practice (Gawlikowski et al., 2023). Thompson sampling provides an alternative approach to ex-ploration by maintaining a posterior distribution over model parameters and sampling from this distribution to make decisions, which however becomes generally intractable un-der complex function approximation schemes (Russo et al., 2018). Zhang (2022) proposed feel-good Thompson sam-pling that biases towards models with higher optimal values, which is developed further for solving general RL problems in Zhong et al. (2022); Agarwal & Zhang (2022), to name a few. 
+
+Exploration via optimization. Our approach draws inspira-tion from the reward-biased maximum likelihood estimation framework, originally proposed by Kumar & Becker (1982), which has been recently adopted in the context of bandits (Liu et al., 2020; Hung et al., 2021; Cen et al., 2024) and single-agent RL (Mete et al., 2021; Liu et al., 2024; Yang et al., 2025). Liu et al. (2024) proposed an algorithm for two-player zero-sum Markov games, however, it requires asymmetric updates and solving bilevel optimization prob-lems with the lower level problem being a Markov game itself. Xiong et al. (2024) tackled the general-sum multi-player Markov game setting, however, the proposed algo-rithm therein is generally computationally intractable. Our work, in contrast, highlights a computationally-efficient al-gorithm for the general multi-player game-theoretic setting, which not only recovers but leads to new formulations for the single-agent setting. Last but not least, Foster et al. (2023); Chen et al. (2025) extended the seminal framework of decision-estimation coefficient (DEC) (Foster et al., 2021) to MARL, however the algorithms proposed therein are com-putationally expensive, due to the presence of minimax and constrained optimization subroutines. 
+
+1.3. Paper organization and notation 
+
+The rest of this paper is organized as follows. Section 2 stud-ies two-player zero-sum matrix games, Section 3 focuses on episodic multi-player general-sum Markov games, and we conclude in Section 4. The proofs as well as the extension to the infinite-horizon setting are deferred to the appendix. 
+
+Notation. We let [n] denote the index set {1, . . . , n }. Let 
+
+In denote the n × n identity matrix, and inner product in Euclidean space Rn by ⟨· , ·⟩ . We let ∆n denote the 
+
+n-dimensional simplex, i.e., ∆n = {x ∈ Rn : x ≥
+
+0, Pni=1 xi = 1 }. For any x ∈ Rn, we let ∥x∥p denote the ℓp norm of x, ∀p ∈ [1 , ∞]. We let Bd
+
+> 2
+
+(R) denote the d-dimensional ℓ2 ball of radius R. The Kullback-Leibler (KL) divergence between two distributions P and Q is denoted as KL (P ∥Q) := P 
+
+> x
+
+P (x) log P (x) 
+
+> Q(x)
+
+.
+
+## 2. Two-Player Zero-Sum Matrix Games 
+
+In this section, we start with a simple setting of two-player zero-sum matrix games, to develop our algorithmic frame-work. 
+
+2.1. Problem setting Two-player zero-sum matrix game. We consider the (pos-sibly KL-regularized) two-player zero-sum matrix games with the following objective: 
+
+max  
+
+> μ∈∆m
+
+min  
+
+> ν∈∆n
+
+f μ,ν (A) (1) 
+
+:= μ⊤Aν − βKL (μ∥μref ) + βKL (ν∥νref ) ,
+
+where A ∈ Rm×n is the payoff matrix, μ ∈ ∆m and 
+
+μref ∈ ∆m (resp. ν ∈ ∆n and νref ∈ ∆n) are the pol-icy and reference policy for the max (resp. min) player, 3Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+and β ≥ 0 is the regularization parameter. 3 Here, the refer-ence policies can be used to incorporate prior knowledge or preference of the game; when the reference policies are uni-form distributions, the KL regularization becomes entropy regularization, which are studied in, e.g., Cen et al. (2021). 
+
+Nash equilibrium. The policy pair (μ⋆, ν ⋆) corresponding to the solution to the saddle-point problem (1) represents a desirable state of the game, where both players perform their (regularized) best-response strategies against the other player, so that no players will unitarily deviate from its current policy. Specifically, the policy pair (μ⋆, ν ⋆) satisfies 
+
+∀(μ, ν ) ∈ ∆m×∆n : f μ,ν ⋆
+
+(A) ≤ f μ⋆,ν ⋆
+
+(A) ≤ f μ⋆,ν (A),
+
+and is called the Nash equilibrium (NE) of the matrix game (Nash, 1950). 4
+
+Noisy bandit feedback. We are interested in learning the NE when the payoff matrix A is unknown and can only be accessed through a stochastic oracle. Specifically, for any 
+
+i ∈ [m] and j ∈ [n], we can query the entry A(i, j ), and receive a noisy feedback bA(i, j ) of A(i, j ) from an oracle, i.e., 
+
+bA(i, j ) = A(i, j ) + ξ, (2) where the noise ξ is an i.i.d. zero-mean random variable across different queries. Each of the collected data tuple is thus in the form of (i, j, bA(i, j )) .
+
+Goal: regret minimization. Our goal is to design an easy-to-implement framework that can find the approximate NE of the matrix game (1) with as few queries as possible to the stochastic oracle in a sequential manner. To begin, we define the following 
+
+f ⋆,ν (A) := max 
+
+> μ∈∆m
+
+f μ,ν (A), f μ,⋆ (A) := min  
+
+> ν∈∆n
+
+f μ,ν (A),
+
+and f ⋆(A) := max  
+
+> μ∈∆m
+
+min  
+
+> ν∈∆n
+
+f μ,ν (A) (3) for any payoff matrix A. The duality gap of the matrix game (1) at a policy pair (μ, ν ) is defined as 
+
+DualGap (μ, ν ) := f ⋆,ν (A) − f μ,⋆ (A), (4) where it is evident that DualGap (μ⋆, ν ⋆) = 0 . A policy pair (μ, ν ) is called an ε-approximate NE (abbreviated as 
+
+ϵ-NE) of the matrix game (1) if DualGap (μ, ν ) ≤ ε.In an online setting, given a sequence of policy updates 
+
+{(μt, ν t)}t=1 ,...,T over T rounds, a common performance         
+
+> 3For simplicity, we set the same regularization parameter for both players; our analysis continues to hold with different regular-ization parameters β1and β2for each player.
+> 4We note that under entropy regularization, the equilibrium is also known as the quantal response equilibrium (QRE) (McKelvey & Palfrey, 1995) when β > 0.
+
+metric is the cumulative regret, defined as 
+
+Regret (T ) := 
+
+> T
+
+X
+
+> t=1
+
+DualGap (μt, ν t)=
+
+> T
+
+X
+
+> t=1
+
+(f ⋆,ν t (A) − f ⋆(A)) 
+
+| {z }
+
+> regret for min-player
+
++
+
+> T
+
+X
+
+> t=1
+
+(f ⋆(A) − f μt,⋆ (A)) 
+
+| {z }
+
+> regret for max-player
+
+,
+
+(5) which encapsulates the regret from both players. Our goal is to achieve a sublinear, and ideally near-optimal, regret with respect to the number of rounds T , by carefully balancing the trade-off between exploration and exploitation, even under function approximation of the model class. 
+
+2.2. Algorithm development 
+
+We propose a model-based approach, called VMG , that enables provably efficient exploration-exploitation trade-off via resorting to a carefully-regularized model (i.e., the payoff matrix) estimator without constructing uncertainty intervals. To enable function approximation, we parameter-ize the payoff matrix by Aω ∈ Rm×n, where ω ∈ Ω ⊂ Rd
+
+is some vector in the parameter space Ω.The proposed approach, on a high level, alternates between updating the payoff matrix based on all the samples col-lected so far, and collecting new samples using the updated policies. Let’s elaborate a bit further. At each round t, let the current payoff matrix estimate be Aωt−1 , and its corre-sponding NE be (μt, ν t).• Value-incentivized model updates. Given all the col-lected data tuples Dt−1 and the policy pair (μt, ν t),
+
+VMG updates the model parameter ωt via solving a regularized least-squares estimation problem as (7) , fa-voring models that minimizes the squared loss between the model and the noisy feedback stored in Dt−1, and 
+
+maximizes the value of each player when the other player’s strategy is fixed. In other words, the regulariza-tion term aims to maximize the duality gap at (μt, ν t),which tries to pull the model away from its current estimate At−1, whose duality gap is 0 at (μt, ν t). The regularized estimator thus strikes a balance of exploita-tion (via least-squares on Dt−1) and exploration (via regularization against the current model Aωt−1 ). • Data collection from best-response policy updates. Us-ing the updated payoff matrix Aωt , VMG updates the best-response policy of each player while fixing the policy of the other player via (8) , resulting in policy pairs (eμt, ν t) and (μt, eνt). Finally, VMG collects one new sample from each of the policy pairs respectively following the oracle (2) , and add them to the dataset 
+
+Dt−1 to form Dt.4Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+The complete procedure of VMG is summarized in Algo-rithm 1. VMG invokes the mechanism of regularization as a means for incentivizing exploration, rendering it more amenable to implement in the presence of function approx-imation. In contrast, prior approach (O’Donoghue et al., 2021) heavily relies on explicitly adding an exploration bonus to the estimate of the payoff matrix using confidence intervals, which is challenging to construct under general function approximation. In addition, VMG allows parallel and independent policy execution from both players. 
+
+Algorithm 1 Value-incentivized Online Matrix Game (VMG )
+
+1: Input: initial parameter ω0, regularization coefficient 
+
+α > 0, iteration number T .
+
+2: Initialization: dataset D0 := ∅.
+
+3: for t = 1 , · · · , T do 
+
+4: Compute the Nash equilibrium (μt, ν t) of the matrix game with the current parameter ωt−1:
+
+μt = arg max 
+
+> μ∈∆m
+
+min  
+
+> ν∈∆n
+
+f μ,ν (Aωt−1 ),νt = arg min 
+
+> ν∈∆n
+
+max  
+
+> μ∈∆m
+
+f μ,ν (Aωt−1 ). (6) 
+
+5: Model update: Update the parameter ωt by minimiz-ing the following objective: 
+
+ωt = arg min 
+
+> ω∈Ω
+
+X 
+
+> (i,j, bA(i,j )) ∈D t−1
+
+
+
+Aω (i, j ) − bA(i, j )
+
+2
+
+−αf ⋆,ν t (Aω ) + αf μt,⋆ (Aω )
+
+| {z }
+
+> value-incentivized reg.
+
+. (7) 
+
+6: Compute eμt and eνt by solving the following opti-mization problems: 
+
+eμt = arg max 
+
+> μ∈∆m
+
+f μ,ν t (Aωt ),
+
+eνt = arg min 
+
+> ν∈∆n
+
+f μt,ν (Aωt ). (8) 
+
+7: Data collection: Sample (it, j t) ∼ (eμt, ν t)
+
+and (i′
+
+> t
+
+, j ′
+
+> t
+
+) ∼ (μt, eνt) and get the noisy feed-back bA(it, j t) and bA(i′
+
+> t
+
+, j ′
+
+> t
+
+) following the ora-cle (2) . Update the dataset Dt = Dt−1 ∪n
+
+(it, j t, bA(it, j t)) , (i′
+
+> t
+
+, j ′
+
+> t
+
+, bA(i′
+
+> t
+
+, j ′
+
+> t
+
+)) 
+
+o
+
+.
+
+8: end for The benefit of regularization. While VMG is agnostic to the power of KL regularization in (1) , the major benefit of regularization comes in terms of computational efficiency. When the KL regularization parameter β > 0, common first-order game solvers such as mirror descent ascent (Sokota et al., 2022) or policy extragradient (Cen et al., 2021; 2023) methods achieve a last-iterate linear convergence rate when solving the matrix game (6) . Turning to the model update, when β > 0, the regularization term in (7) can be computed in closed form: 
+
+− f ⋆,ν t (Aω ) + f μt,⋆ (Aω )= −β
+
+"
+
+log 
+
+> n
+
+X
+
+> i=1
+
+μref ,i exp 
+
+ Aω (i, :) νt
+
+β
+
+!
+
++ log 
+
+> m
+
+X
+
+> j=1
+
+νref ,j exp 
+
+
+
+− μ⊤ 
+
+> t
+
+Aω (: , j )
+
+β
+
+ !# 
+
++ C, (9) where μref ,i (resp. νref ,j ) is the i-th (resp. j-th) entry of 
+
+μref (resp. νref ), Aω (i, :) (resp. Aω (: , j )) is the i-th row (resp. j-th column) of Aω , and C is a constant that does not depend on Aω . Leveraging the closed-form expression, one can bypass solving a bi-level optimization problem (7) on its surface, but resorts to more efficient first-order methods. Last but not least, the policies eμt and eνt in (8) can be computed in closed form as well: 
+
+eμt,i ∝ μref ,i exp 
+
+ Aωt (i, :) νt
+
+β
+
+
+
+, (10) 
+
+eνt,j ∝ νref ,j exp 
+
+
+
+− μ⊤ 
+
+> t
+
+Aωt (: , j )
+
+β
+
+
+
+, ∀i ∈ [m], j ∈ [n].
+
+The case of symmetric payoff. One important special class of matrix games is the symmetric matrix game (Cheng et al., 2004), with A = −A⊤, μref = νref , and m = n. Many well-known games are symmetric, from classic games like rock-paper-scissors to the recent example of LLM align-ment (Munos et al., 2023; Swamy et al., 2024; Yang et al., 2024b). For a symmetric matrix game, it admits a symmetric Nash (μ⋆, μ ⋆), and Algorithm 1 reduces to a single-player algorithm by only tracking a single policy μt, recognizing 
+
+μt = νt and eμt = eνt due to f μ,ν (A) = −f ν,μ (A). In addition, VMG only needs to collect one sample from the policy pair (eμt, μ t) in each iteration. This is particularly desirable when the policy is expensive to store and update, such as large-scale neural networks or LLMs. 
+
+Reduction to the bandit case. By setting the action space of the min player to n = 1 , VMG seamlessly re-duces to the bandit setting, where the payoff matrix be-comes a reward vector A ∈ Rm. Here, we let f μ(A) = 
+
+μ⊤A − βKL (μ∥μref ) and f ⋆(A) := max μ∈∆m f μ(A). In-terestingly, to encourage exploration, the regularization term favors a reward estimate that maximizes its regret 
+
+f ⋆(Aω ) − f μt (Aω ) on the current policy μt, which is differ-ent from the reward-biasing framework that only regularizes against f ⋆(Aω ) (Cen et al., 2024; Liu et al., 2020; Xie et al., 2024). 5Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+2.3. Theoretical guarantee 
+
+We demonstrate that VMG achieves near-optimal regret, assuming linear function approximation of the payoff matrix. Specifically, we have the following assumption. 
+
+Assumption 2.1 (Linear function approximation) . The pay-off matrix is parameterized as 
+
+Aω (i, j ) := ϕ(i, j )⊤ω, ∀i ∈ [m], j ∈ [n], (11) where ω ∈ Ω ⊂ Rd is the parameter vector and ϕ(i, j ) ∈ Rd
+
+is the feature vector for the (i, j )-th entry. Here, the feature vectors are known and fixed, and satisfy ∥ϕ(i, j )∥2 ≤ 1
+
+for all i ∈ [m] and j ∈ [n]. For all ω ∈ Ω, we suppose 
+
+∥ω∥2 ≤ √d and ∥Aω ∥∞ ≤ Bl for some Bl > 0.We also assume that the linear function class is expressive enough to describe the true payoff matrix A.
+
+Assumption 2.2 (realizability) . There exists ω⋆ ∈ Ω such that Aω⋆ = A.Next, we impose the noise follows standard sub-Gaussian distribution. 
+
+Assumption 2.3 (i.i.d. sub-Gaussian noise) . The noise ξ in (2) are i.i.d. mean-zero sub-Gaussian random variables with sub-Gaussian parameter σ > 0.
+
+Regret guarantee. The following theorem states the regret bound of VMG under appropriate choice of the regulariza-tion parameter. 
+
+Theorem 2.4. Suppose Assumptions 2.1, 2.2 and 2.3 hold. Let δ ∈ (0 , 1) , setting the regularization coefficient α as 
+
+α =
+
+s
+
+Td log  1 + ( T /d )3/2 (log(4 T /δ ) + d log( dT )) ,
+
+(12) 
+
+then for any β ≥ 0, with any initial parameter ω0 and reference policies μref and νref , we have with probability at least 1 − δ,      
+
+> Regret (T) = O
+> 
+> Bl
+> 
+> Bl+σp2 log(8 T /δ )
+> 
+> dpTlog( dT )
+> 
+> (13)
+
+for all T ∈ N+.
+
+The proof of Theorem 2.4 is deferred to Appendix B.2. Theorem 2.4 establishes that by setting α on the order of 
+
+eO √T , with high probability, the regret of VMG is no larger than an order of 
+
+eO
+
+
+
+d√T
+
+
+
+,
+
+assuming the payoff matrix and the noise σ are well-bounded. In particular, when reduced to the linear bandit setting, this matches with the lower bound Ω( d√T ) estab-lished in Dani et al. (2008), suggesting the near-optimality of our result. In addition, since min t∈[T ] DualGap (μt, ν t) ≤
+
+Regret (T )/T , VMG is guaranteed to find an ε-NE of the matrix game (1) for any ε > 0 within eO  d2/ε 2 samples. 
+
+## 3. Multi-player General-sum Markov Games 
+
+We now turn to the more challenging setting of online multi-player general-sum Markov games, which includes the two-player zero-sum Markov game as a special case. 
+
+3.1. Problem setting Multi-player general-sum Markov game. We consider an N -player general-sum episodic Markov game with a finite horizon denoted as MP := ( S, A, P, r, H ), where S
+
+is the state space, A := A1 × · · · × A N := QNn=1 An is the joint action space for all players, with An the action space of player n, and H ∈ N+ is the horizon length. Let 
+
+∆( S) and ∆( A) denote the set of probability distributions over S and A, respectively. P = {Ph}h∈[H] with Ph :
+
+S × A → ∆( S) is the inhomogeneous transition kernel: at step h, the probability of transitioning from state s to state s′ by the action a = ( a1, · · · , a n) is Ph(s′|s, a). r =
+
+{rnh }h∈[H],n ∈[N ] stands for the reward function with rnh :
+
+S × A → [0 , 1] the reward of the n-th player at step h.
+
+Markov policies. In this paper, we focus on the class of Markov policies, where the policy of each player depends only on the current state, without dependence on the history. We let πn : S × [H] → ∆( A) denote the policy of player n,and πnh (·| s) ∈ ∆( An) denotes the probability distribution of the action of player n at step h given any state s. We let π = ( π1, · · · , π N ) : S × [H] → ∆( A) denote the joint Markov policy (we assume all policies appear in this paper are Markovian, and we let joint policy stands for joint Markov policy), where πh(·| s) := ( π1
+
+> h
+
+, · · · , π Nh )( ·| s) ∈
+
+∆( A) for all s ∈ S and h ∈ [H]. For any joint policy 
+
+π, we let π−n denote the joint policy excluding player n.With a slight abuse of notation, we write π = ( πn, π−n).In addition, a joint policy π is called a product policy if 
+
+π1, · · · , π N are executed independently, i.e., under policy 
+
+π, each player takes actions independently. We denote 
+
+π = π1 × · · · × πN for a product policy. 
+
+KL-regularized value function and Q-function. Given a joint policy π, the KL-regularized state-value function (value function ) V π 
+
+> h,n
+
+: S → R and the KL-regularized state-action value function ( Q-function ) Qπ 
+
+> h,n
+
+: S × A → R
+
+of the n-th player under π — with regularization parameter 6Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+β ≥ 0 — are respectively defined as 
+
+V π
+
+> h,n
+
+(s) := E
+
+" HX
+
+> i=h
+
+rni (si, ai) − β log πn(ani |si)
+
+πn 
+
+> ref
+
+(ani |si) sh = s
+
+#
+
+,
+
+(14a) 
+
+Qπ
+
+> h,n
+
+(s, a) := rnh (s, a) + Es′∼Ph(·| s, a)
+
+V π
+
+> h+1 ,n
+
+(s′) ,
+
+(14b) for all (s, a) ∈ S × A , h ∈ [H] where si and ai are the state and action at step i, respectively, and πref : S × [H] →
+
+∆( A) is the reference policy. When the reference pol-icy is a uniform distribution over the joint action space, the regularization becomes the entropy regularization. In (14a) , πn(·| s) (resp. πn 
+
+> ref
+
+(·| s)) should be understood as the marginal distribution of player n under joint distribution 
+
+π(·| s) (resp. πref (·| s)), and we define V π
+
+> H+1 ,n
+
+(s) = 0 for all s ∈ S and β ≥ 0. To simplify the notation, we define 
+
+V π 
+
+> n
+
+:= V π 
+
+> 1,n
+
+and Qπ 
+
+> n
+
+:= Qπ 
+
+> 1,n
+
+for all n ∈ [N ]. We as-sume ρ ∈ ∆( S) is the initial state distribution, i.e., s1 ∼ ρ.Furthermore, we define V π 
+
+> n
+
+(ρ) := Es∼ρ[V π 
+
+> n
+
+(s)] .We let π = πn × π−n denote the policy profile where all players but the n-th player execute policy π−n, and the n-th player executes policy πn independent of the other players. For all n ∈ [N ], we define the best-response value function 
+
+V ⋆, π−n 
+
+> h,n
+
+(s) := max  
+
+> πn:S× [H]→∆( An)
+
+V πn×π−n 
+
+> h,n
+
+(s), (15) for all s ∈ S , h ∈ [H], n ∈ [N ], which is the optimal value of player n when the policies of other agents are fixed by 
+
+π−n. Importantly, there exists at least one policy πn,⋆ (π−n)
+
+that achieves the maximum in (15) for all s ∈ S , and this policy is referred to the best-response policy of player n
+
+under joint policy π−n (Shapley, 1953). We also define 
+
+V ⋆, π−n 
+
+> n
+
+(ρ) := max  
+
+> πn:S× [H]→∆( An)
+
+V πn×π−n 
+
+> n
+
+(ρ).
+
+One important thing to notice is that the best-response policy 
+
+πn,⋆ (π−n) does not depend on the initial state distribution 
+
+ρ (Mei et al., 2020). 
+
+Equilibria of Markov games. In a multi-player general-sum Markov game, each agent aims to maximize its own value function, where the Nash equilibrium (NE) (Nash, 1950) and the coarse correlated equilibrium (CCE) (Au-mann, 1987) are two widely studied solution concepts, whose definitions are as follows. • Nash equilibrium (NE): a product policy π = π1 ×· · · × πN is a Nash equilibrium of MP if 
+
+∀s ∈ S , n ∈ [N ] : V ⋆, π−n 
+
+> n
+
+(s) = V πn,π−n 
+
+> n
+
+(s).
+
+(16) • Coarse correlated equilibrium (CCE): a joint policy π
+
+is a CCE of MP if 
+
+∀s ∈ S , n ∈ [N ] : V ⋆, π−n 
+
+> n
+
+(s) ≤ V πn,π−n 
+
+> n
+
+(s).
+
+(17) It is obvious that every NE is a CCE, but the converse is not true in general. In general, computing the NE in general-sum Markov games is intractable (Daskalakis et al., 2009), except for two-player zero-sum Markov games. 
+
+Goal: regret minimization. To measure the proximity of a policy π to the equilibrium, we define the (average) sub-optimality gap of policy π w.r.t. the initial distribution ρ
+
+as 
+
+Gap (π) := 1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−n 
+
+> n
+
+(ρ) − V π 
+
+> n
+
+(ρ)
+
+
+
+. (18) A product policy π is said to be an ε-approximate NE (ab-breviated as ε-NE) if Gap (π) ≤ ε, and a joint policy π is said to be an ε-approximate CCE (abbreviated as ε-CCE) if 
+
+Gap (π) ≤ ε.We aim to design a model-based framework that find the approximate NE or CCE of the Markov game MP in a prov-ably efficient manner. Similar to the matrix game setting, we consider the following regret measure: 
+
+Regret (T ) := 
+
+> T
+
+X
+
+> t=1
+
+Gap (πt)=
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−nt 
+
+> n
+
+(ρ) − V πt 
+
+> n
+
+(ρ)
+
+
+
+, (19) where πt is the policy profile at time t. Our goal is to achieve a sublinear regret with respect to the number of rounds T ,by carefully balancing the trade-off between exploration and exploitation, even under function approximation of the model class. 
+
+3.2. Algorithm development 
+
+For simplicity, we will focus on the function approximation over the transition kernel of the Markov game assuming the reward function is fixed and deterministic, while it is straightforwardly to also incorporate the reward function approximation. We let F denote the function class of the estimators of the transition kernel of the Markov game, and we denote the parameterized transition kernel as 
+
+Pf = ( Pf, 1, · · · , Pf,H ) ∈ F = F1 × · · · F H ,
+
+where F is the function class and f is its parameterization. We define the value function V π 
+
+> f,h,n
+
+under the transition kernel Pf as 
+
+∀s ∈ S , h ∈ [H] V π
+
+> f,h,n
+
+(s) := (20) 7Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+EPf ,π
+
+" HX
+
+> i=h
+
+
+
+rni (si, ai) − β log πn(ani |si)
+
+πn 
+
+> ref
+
+(ani |si)
+
+
+
+sh = s
+
+#
+
+,
+
+and the Q-function Qπ 
+
+> f,h,n
+
+is defined likewise. Akin to the matrix game case, VMG alternates between updating the model updates based on all the transitions observed so far, and collecting new trajectories using the updated policies. Suppose that at the t-th iteration, the current estimate of the transition kernel is Pft−1 , and its corresponding NE or CCE is πt. VMG alternates between the following two steps. • Value-incentivized model updates. Given all the col-lected transitions Dt−1,h at each step h and the equi-librium policy πt, VMG updates the model parame-ter ft via solving a regularized maximum likelihood estimation (MLE) problem as (22) , favoring models that minimizes the negative log-likelihood Lt(f ) of the model, i.e. 
+
+Lt(f ) := 
+
+> H
+
+X
+
+> h=1
+
+X
+
+> (sh,ah,s h+1 )∈D t−1,h
+
+− log Pf,h (sh+1 |sh, ah),
+
+(21) 
+
+and maximizes the sum of the best-response values of each player when the other player’s strategy is fixed at π−nt . In words, the regularizer tries to encourage models that incentive the players to deviate from their current policy, resulting in better exploration. • Trajectory collection from best-response policy up-dates. Using the updated model Pft , VMG updates the best-response policy eπnt of each player while fixing the policy π−nt of the other player via (23) . VMG then collects new trajectories by following policy πt and 
+
+(eπnt , π−nt ) for all n ∈ [N ], and update the dataset. The complete procedure of VMG is summarized in Algo-rithm 2, where the function Equilibrium (Mf ) returns the NE or CCE of the Markov game Mf by calling off-the-shelf solvers, e.g., Cai et al. (2024); Zhang et al. (2022). Note that we are primarily interested in finding the NE for two-player zero-sum Markov games, and the CCE for multi-player general-sum Markov games, due to computational tractability. 
+
+Comparison with MEX. Liu et al. (2024, Algorithm 2) proposed the MEX framework, which also considered using value functions as a means to incentive exploration for two-player zero-sum Markov games. Their algorithm requires asymmetric updates — and two sets of model parameters as a result — of the max and min players, where the model update of the max player is regularized by the optimal value 
+
+V ⋆f = max π1 min π2 V π
+
+> 1,1
+
+(ρ) of the Markov game, which is an expensive saddle-point optimization problem, and the model update of the min player is regularized by the best-response value function. In contrast, VMG only leverages best-response value functions as a regularization, which is much easier to solve. VMG also permits simultaneous up-dates for all the players, making it amenable to multi-player general-sum Markov games. In contrast, the extension of MEX (Xiong et al., 2024) to this more general setting is sig-nificantly more involved with a computational complexity that scales exponentially with the number of agents. 
+
+Algorithm 2 Value-incentivized Online Markov Game (VMG )
+
+1: Input: reference policies πref , initial transition kernel estimate f0 ∈ F , regularization coefficient α > 0,iteration number T .
+
+2: Initialization: dataset D0,h := ∅, ∀h ∈ [H].
+
+3: for t = 1 , · · · , T do 
+
+4: πt ← Equilibrium (Mft−1 ). ▷ Equilibrium (Mf )
+
+returns a CCE or NE of game Mf .
+
+5: Model update: Update the estimator ft by minimiz-ing the following objective: 
+
+ft = arg min  
+
+> f∈F
+
+Lt(f ) − α
+
+> N
+
+X
+
+> n=1
+
+V ⋆, π−nt 
+
+> f,n
+
+(ρ). (22) 
+
+6: Compute best-response policies {eπnt }n∈[N ]:
+
+∀n ∈ [N ] : eπnt = arg max 
+
+> πn:S× [H]→∆( An)
+
+V πn,π−nt 
+
+> ft,n
+
+(ρ).
+
+(23) 
+
+7: Data collection: sample a trajectory with transition tuples {(st,h , at,h , s t,h +1 )}Hh=1 by executing πt, and sample a trajectory with transition tuples {(snt,h , ant,h , s nt,h +1 )}Hh=1 
+
+by executing (eπnt , π−nt ) for each n ∈ [N ].Update the dataset Dt,h = Dt−1,h ∪Nn=1 
+
+{(st,h , at,h , s t,h +1 ), (snt,h , ant,h , s nt,h +1 )},
+
+∀h ∈ [H].
+
+8: end for Reduction to the single-agent MDP case. VMG can be reduced to the Markov decision process (MDP) setting via either setting the number of players N = 1 in the multi-player general-sum Markov game, or setting the action space of the min player to a singleton in the two-player zero-sum Markov game. Interestingly, the former leads to the value regularization V ⋆f (ρ) studied in MEX (Liu et al., 2024), while the latter leads to a new form of regularizer V ⋆f (ρ) −
+
+V πt 
+
+> f
+
+(ρ), adding friction from the current policy πt.8Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+3.3. Theoretical guarantee 
+
+We demonstrate that VMG achieves near-optimal regret under the following linear mixture model of the transition kernel for Markov games. 
+
+Assumption 3.1 (linear mixture model) . The function class 
+
+F = F1 × · · · F H is 
+
+∀h ∈ [H] : Fh := 
+
+n
+
+fh|fh(s′|s, a) = ϕh(s, a, s ′)⊤θh,
+
+∀(s, a, s ′) ∈ S × A × S , θ h ∈ Θh
+
+o
+
+,
+
+where ϕh = ( ϕ1
+
+> h
+
+, · · · , ϕ dh) : S ×A×S → Rd are the known feature maps with ϕih : S × A → ∆( S) being transition kernels for all i ∈ [d]. ∥ϕh(s, a, s ′)∥2 ≤ 1 for all (s, a, s ′),and Θh ⊆ Bd
+
+> 2
+
+(√d), ∀h ∈ [H]. For each fh ∈ F h and 
+
+(s, a) ∈ S × A , fh(·| s, a) ∈ ∆( S), ∀h ∈ [H].The linear mixture model is a common assumption in the RL literature, see, for example, Ayoub et al. (2020); Modi et al. (2020); Cai et al. (2020) for single-agent RL, and Chen et al. (2022); Liu et al. (2024) for Markov games. We also assume the function class F is expressive enough to describe the true transition kernel of the Markov game. 
+
+Assumption 3.2 (realizability) . There exists f ⋆ ∈ F such that Pf ⋆ = P.
+
+Regret guarantee. We now present our main result for the regret of the online Markov game, whose proof is deferred to Appendix B.3. 
+
+Theorem 3.3. Under Assumptions 3.1 and 3.2, if setting the regularization coefficient α as          
+
+> α=
+> vuutTHd log
+> 
+> 1 + T3/2H2
+> √d
+> 
+> log
+> HN δ
+> 
+> +dlog ( d|S| T)
+> 
+> ,
+
+then for any β ≥ 0, with any initial state distribution ρ,transition kernel estimator f0 ∈ F and reference policy 
+
+πref , the regret of Algorithm 2 satisfies the following bound with probability at least 1 − δ for any δ ∈ (0 , 1) and for all 
+
+T ∈ N+ :        
+
+> Regret (T)≤eOd√H3T·
+> s
+> 1
+> dlog
+> N H δ
+> 
+> + log ( d|S| T)
+> !
+> .
+> (24)
+
+Theorem 3.3 establishes that by setting α on the order of 
+
+eO(pT /H ), with high probability, the regret of VMG is no larger than an order of 
+
+eO
+
+
+
+d√H3T
+
+
+
+for general-sum Markov games, which improves the depen-dency on the horizon length H compared with the regret 
+
+eO
+
+
+
+dH 5√T
+
+
+
+of (Xiong et al., 2024). When reducing to two-player zero-sum Markov games, our regret bound — established for both players — matches that of MEX (Liu et al., 2024), which only covers the max player. In addition, since min t∈[T ] Gap (πt) ≤ Regret (T )/T and each iteration collects N + 1 trajectories, VMG is guaran-teed to find an ε-NE ( ε-CCE) of MP for any ε > 0 within 
+
+eO
+
+ N d 2H3
+
+> ε2
+
+
+
+trajectories or eO
+
+ N d 2H4
+
+> ε2
+
+
+
+samples. Com-pared to the minimax sample complexity (Chen et al., 2022), our sample complexity is near-optimal up to a factor of H
+
+when the number of players N is fixed. 
+
+## 4. Conclusion 
+
+In this paper, we introduced VMG , a provably-efficient model-based algorithm for online MARL that balances ex-ploration and exploitation without requiring explicit uncer-tainty quantification. The key innovation lies in incentiviz-ing the model estimation to maximize the best-response value functions across all players to implicitly drive explo-ration. In addition, VMG is readily compatible with modern deep reinforcement learning architectures using function ap-proximation, and is demonstrated to achieve a near-optimal regret under linear function approximation of the model class. We believe this work takes an important step toward making MARL more practical and scalable for real-world applications. Several promising directions remain for future work. For example, designing a model-free counterpart of VMG that can be used in conjunction with function approximation could be a valuable extension. Additionally, it will be in-teresting to develop the performance guarantee of VMG 
+
+under alternative assumptions of function approximation, such as general function approximation and independent function approximation across the players to tame the curse of dimensionality and multi-agency. Last but not least, it will be of interest to study the performance of VMG under adversarial environments. 
+
+## Acknowledgement 
+
+This work is supported in part by the grants NSF DMS-2134080, CCF-2106778, ONR N00014-19-1-2404, ONR N00014-25-1-2173, NSF ECCS-2401391, and NSF IIS-2403240. 
+
+## Impact Statement 
+
+This paper presents work whose goal is to advance the field of Machine Learning. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here. 9Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+## References 
+
+Abbasi-Yadkori, Y., P ´al, D., and Szepesv ´ari, C. Improved algorithms for linear stochastic bandits. Advances in neural information processing systems , 24, 2011. Agarwal, A. and Zhang, T. Model-based RL with optimistic posterior sampling: Structural conditions and sample complexity. Advances in Neural Information Processing Systems , 35:35284–35297, 2022. Agarwal, A., Jin, Y., and Zhang, T. Vo ql: Towards op-timal regret in model-free RL with nonlinear function approximation. In The Thirty Sixth Annual Conference on Learning Theory , pp. 987–1063. PMLR, 2023. Aumann, R. J. Correlated equilibrium as an expression of bayesian rationality. Econometrica: Journal of the Econometric Society , pp. 1–18, 1987. Ayoub, A., Jia, Z., Szepesvari, C., Wang, M., and Yang, L. Model-based reinforcement learning with value-targeted regression. In International Conference on Machine Learning , pp. 463–474. PMLR, 2020. Bai, Y., Jin, C., Wang, H., and Xiong, C. Sample-efficient learning of stackelberg equilibria in general-sum games. 
+
+Advances in Neural Information Processing Systems , 34: 25799–25811, 2021. Bouneffouf, D. Finite-time analysis of the multi-armed bandit problem with known trend. In 2016 IEEE Congress on Evolutionary Computation (CEC) , pp. 2543–2549. IEEE, 2016. Busoniu, L., Babuska, R., and De Schutter, B. A comprehen-sive survey of multiagent reinforcement learning. IEEE Transactions on Systems, Man, and Cybernetics, Part C (Applications and Reviews) , 38(2):156–172, 2008. Cai, Q., Yang, Z., Jin, C., and Wang, Z. Provably efficient exploration in policy optimization. In International Con-ference on Machine Learning , pp. 1283–1294. PMLR, 2020. Cai, Y., Luo, H., Wei, C.-Y., and Zheng, W. Near-optimal policy optimization for correlated equilibrium in general-sum Markov games. In International Conference on Arti-ficial Intelligence and Statistics , pp. 3889–3897. PMLR, 2024. Cen, S., Wei, Y., and Chi, Y. Fast policy extragradient meth-ods for competitive games with entropy regularization. 
+
+Advances in Neural Information Processing Systems , 34: 27952–27964, 2021. Cen, S., Chi, Y., Du, S. S., and Xiao, L. Faster last-iterate convergence of policy optimization in zero-sum Markov games. In The Eleventh International Conference on Learning Representations , 2023. Cen, S., Mei, J., Goshvadi, K., Dai, H., Yang, T., Yang, S., Schuurmans, D., Chi, Y., and Dai, B. Value-incentivized preference optimization: A unified approach to online and offline rlhf. arXiv preprint arXiv:2405.19320 , 2024. Chen, F., Mei, S., and Bai, Y. Unified algorithms for RL with decision-estimation coefficients: PAC, reward-free, preference-based learning and beyond. The Annals of Statistics , 53(1):426–456, 2025. Chen, Z., Zhou, D., and Gu, Q. Almost optimal algorithms for two-player zero-sum linear mixture Markov games. In International Conference on Algorithmic Learning Theory , pp. 227–261. PMLR, 2022. Cheng, S.-F., Reeves, D. M., Vorobeychik, Y., and Wellman, M. P. Notes on equilibria in symmetric games. 2004. Cui, Q., Zhang, K., and Du, S. Breaking the curse of multiagents in a large state space: Rl in markov games with independent linear function approximation. In The Thirty Sixth Annual Conference on Learning Theory , pp. 2651–2652. PMLR, 2023. Dai, Y., Cui, Q., and Du, S. S. Refined sample complex-ity for markov games with independent linear function approximation. arXiv preprint arXiv:2402.07082 , 2024. Dani, V., Hayes, T. P., and Kakade, S. M. Stochastic linear optimization under bandit feedback. In COLT , volume 2, pp. 3, 2008. Daskalakis, C. and Panageas, I. Last-iterate convergence: Zero-sum games and constrained min-max optimization. 
+
+arXiv preprint arXiv:1807.04252 , 2018. Daskalakis, C., Goldberg, P. W., and Papadimitriou, C. H. The complexity of computing a Nash equilibrium. Com-munications of the ACM , 52(2):89–97, 2009. Du, S., Kakade, S., Lee, J., Lovett, S., Mahajan, G., Sun, W., and Wang, R. Bilinear classes: A structural framework for provable generalization in rl. In International Conference on Machine Learning , pp. 2826–2836. PMLR, 2021. Erez, L., Lancewicki, T., Sherman, U., Koren, T., and Man-sour, Y. Regret minimization and convergence to equilib-ria in general-sum Markov games. In International Con-ference on Machine Learning , pp. 9343–9373. PMLR, 2023. Foster, D., Foster, D. J., Golowich, N., and Rakhlin, A. On the complexity of multi-agent decision making: From learning in games to partial monitoring. In The Thirty Sixth Annual Conference on Learning Theory , pp. 2678– 2792. PMLR, 2023. 10 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Foster, D. J., Kakade, S. M., Qian, J., and Rakhlin, A. The statistical complexity of interactive decision mak-ing. arXiv preprint arXiv:2112.13487 , 2021. Gawlikowski, J., Tassi, C. R. N., Ali, M., Lee, J., Humt, M., Feng, J., Kruspe, A., Triebel, R., Jung, P., Roscher, R., et al. A survey of uncertainty in deep neural networks. 
+
+Artificial Intelligence Review , 56(Suppl 1):1513–1589, 2023. Huang, B., Lee, J. D., Wang, Z., and Yang, Z. Towards gen-eral function approximation in zero-sum Markov games. In International Conference on Learning Representations ,2022. Hung, Y.-H., Hsieh, P.-C., Liu, X., and Kumar, P. Reward-biased maximum likelihood estimation for linear stochas-tic bandits. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 35, pp. 7874–7882, 2021. Jia, Z., Yang, L., Szepesvari, C., and Wang, M. Model-based reinforcement learning with value-targeted regression. In 
+
+Learning for Dynamics and Control , pp. 666–686. PMLR, 2020. Jin, C., Allen-Zhu, Z., Bubeck, S., and Jordan, M. I. Is q-learning provably efficient? Advances in neural infor-mation processing systems , 31, 2018. Jin, C., Yang, Z., Wang, Z., and Jordan, M. I. Provably effi-cient reinforcement learning with linear function approxi-mation. In Conference on learning theory , pp. 2137–2143. PMLR, 2020. Jin, C., Liu, Q., Wang, Y., and Yu, T. V-learning–a simple, efficient, decentralized algorithm for multiagent rl. arXiv preprint arXiv:2110.14555 , 2021. Kumar, P. and Becker, A. A new family of optimal adaptive controllers for markov chains. IEEE Transactions on Automatic Control , 27(1):137–146, 1982. Lai, T. L. Adaptive treatment allocation and the multi-armed bandit problem. The annals of statistics , pp. 1091–1114, 1987. Li, G., Chi, Y., Wei, Y., and Chen, Y. Minimax-optimal multi-agent rl in markov games with a generative model. In Proceedings of the 36th International Conference on Neural Information Processing Systems , pp. 15353– 15367, 2022. Littman, M. L. Markov games as a framework for multi-agent reinforcement learning. In Machine learning pro-ceedings 1994 , pp. 157–163. Elsevier, 1994. Liu, Q., Yu, T., Bai, Y., and Jin, C. A sharp analysis of model-based reinforcement learning with self-play. In 
+
+International Conference on Machine Learning , pp. 7001– 7010. PMLR, 2021. Liu, X., Hsieh, P.-C., Hung, Y. H., Bhattacharya, A., and Kumar, P. Exploration through reward biasing: Reward-biased maximum likelihood estimation for stochastic multi-armed bandits. In International Conference on Machine Learning , pp. 6248–6258. PMLR, 2020. Liu, Z., Lu, M., Xiong, W., Zhong, H., Hu, H., Zhang, S., Zheng, S., Yang, Z., and Wang, Z. Maximize to explore: One objective function fusing estimation, planning, and exploration. Advances in Neural Information Processing Systems , 36, 2024. Mao, W. and Ba s¸ ar, T. Provably efficient reinforcement learning in decentralized general-sum Markov games. 
+
+Dynamic Games and Applications , 13(1):165–186, 2023. McKelvey, R. D. and Palfrey, T. R. Quantal response equi-libria for normal form games. Games and economic behavior , 10(1):6–38, 1995. Mei, J., Xiao, C., Szepesvari, C., and Schuurmans, D. On the global convergence rates of softmax policy gradient methods. In International conference on machine learn-ing , pp. 6820–6829. PMLR, 2020. Mertikopoulos, P., Papadimitriou, C., and Piliouras, G. Cy-cles in adversarial regularized learning. In Proceedings of the twenty-ninth annual ACM-SIAM symposium on discrete algorithms , pp. 2703–2717. SIAM, 2018. Mete, A., Singh, R., Liu, X., and Kumar, P. Reward biased maximum likelihood estimation for reinforcement learn-ing. In Learning for Dynamics and Control , pp. 815–827. PMLR, 2021. Modi, A., Jiang, N., Tewari, A., and Singh, S. Sample com-plexity of reinforcement learning using linearly combined model ensembles. In International Conference on Artifi-cial Intelligence and Statistics , pp. 2010–2020. PMLR, 2020. Munos, R., Valko, M., Calandriello, D., Azar, M. G., Row-land, M., Guo, Z. D., Tang, Y., Geist, M., Mesnard, T., Michi, A., et al. Nash learning from human feedback. 
+
+arXiv preprint arXiv:2312.00886 , 2023. Nash, J. F. Non-cooperative games. 1950. Ni, C., Song, Y., Zhang, X., Jin, C., and Wang, M. Represen-tation learning for general-sum low-rank markov games. 
+
+arXiv preprint arXiv:2210.16976 , 2022. O’Donoghue, B. Variational bayesian reinforcement learn-ing with regret bounds. Advances in Neural Information Processing Systems , 34:28208–28221, 2021. 11 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+O’Donoghue, B., Lattimore, T., and Osband, I. Matrix games with bandit feedback. In Uncertainty in Artificial Intelligence , pp. 279–289. PMLR, 2021. Russo, D. J., Van Roy, B., Kazerouni, A., Osband, I., Wen, Z., et al. A tutorial on thompson sampling. Foundations and Trends® in Machine Learning , 11(1):1–96, 2018. Sessa, P. G., Kamgarpour, M., and Krause, A. Efficient model-based multi-agent reinforcement learning via op-timistic equilibrium computation. In International Con-ference on Machine Learning , pp. 19580–19597. PMLR, 2022. Shapley, L. S. Stochastic games. Proceedings of the Na-tional Academy of Sciences , 39(10):1095–1100, 1953. Sokota, S., D’Orazio, R., Kolter, J. Z., Loizou, N., Lanctot, M., Mitliagkas, I., Brown, N., and Kroer, C. A unified ap-proach to reinforcement learning, quantal response equi-libria, and two-player zero-sum games. arXiv preprint arXiv:2206.05825 , 2022. Song, Z., Mei, S., and Bai, Y. When can we learn general-sum markov games with a large number of players sample-efficiently? arXiv preprint arXiv:2110.04184 ,2021. Swamy, G., Dann, C., Kidambi, R., Wu, Z. S., and Agarwal, A. A minimaximalist approach to reinforcement learning from human feedback. arXiv preprint arXiv:2401.04056 ,2024. Wang, Y., Wang, R., Du, S. S., and Krishnamurthy, A. Optimism in reinforcement learning with gener-alized linear function approximation. arXiv preprint arXiv:1912.04136 , 2019. Wang, Y., Liu, Q., Bai, Y., and Jin, C. Breaking the curse of multiagency: Provably efficient decentralized multi-agent rl with function approximation. In The Thirty Sixth Annual Conference on Learning Theory , pp. 2793–2848. PMLR, 2023. Wei, C.-Y., Lee, C.-W., Zhang, M., and Luo, H. Linear last-iterate convergence in constrained saddle-point opti-mization. arXiv preprint arXiv:2006.09517 , 2020. Xie, Q., Chen, Y., Wang, Z., and Yang, Z. Learning zero-sum simultaneous-move markov games using function approximation and correlated equilibrium. In Conference on learning theory , pp. 3674–3682. PMLR, 2020. Xie, T., Foster, D. J., Krishnamurthy, A., Rosset, C., Awadal-lah, A., and Rakhlin, A. Exploratory preference optimiza-tion: Harnessing implicit Q⋆-approximation for sample-efficient RLHF. arXiv preprint arXiv:2405.21046 , 2024. Xiong, N., Liu, Z., Wang, Z., and Yang, Z. Sample-efficient multi-agent RL: An optimization perspective. In The Twelfth International Conference on Learning Represen-tations , 2024. Yang, L. and Wang, M. Sample-optimal parametric q-learning using linearly additive features. In International conference on machine learning , pp. 6995–7004. PMLR, 2019. Yang, T., Cen, S., Wei, Y., Chen, Y., and Chi, Y. Federated natural policy gradient and actor critic methods for multi-task reinforcement learning. In The Thirty-eighth Annual Conference on Neural Information Processing Systems ,2024a. Yang, T., Mei, J., Dai, H., Wen, Z., Cen, S., Schuurmans, D., Chi, Y., and Dai, B. Faster wind: Accelerating iterative best-of-n distillation for llm alignment. arXiv preprint arXiv:2410.20727 , 2024b. Yang, T., Dai, B., Xiao, L., and Chi, Y. Exploration from a primal-dual lens: Value-incentivized actor-critic methods for sample-efficient online RL. Technical Report , 2025. Yuan, R., Du, S. S., Gower, R. M., Lazaric, A., and Xiao, L. Linear convergence of natural policy gradient methods with log-linear policies. In International Conference on Learning Representations , 2023. Zhan, W., Cen, S., Huang, B., Chen, Y., Lee, J. D., and Chi, Y. Policy mirror descent for regularized reinforcement learning: A generalized framework with linear conver-gence. SIAM Journal on Optimization , 33(2):1061–1091, 2023. Zhang, R., Liu, Q., Wang, H., Xiong, C., Li, N., and Bai, Y. Policy optimization for Markov games: Unified frame-work and faster convergence. Advances in Neural Infor-mation Processing Systems , 35:21886–21899, 2022. Zhang, T. Feel-good Thompson sampling for contextual bandits and reinforcement learning. SIAM Journal on Mathematics of Data Science , 4(2):834–857, 2022. Zhong, H., Xiong, W., Zheng, S., Wang, L., Wang, Z., Yang, Z., and Zhang, T. GEC: A unified framework for interactive decision making in MDP, POMDP, and beyond. arXiv preprint arXiv:2211.01962 , 2022. 12 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+## A. Special Cases 
+
+Symmetric matrix game. One important special class of matrix games is the symmetric matrix game (Cheng et al., 2004), with A = −A⊤, μref = νref , and m = n. In this case, we assume the parameter space Ω preserves anti-symmetry of A, i.e., 
+
+Aω = −A⊤ 
+
+> ω
+
+for any ω ∈ Ω. For a symmetric matrix game, it admits a symmetric Nash (μ⋆, μ ⋆), and Algorithm 1 reduces to a single-player algorithm by only tracking a single policy μt, recognizing μt = νt and eμt = eνt due to f μ,ν (A) = −f ν,μ (A).In addition, VMG only needs to collect one sample from the policy pair (eμt, μ t) in each iteration. Altogether, these lead to a simplified algorithm summarized in Algorithm 3. 
+
+Algorithm 3 Value-incentivized Online Symmetric Matrix Game ( VMG ) 
+
+> 1:
+
+Input: initial parameter ω0, regularization coefficient α > 0, iteration number T . 
+
+> 2:
+
+Initialization: dataset D0 := ∅. 
+
+> 3:
+
+for t = 1 , · · · , T do  
+
+> 4:
+
+Compute μt by solving the matrix game with the current parameter ωt−1:
+
+μt = arg max 
+
+> μ∈∆m
+
+min  
+
+> ν∈∆n
+
+f μ,ν (Aωt−1 ). (25)  
+
+> 5:
+
+Model update: Update the parameter ωt by minimizing the following objective: 
+
+ωt = arg min 
+
+> ω∈Ω
+
+X 
+
+> (i,j, bA(i,j )) ∈D t−1
+
+
+
+Aω (i, j ) − bA(i, j )
+
+2
+
++ αf μt,⋆ (Aω ). (26)  
+
+> 6:
+
+Compute eμt by solving the following optimization problem: 
+
+eμt = arg max 
+
+> μ∈∆m
+
+f μ,μ t (Aωt ). (27)  
+
+> 7:
+
+Data collection: Sample (it, j t) ∼ (eμt, μ t) and get the noisy feedback bA(it, j t) following the oracle (2) . Update the dataset Dt = Dt−1 ∪
+
+n
+
+(it, j t, bA(it, j t)) 
+
+o
+
+. 
+
+> 8:
+
+end for Bandit setting. By setting n = 1 , we can reduce the matrix game to the bandit setting, where the payoff matrix becomes a reward vector A ∈ Rm, leading to a simplified algorithm in Algorithm 4. Here, we let f μ(A) = μ⊤A − βKL (μ∥μref ) and 
+
+f ⋆(A) := max μ∈∆m f μ(A). Interestingly, to encourage exploration, the regularization term favors a reward estimate that maximizes its regret f ⋆(Aω ) − f μt (Aω ) on the current policy μt, which is different from the reward-biasing framework that only regularizes against f ⋆(Aω ) (Cen et al., 2024; Liu et al., 2020; Xie et al., 2024). 
+
+MDP setting. VMG can be reduced to the single-agent setting via either setting the number of players N = 1 in the multi-player general-sum Markov game, or setting the action space of the min player to a singleton, i.e., |A 2| = 1 , in the two-player zero-sum Markov game. Interestingly, the former (option I) leads to the value regularization V ⋆f (ρ) studied in MEX (c.f., Algorithm 1 in Liu et al. (2024)), while the latter (option II) leads to a new form of regularizer V ⋆f (ρ) − V πt 
+
+> f
+
+(ρ),adding friction from the current policy πt. The latter regularizer is also the MDP counterpart of the bandit algorithm in Algorithm 4. We summarize both variants in Algorithm 5. 
+
+## B. Proofs of Main Theorems 
+
+B.1. Auxiliary lemmas 
+
+We provide some technical lemmas that will be used in our proofs. 
+
+Lemma B.1 (Freedman’s inequality, Lemma D.2 in Liu et al. (2024)) . Let {Xt}t≤T be a real-valued martingale difference sequence adapted to filtration {F t}t≤T . If |Xt| ≤ R almost surely, then for any η ∈ (0 , 1/R ) it holds that with probability at least 1 − δ, TX
+
+> t=1
+
+Xt ≤ O η
+
+> T
+
+X
+
+> t=1
+
+E[X2 
+
+> t
+
+|F t−1] + log(1 /δ )
+
+η
+
+!
+
+.
+
+13 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Algorithm 4 Value-incentivized Online Bandit ( VMG )
+
+1: Input: initial parameter ω0, regularization coefficient α > 0, iteration number T .
+
+2: Initialization: dataset D0 := ∅.
+
+3: for t = 1 , · · · , T do 
+
+4: Policy update: Compute μt with the current parameter ωt−1:
+
+μt = arg max 
+
+> μ∈∆m
+
+f μ(Aωt−1 ) ∝ μref exp 
+
+ Aωt−1
+
+β
+
+
+
+. (28) 
+
+5: Data collection: Sample it ∼ μt and get the noisy feedback bA(it) following the oracle (2) . Update the dataset 
+
+Dt = Dt−1 ∪
+
+n
+
+(it, bA(it)) 
+
+o
+
+.
+
+6: Model update: Update the parameter ωt by minimizing the following objective: 
+
+ωt = arg min 
+
+> ω∈Ω
+
+X 
+
+> (i, bA(i)) ∈D t
+
+
+
+Aω (i) − bA(i)
+
+2
+
+− αf ⋆(Aω ) + αf μt (Aω ). (29) 
+
+7: end for Algorithm 5 Value-incentivized Online Single-agent MDP ( VMG )
+
+1: Input: initial transition kernel estimate f0 ∈ F , regularization coefficient α > 0, iteration number T .
+
+2: Initialization: dataset D0,h := ∅ for all h ∈ [H].
+
+3: for t = 1 , · · · , T do 
+
+4: Policy update: Compute πt with the current transition kernel estimator ft−1:
+
+πt = arg max 
+
+> π∈∆( A1)
+
+V πft−1 (ρ). (30) 
+
+5: Data collection: sample a trajectory with transition tuples {(st,h , a t,h , s t,h +1 )}Hh=1 following πt. Update the dataset 
+
+Dt,h = Dt−1,h ∪ { (st,h , a t,h , s t,h +1 )} for all h ∈ [H].
+
+6: Model update: update the estimator ft by minimizing the following objective 
+
+ft =
+
+(arg min f ∈F 
+
+PHh=1 
+
+P 
+
+> (sh,a h,s h+1 )∈D t,h
+
+− log Pf,h (sh+1 |sh, a h) − αV ⋆f (ρ) (option I) 
+
+arg min f ∈F 
+
+PHh=1 
+
+P 
+
+> (sh,a h,s h+1 )∈D t,h
+
+− log Pf,h (sh+1 |sh, a h) − αV ⋆f (ρ) + αV πt 
+
+> f
+
+(ρ) (option II) . (31) 
+
+7: end for Lemma B.2 (Lemma 11 in Abbasi-Yadkori et al. (2011)) . Let {xs}s∈[T ] be a sequence of vectors with xs ∈ V for some Hilbert space V. Let Λ0 be a positive definite matrix and define Λt = Λ 0 + Pts=1 xsx⊤ 
+
+> s
+
+. Then it holds that 
+
+> T
+
+X
+
+> s=1
+
+min 
+
+n
+
+1, ∥xs∥Λ−1
+
+> s−1
+
+o
+
+≤ 2 log 
+
+ det(Λ T )det(Λ 0)
+
+
+
+.
+
+Lemma B.3 (Lemma F.3 in Du et al. (2021)) . Let X ⊂ Rd and sup x∈X ∥x∥2 ≤ BX . Then for any n ∈ N+, we have 
+
+∀λ > 0 : max   
+
+> x1,··· ,x n∈X
+
+log det Id + 1
+
+λ
+
+> n
+
+X
+
+> i=1
+
+xix⊤
+
+> i
+
+!
+
+≤ d log 
+
+
+
+1 + nB 2
+
+> X
+
+dλ 
+
+
+
+.
+
+Lemma B.4 (Martingale exponential concentration, Lemma D.1 in Liu et al. (2024)) . Let δ ∈ (0 , 1) . For a sequence of real-valued random variables {Xt}t∈[T ] adapted to filtration {F t}t∈[T ], the following holds with probability at least 1 − δ:
+
+∀t ∈ [T ] : −
+
+> t
+
+X
+
+> s=1
+
+Xs ≤
+
+> t
+
+X
+
+> s=1
+
+log E[exp( −Xs)|F s−1] + log(1 /δ ).
+
+14 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Lemma B.5 (Covering number of ℓ2 ball, Lemma D.5 in Jin et al. (2020)) . For any ϵ > 0 and d ∈ N+, the ϵ-covering number of the ℓ2 ball of radius R in Rd is bounded by (1 + 2 R/ϵ )d.
+
+B.2. Proof of Theorem 2.4 
+
+In the proof, for any sequence {xi}i∈Z and any integers a, b ∈ Z where a > b , we define Pbi=a xi := 0 .We begin by decomposing the regret as 
+
+Regret (T ) = 
+
+> T
+
+X
+
+> t=1
+
+f ⋆,ν t (A) − f μt,⋆ (A)=
+
+> T
+
+X
+
+> t=1
+
+(f ⋆,ν t (A) − f μt,⋆ (A) − (f ⋆,ν t (Aωt ) − f μt,⋆ (Aωt ))) +
+
+> T
+
+X
+
+> t=1
+
+
+
+f ⋆,ν t (Aωt ) − f eμt,ν t (A)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (A) − f μt,⋆ (Aωt )
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (A) − f eμt,ν t (Aωt−1 )
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (Aωt−1 ) − f μt,eνt (A)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (Aωt−1 ) − f μt,eνt (Aωt−1 )
+
+
+
+. (32) Recall that (μt, ν t) is the Nash equilibrium of the matrix game with the pay-off matrix Aωt−1 (see (6)), we have 
+
+∀t ∈ [T ] : f eμt,ν t (Aωt−1 ) ≤ f μt,ν t (Aωt−1 ) ≤ f μt, eνt (Aωt−1 ). (33) This implies the last term in the regret decomposition is non-positive, i.e., 
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (Aωt−1 ) − f μt,eνt (Aωt−1 )
+
+
+
+≤ 0. (34) Moreover, by the definition of eμt and eνt in (8), we have 
+
+f ⋆,ν t (Aωt ) = f eμt,ν t (Aωt ) and f μt,⋆ (Aωt ) = f μt,eνt (Aωt ). (35) Combining (34), (35) with (32), we have 
+
+Regret (T ) ≤
+
+> T
+
+X
+
+> t=1
+
+(f ⋆,ν t (A) − f μt,⋆ (A) − (f ⋆,ν t (Aωt ) − f μt,⋆ (Aωt ))) 
+
+| {z }
+
+> (i)
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (Aωt ) − f eμt,ν t (A)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (A) − f μt,eνt (Aωt )
+
+| {z }
+
+> (ii)
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (A) − f eμt,ν t (Aωt−1 )
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (Aωt−1 ) − f μt,eνt (A)
+
+| {z }
+
+> (iii)
+
+. (36) We will upper bound the three terms in the right-hand side of (36) separately. 15 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Step 1: bounding term (i). Define the squared loss function Lt(ω) over the dataset Dt−1 as 
+
+Lt(ω) := X 
+
+> (i,j, bA(i,j )) ∈D t−1
+
+
+
+Aω (i, j ) − bA(i, j )
+
+2
+
+. (37) Then by the optimality of ωt for (7), we know that 
+
+Lt(ωt) − αf ⋆,ν t (Aωt ) + αf μt,⋆ (Aωt ) ≤ Lt(ω⋆) − αf ⋆,ν t (A) + αf μt,⋆ (A),
+
+where we use Assumption 2.2, which implies Aω⋆ = A. Reorganizing the terms, we have (i) ≤ 1
+
+α
+
+> T
+
+X
+
+> t=1
+
+(Lt(ω⋆) − Lt(ωt)) . (38) Thus, it is sufficient to bound the term PTt=1 (Lt(ω⋆) − Lt(ωt)) . For any t ∈ [T ], we denote 
+
+bA(it, j t) = A(it, j t) + ξt and bA(i′
+
+> t
+
+, j ′
+
+> t
+
+) = A(it, j t) + ξ′
+
+> t
+
+.
+
+It follows that we can rewrite Lt(ω) as 
+
+Lt(ω) = 
+
+> t−1
+
+X
+
+> s=1
+
+(Aω (is, j s) − A(is, j s) − ξs)2 +
+
+> t−1
+
+X
+
+> s=1
+
+(Aω (i′
+
+> s
+
+, j ′
+
+> s
+
+) − A(i′
+
+> s
+
+, j ′
+
+> s
+
+) − ξ′
+
+> s
+
+)2 ,
+
+from which we deduce 
+
+Lt(ω⋆) − Lt(ω) = −
+
+> t−1
+
+X
+
+> s=1
+
+h
+
+(Aω (is, j s) − A(is, j s) − ξs)2 − ξ2
+
+> s
+
+i
+
+−
+
+> t−1
+
+X
+
+> s=1
+
+h
+
+(Aω (i′
+
+> s
+
+, j ′
+
+> s
+
+) − A(i′
+
+> s
+
+, j ′
+
+> s
+
+) − ξ′
+
+> s
+
+)2 − (ξ′
+
+> s
+
+)2i
+
+= −
+
+> t−1
+
+X
+
+> s=1
+
+[( Aω (is, j s) − A(is, j s)) ( Aω (is, j s) − A(is, j s) − 2ξs)] 
+
+| {z }
+
+> := Xωs
+
+−
+
+> t−1
+
+X
+
+> s=1
+
+[( Aω (i′
+
+> s
+
+, j ′
+
+> s
+
+) − A(i′
+
+> s
+
+, j ′
+
+> s
+
+)) ( Aω (i′
+
+> s
+
+, j ′
+
+> s
+
+) − A(i′
+
+> s
+
+, j ′
+
+> s
+
+) − 2ξ′
+
+> s
+
+)] 
+
+| {z } 
+
+> := Yωs
+
+. (39) It is then sufficient to bound − Pt−1 
+
+> s=1
+
+Xωs and − Pt−1 
+
+> s=1
+
+Y ωs , which is supplied by the following lemma. 
+
+Lemma B.6. When Assumption 2.1, 2.2, 2.3 hold, for any δ ∈ (0 , 1) , with probability at least 1 − δ, it holds 
+
+∀t ∈ [T ], ω ∈ Ω : −
+
+> t−1
+
+X
+
+> s=1
+
+Xωs ≤ − 12
+
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
+(40) 
+
+and 
+
+∀t ∈ [T ], ω ∈ Ω : −
+
+> t−1
+
+X
+
+> s=1
+
+Y ωs ≤ − 12
+
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
+(41) 
+
+where C > 0 is some universal constant. 
+
+16 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Combining (39), (38) and Lemma B.6 leads to a bound of term (i): (i) ≤ 1
+
+α
+
+
+
+− 12
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aωt (i, j ) − A(i, j )) 2i
+
+− 12
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs
+
+h
+
+(Aωt (i, j ) − A(i, j )) 2i
+
++2 T · CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+  
+
+. (42) 
+
+Step 2: bounding terms (ii) and (iii). To bound (ii) and (iii), we first prove the following lemma. 
+
+Lemma B.7. For any {(bμt, bνt)}t∈[T ] ⊂ ∆m × ∆n and any {bωt}t∈[T ] ⊂ Ω, we have 
+
+> T
+
+X
+
+> t=1
+
+f bμt,bνt (Abωt ) − f bμt,bνt (A) ≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼bμs,j ∼bνs [( Abωt (i, j ) − A(i, j )) 2]+ ( √d + 2 Bl) min {d(λ), T } + √dλ (43) 
+
+for any λ, η > 0, where d(λ) := 2 d log  1 + Tdλ 
+
+.
+
+By letting bμt = eμt, bνt = νt and bωt = ωt in Lemma B.7, we have 
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (Aωt ) − f eμt,ν t (A)
+
+
+
+≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2]+ ( √d + 2 Bl) min {d(λ), T } + √dλT. (44) By letting bμt = μt, bνt = eνt and bωt = ωt in Lemma B.7, we have 
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (A) − f μt,eνt (Aωt )
+
+
+
+≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs [( Aωt (i, j ) − A(i, j )) 2]+ ( √d + 2 Bl) min {d(λ), T } + √dλT. (45) Similarly, we have 
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (A) − f eμt,ν t (Aωt−1 )
+
+
+
+≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−2
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt−1 (i, j ) − A(i, j )) 2]+ ( √d + 2 Bl) min {d(λ), T } + √dλT + 2 B2 
+
+> l
+
+ηT, (46) which uses the fact 
+
+Ei∼eμt−1,j ∼νt−1 [( Aωt−1 (i, j ) − A(i, j )) 2] ≤ 4B2 
+
+> l
+
+.
+
+Notice that the second term in (46) can be further bounded by 
+
+> T
+
+X
+
+> t=1
+> t−2
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt−1 (i, j ) − A(i, j )) 2] =  
+
+> T−1
+
+X
+
+> t=0
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2]
+
+≤
+
+> T
+
+X
+
+> t=0
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2]=
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2], (47) where the first line shifts the index of t by 1, and the last equality holds because the term is 0 when t = 0 . Plugging the above inequality back to (46) leads to 
+
+> T
+
+X
+
+> t=1
+
+
+
+f eμt,ν t (A) − f eμt,ν t (Aωt−1 )
+
+
+
+= d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2]
+
+17 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
++ ( √d + 2 Bl) min {d(λ), T } + √dλT + 2 B2 
+
+> l
+
+ηT. (48) Analogously, we have 
+
+> T
+
+X
+
+> t=1
+
+
+
+f μt,eνt (Aωt−1 ) − f μt,eνt (A)
+
+
+
+≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs [( Aωt (i, j ) − A(i, j )) 2]+ ( √d + 2 Bl) min {d(λ), T } + √dλT + 2 B2 
+
+> l
+
+ηT. (49) Combining (44), (45), (48), and (49), we have (ii) + (iii) ≤ η
+
+( TX
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs [( Aωt (i, j ) − A(i, j )) 2] + 
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs [( Aωt (i, j ) − A(i, j )) 2]
+
+)
+
++ 2d(λ)
+
+η + 4( √d + 2 Bl) min {d(λ), T } + 4 √dλT + 4 B2 
+
+> l
+
+ηT. (50) 
+
+Step 3: combining the bounds. Letting η = 12α in (50) , the first line of (42) could cancel out the first line of (50) , which leads to 
+
+Regret (T ) = (i) + (ii) + (iii) 
+
+= Tα · 2CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
++ 4 αd (λ) + 4( √d + 2 Bl) min {d(λ), T } + 4 √dλT + 2B2 
+
+> l
+
+Tα (51) with probability at least 1 − δ.By choosing 
+
+α =
+
+vuut T
+
+
+
+log(4 T /δ ) + d log 
+
+
+
+1 + 2 √dT 
+
+ 
+
+d log  1 + ( T /d )3/2 and λ =
+
+r dT ,
+
+we have with probability at least 1 − δ,
+
+Regret (T )
+
+≤ 2
+
+
+
+CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+
+
++ 1 
+
+
+
+d√T ·
+
+s 1
+
+d log(4 T /δ ) + log 
+
+
+
+1 + 2 √dT 
+
+
+
+log  1 + ( T /d )3/2
+
++ 2 B2
+
+> l
+
+√T
+
+vuut d log  1 + ( T /d )3/2
+
+log(4 T /δ ) + d log 
+
+
+
+1 + 2 √dT 
+
+ + 4( √d + 2 Bl)d log 
+
+
+
+1 + ( T /d )3/2
+
++ 4 d√T (52) for some absolute constant C > 0, and thus the regret could be bounded by (13) by simplifying the logarithmic terms. B.2.1. P ROOF OF LEMMA B.6 To begin, by Assumption 2.3 together with the sub-Gaussian concentration inequality, we have that with probability at least 
+
+1 − δ 
+
+> 2
+
+, for any s ∈ [T ] and ω ∈ Ω,
+
+P(|ξs| ≥ a) ≤ 2 exp 
+
+
+
+− a2
+
+2σ2
+
+
+
+and P(|ξ′
+
+> s
+
+| ≥ a) ≤ 2 exp 
+
+
+
+− a2
+
+2σ2
+
+
+
+for all a > 0,
+
+which implies that with probability at least 1 − δ 
+
+> 2
+
+,
+
+|ξs| ≤ σp2 log(8 T /δ ), |ξ′
+
+> s
+
+| ≤ σp2 log(8 T /δ ), ∀s ∈ [T ]. (53) 18 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+We let E be the event that (53) holds for all s ∈ [T ], which satisfies P(E) ≥ 1 − δ 
+
+> 2
+
+.Next, we define filtrations Ft := σ(Dt) for all t ∈ [T ]. By Assumption 2.3, we have for all s ∈ [T ] and ω ∈ Ω,
+
+E[Xωs |F s−1] = Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+, (54) 
+
+E[Y ωs |F s−1] = Ei∼μs,j ∼eνs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+. (55) We also have 
+
+Var [Xωs |F s−1] ≤ E (Xωs )2|F s−1
+
+
+
+= E
+
+h
+
+(Aω (is, j s) − A(is, j s)) 2 (Aω (is, j s) − A(is, j s) − 2ξs)2 |F s−1
+
+i
+
+≤ 4( B2 
+
+> l
+
++ σ2)E
+
+h
+
+(Aω (is, j s) − A(is, j s)) 2 |F s−1
+
+i
+
+= 4( B2 
+
+> l
+
++ σ2)Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+, (56) where we use Assumptions 2.1, 2.2 and 2.3 in the last inequality: Assumption 2.2 guarantees that Aω⋆ = A, and Assumption 2.1 indicates that ∥A(i, j )∥∞ := max i∈[m],j ∈[n] |A(i, j )| ≤ Bl and ∥Aω (i, j )∥∞ ≤ Bl for all ω ∈ Ω;moreover, Assumption 2.3 implies Eξ2 
+
+> s
+
+≤ σ2. Conditioned on event E, we can bound |Xωs − E[Xωs |F s−1]| using (39) and (54) as follows: 
+
+|Xωs − E[Xωs |F s−1]|
+
+= (Aω (is, j s) − A(is, j s)) ( Aω (is, j s) − A(is, j s) − 2ξs) − Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+≤ (Aω (is, j s) − A(is, j s)) 2 − Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ 2 |ξs| | Aω (is, j s) − A(is, j s)|≤ 4Bl
+
+
+
+Bl + σp2 log(8 T /δ )
+
+
+
+. (57) In what follows, we apply a standard covering argument together with the Freedman’s inequality to prove the desired bound, conditioned on event E. First, for any X ⊂ Rd, let N (X , ϵ, ∥·∥ ) be the ϵ-covering number of X with respect to the norm 
+
+∥·∥ . By Assumption 2.1 we know that Ω ⊂ Bd
+
+> 2
+
+(√d). Thus by Lemma B.5 we have 
+
+log N (Ω , ϵ, ∥·∥ 2) ≤ log N (Bd
+
+> 2
+
+(√d), ϵ, ∥·∥ 2) ≤ d log 1 + 2√dϵ
+
+!
+
+(58) for any ϵ > 0. In other words, for any ϵ > 0, there exists an ϵ-net Ωϵ ⊂ Ω such that log |Ωϵ| ≲ d log 
+
+
+
+1 + 2√dϵ
+
+
+
+.Applying Freedman’s inequality (c.f. Lemma B.1) to the martingale difference sequence {E[Xωs |F s−1] − Xωs }s∈[T ] and making use of (54), (56) and (57) we have under event E, with probability at least 1 − δ 
+
+> 4
+
+,
+
+∀t ∈ [T ], ω ∈ Ωϵ :
+
+> t
+
+X
+
+> s=1
+
+
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+− Xωs
+
+
+
+≤ 12
+
+> t
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ 4 CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+
+
+log 
+
+ 4Tδ
+
+
+
++ d log 1 + 2√dϵ
+
+!! 
+
+,
+
+where C > 0 is an absolute constant. In addition, conditioned on event E, for any ω, ω ′ ∈ Ω, ∥ω − ω′∥2 ≤ ϵ, we have 
+
+ 12 Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+− Xωs
+
+
+
+−
+
+ 12 Ei∼eμs,j ∼νs
+
+h
+
+(Aω′ (i, j ) − A(i, j )) 2i
+
+− Xω′
+
+> s
+
+
+
+19 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+≤ 12 Ei∼eμs,j ∼νs (Aω (i, j ) − A(i, j )) 2 − (Aω′ (i, j ) − A(i, j )) 2 + |Xωs − Xω′ 
+
+> s
+
+|≤
+
+
+
+6Bl + 2 σp2 log(8 T /δ )
+
+
+
+ϵ. 
+
+Thus combining the above two expressions and set ϵ = 1 
+
+> T
+
+, we have that under event E, with probability at least 1 − δ 
+
+> 4
+
+,
+
+∀t ∈ [T ], ω ∈ Ω : 
+
+> t
+
+X
+
+> s=1
+
+
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
+− Xωs
+
+
+
+≤ 12
+
+> t
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ 4 CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
+(59) for sufficiently large constant C.Rearanging terms, we have with probability at least 1 − δ 
+
+> 4
+
+,
+
+∀t ∈ [T ], ω ∈ Ω : −
+
+> t−1
+
+X
+
+> s=1
+
+Xωs ≤ − 12
+
+> t−1
+
+X
+
+> s=1
+
+Ei∼eμs,j ∼νs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ 4 CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
+. (60) Similar to (40), conditioned on event E, we could upper bound − Pt−1 
+
+> s=1
+
+Y ωs as follows with probability at least 1 − δ 
+
+> 4
+
+:
+
+∀t ∈ [T ], ω ∈ Ω : −
+
+> t−1
+
+X
+
+> s=1
+
+Y ωs ≤ − 12
+
+> t−1
+
+X
+
+> s=1
+
+Ei∼μs,j ∼eνs
+
+h
+
+(Aω (i, j ) − A(i, j )) 2i
+
++ 4 CB l
+
+
+
+Bl + σp2 log(8 T /δ )
+
+ 
+
+log 
+
+ 4Tδ
+
+
+
++ d log 
+
+
+
+1 + 2 T √d
+
+
+
+. (61) Applying union bound completes the proof of Lemma B.6. B.2.2. P ROOF OF LEMMA B.7 For any μ, ν ∈ ∆m × ∆n and any ω ∈ Ω, notice that 
+
+f μ,ν (Aω ) − f μ,ν (A) = ⟨Ei∼μ,j ∼ν [ϕ(i, j )] 
+
+| {z }
+
+> =: x(μ,ν )
+
+, ω − ω⋆⟩, (62) where we denote Ei∼μ,j ∼ν [ϕ(i, j )] as x(μ, ν ) for simplicity. By Assumption 2.1, it guarantees that ∥x(μ, ν )∥∞ ≤ 1 for all 
+
+μ, ν . For each t ∈ [T ], we define Λt ∈ Rd×d as 
+
+Λt := λI d +
+
+> t−1
+
+X
+
+> s=1
+
+x(bμs, bνs)x(bμs, bνs)⊤ (63) for any λ > 0. By Lemma B.2 and Lemma B.3, we have 
+
+> t
+
+X
+
+> s=1
+
+min 
+
+n
+
+∥x(bμs, bνs)∥Λ−1 
+
+> s
+
+, 1
+
+o
+
+≤ 2d log 
+
+
+
+1 + Tdλ 
+
+
+
+:= d(λ), (64) which will be used repeatedly in the proof. 20 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+We decompose PTt=1 f bμt,bνt (Abωt ) − f bμt,bνt (A) into two terms: 
+
+> T
+
+X
+
+> t=1
+
+f bμt,bνt (Abωt ) − f bμt,bνt (A) =
+
+> T
+
+X
+
+> t=1
+
+|⟨ x(bμt, bνt), bωt − ω⋆⟩| 1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+≤ 1
+
+o| {z }
+
+> (a)
+
++
+
+> T
+
+X
+
+> t=1
+
+|⟨ x(bμt, bνt), bωt − ω⋆⟩| 1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+> 1
+
+o| {z }
+
+> (b)
+
+. (65) To prove Lemma B.7, below we bound (a) and (b) separately. 
+
+Step 1: bounding term (a). To bound term (a), it follows that 
+
+(a) = 
+
+> T
+
+X
+
+> t=1
+
+|⟨ x(bμt, bνt), bωt − ω⋆⟩| 1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+≤ 1
+
+o
+
+≤
+
+> T
+
+X
+
+> t=1
+
+∥bωt − ω⋆∥Λt ∥x(bμt, bνt)∥Λ−1
+
+> t
+
+1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+≤ 1
+
+o
+
+≤
+
+> T
+
+X
+
+> t=1
+
+∥bωt − ω⋆∥Λt min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+, (66) where the first inequality uses the Cauchy-Schwarz inequality, and the second inequality uses the fact that 
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+≤ 1
+
+o
+
+≤ min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+.
+
+Also, by Assumption 2.1 and the definition of Λt in (63), we have 
+
+∥bωt − ω⋆∥Λt ≤ 2√λd +
+
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2
+
+, (67) which gives 
+
+> T
+
+X
+
+> t=1
+
+∥bωt − ω⋆∥Λt min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+≤
+
+> T
+
+X
+
+> t=1
+
+2√λd +
+
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2 · min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+≤
+
+> T
+
+X
+
+> t=1
+
+4λd 
+
+!1/2 TX
+
+> t=1
+
+min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o!1/2
+
++
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2 TX
+
+> t=1
+
+min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o!1/2
+
+≤ 2pλdT min {d(λ), T } + d(λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2
+
+, (68) where the first inequality uses (67) and the second inequality uses the Cauchy-Schwarz inequality and the fact that 
+
+min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o2
+
+≤ min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+,
+
+21 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+and the last inequality uses (64). Plugging (68) into (66), we have 
+
+(a) ≤ 2√d · pλT min {d(λ), T } + d(λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2
+
+. (69) 
+
+Step 2: bounding term (b). It follows that 
+
+(b) = 
+
+> T
+
+X
+
+> t=1
+
+|⟨ x(bμt, bνt), bωt − ω⋆⟩| 1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+> 1
+
+o
+
+≤
+
+> T
+
+X
+
+> t=1
+
+|⟨ x(bμt, bνt), bωt − ω⋆⟩| min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+≤ 2Bl min {T, d (λ)}, (70) where the first inequality uses the fact that 
+
+1
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+> 1
+
+o
+
+≤ min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+,
+
+and the last inequality uses Assumption 2.1 and (64). 
+
+Step 3: combining (a) and (b). Plugging (69) and (70) into (65), we have 
+
+> T
+
+X
+
+> t=1
+
+f bμt,bνt (Abωt ) − f bμt,bνt (A)
+
+≤ 2√d · pλT min {d(λ), T } + d(λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2
+
++ 2 Bl min {T, d (λ)}≤ d(λ)
+
+η · η
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2
+
+!1/2
+
++ ( √d + 2 Bl) min {d(λ), T } + √dλT 
+
+≤ d(λ)2η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> s=1
+
+|⟨ bωt − ω⋆, x (bμs, bνs)⟩| 2 + ( √d + 2 Bl) min {d(λ), T } + √dλT (71) for any η > 0, where the second and third inequalities both use the fact that √ab ≤ a+b 
+
+> 2
+
+for any a, b ≥ 0. The proof is completed by plugging in the following fact into the above relation: for any μ, ν ∈ ∆m × ∆n and any ω ∈ Ω, we have 
+
+|⟨ x(μ, ν ), ω − ω⋆⟩| 2 = |Ei∼μ,j ∼ν [Aω (i, j ) − A(i, j )] |2 ≤ Ei∼μ,j ∼ν [( Aω (i, j ) − A(i, j )) 2]. (72) 
+
+B.3. Proof of Theorem 3.3 
+
+For notation simplicity, we define 
+
+eπt,n := ( eπnt , π−nt ), ∀n ∈ [N ]. (73) Analogous to (32), here we decompose the regret as 
+
+Regret (T ) = 
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−nt 
+
+> n
+
+(ρ) − V πt 
+
+> n
+
+(ρ)
+
+
+
+,
+
+=
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−nt 
+
+> n
+
+(ρ) − V ⋆, π−nt 
+
+> ft,n
+
+(ρ)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−nt 
+
+> ft,n
+
+(ρ) − V eπnt ,π−nt 
+
+> n
+
+(ρ)
+
+
+
+22 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V eπnt ,π−nt 
+
+> n
+
+(ρ) − V eπnt ,π−nt 
+
+> ft−1,n
+
+(ρ)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V eπnt ,π−nt 
+
+> ft−1,n
+
+(ρ) − V πt
+
+> ft−1,n
+
+(ρ)
+
+
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V πt
+
+> ft−1,n
+
+(ρ) − V πt 
+
+> n
+
+(ρ)
+
+
+
+. (74) By line 4 in Algorithm 2 we know that the second term in the third line of (74) is non-positive. Besides, (23) indicates 
+
+∀n ∈ [N ] : V ⋆, π−nt 
+
+> ft,n
+
+(ρ) = V eπnt ,π−nt 
+
+> ft,n
+
+(ρ). (75) Combining these two facts, we have 
+
+Regret (T ) ≤
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V ⋆, π−nt 
+
+> n
+
+(ρ) − V ⋆, π−nt 
+
+> ft,n
+
+(ρ)
+
+| {z }
+
+> (i)
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V eπnt ,π−nt 
+
+> ft,n
+
+(ρ) − V eπnt ,π−nt 
+
+> n
+
+(ρ)
+
+| {z }
+
+> (ii)
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V eπnt ,π−nt 
+
+> n
+
+(ρ) − V eπnt ,π−nt 
+
+> ft−1,n
+
+(ρ)
+
+| {z }
+
+> (iii)
+
++
+
+> T
+
+X
+
+> t=1
+
+1
+
+N
+
+> N
+
+X
+
+> n=1
+
+
+
+V πt
+
+> ft−1,n
+
+(ρ) − V πt 
+
+> n
+
+(ρ)
+
+| {z }
+
+> (iv)
+
+. (76) In the following we upper bound each term in (76) separately. 
+
+Step 1: bounding term (i). By Assumption 3.2 we know that there exists f ⋆ ∈ F such that f ⋆ := P = Pf ⋆ . By the model update rule (22) in Algorithm 2 and the definition of the loss function (21), we have 
+
+Lt(ft) − α
+
+> N
+
+X
+
+> n=1
+
+V ⋆, π−nt 
+
+> ft,n
+
+(ρ) ≤ L t(f ⋆) − α
+
+> N
+
+X
+
+> n=1
+
+V ⋆, π−nt 
+
+> n
+
+(ρ)
+
+from which we deduce 
+
+(i) ≤ 1
+
+N α 
+
+> T
+
+X
+
+> t=1
+
+(Lt(f ⋆) − L t(ft)) . (77) It then boils down to bounding the right-hand side of (77). We first define random variables Xft,h and Y ft,h,n as 
+
+Xft,h := log 
+
+ Ph(st,h +1 |st,h , at,h )
+
+Pf,h (st,h +1 |st,h , at,h )
+
+
+
+and Y ft,h,n := log Ph(snt,h +1 |snt,h , ant,h )
+
+Pf,h (snt,h +1 |snt,h , ant,h )
+
+!
+
+, ∀n ∈ [N ]. (78) By the definition of the loss function (21), we have 
+
+Lt(f ⋆) − L t(f ) = −
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+> N
+
+X
+
+> n=1
+
+
+
+Xfi,h + Y fi,h,n 
+
+
+
+. (79) Let D2 
+
+> H
+
+(·∥· ) denote the Hellinger divergence defined as: 
+
+D2 
+
+> H
+
+(P ∥Q) := 12
+
+Z
+
+> X
+
+p P (x) − pQ(x)
+
+2
+
+dx (80) for any probability measures P and Q on X , and define 
+
+ℓ(fh, s, a) := D2 
+
+> H
+
+(Pf,h (·| s, a)∥Ph(·| s, a)) . (81) In the following lemma we provide a concentration result for the random variables Xft,h and Y ft,h,n in (79) (recall we define 
+
+eπt,n := ( eπnt , π−nt ) in (73) ), where the state-action visitation distribution dπ 
+
+> h
+
+(ρ) ∈ ∆( S × A ) at step h under the policy π
+
+and the initial state distribution ρ is defined as 
+
+dπ 
+
+> h
+
+(s, a ; ρ) := Es1∼ρPπ (sh = s, ah = a|s1). (82) 23 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Lemma B.8. When Assumptions 3.1 and 3.2 hold, for any δ ∈ (0 , 1) , with probability at least 1 − δ, we have for all t ∈ [T ],
+
+f ∈ F and n ∈ [N ]:
+
+−
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+Xfi,h ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+E(si,h ,ai,h )∼dπih (ρ) [ℓ(fh, s i,h , ai,h )] + 2 √2H + 2 H log 
+
+ (N + 1) HT δ
+
+
+
++ 2 dH log 
+
+
+
+1 + 2 √d|S| 2T 2
+
+. (83) 
+
+−
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+Y fi,h,n ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+E(sni,h ,ani,h )∼d eπi,n h (ρ)
+
+ℓ(fh, s ni,h , ani,h )
+
++ 2 √2H + 2 H log 
+
+ (N + 1) HT δ
+
+
+
++ 2 dH log 
+
+
+
+1 + 2 √d|S| 2T 2
+
+. (84) Combining (77), (79), (83), (84), we have with probability at least 1 − δ:(i) ≤ − 2
+
+N α 
+
+> N
+
+X
+
+> n=1
+
+ TX
+
+> t=1
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+E(si,h ,ai,h )∼dπih (ρ) [ℓ(ft,h , s i,h , ai,h )] +
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+E(sni,h ,ani,h )∼d eπi,n h (ρ)
+
+ℓ(ft,h , s ni,h , ani,h ) 
+
++ 4HT α
+
+√2 + log 
+
+ (N + 1) HT δ
+
+
+
++ d log 
+
+
+
+1 + 2 √d|S| 2T 2
+
+. (85) 
+
+Step 2: bounding terms (ii), (iii) and (iv). To bound (ii), (iii) and (iv), we introduce the following lemma. 
+
+Lemma B.9. Under Assumptions 3.1 and 3.2, for any n ∈ [N ], β ≥ 0, {bπt : S × [H] → ∆( A)}t∈[T ] and { bft}t∈[T ] ⊂ F ,we have 
+
+> T
+
+X
+
+> t=1
+
+V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) ≤ η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+E(s, a)∼d bπih (ρ)ℓ( bft,h , s, a)+ H
+
+ 4dH (λ)Hη +
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT 
+
+
+
+(86) 
+
+for any η > 0 and λ > 0, where dH (λ) is defined as 
+
+dH (λ) := 2 d log 
+
+
+
+1 + H2Tλ
+
+
+
+.
+
+Now we are ready to bound (ii), (iii) and (iv). To bound (ii), letting bft = ft and bπt = eπt,n for each n ∈ [N ] in Lemma B.9 (recall we define eπt,n := ( eπnt , π−nt ) in (73)), we have for any η > 0:(ii) ≤ η
+
+2N
+
+> H
+
+X
+
+> h=1
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft,h , s, a)+ H
+
+ 4dH (λ)Hη +
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT 
+
+
+
+. (87) Letting bft,h = ft−1 and bπt,h = eπt,n for each n ∈ [N ] in Lemma B.9, we can bound (iii) as follows: (iii) ≤ η
+
+2N
+
+> H
+
+X
+
+> h=1
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft−1,h , s, a)
+
+24 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
++ H
+
+ 4dH (λ)Hη +
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT 
+
+
+
+. (88) To continue to bound the first term, note that 
+
+> H
+
+X
+
+> h=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft−1,h , s, a) ≤
+
+> H
+
+X
+
+> h=1
+> T
+
+X
+
+> t=1
+> t−2
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft−1,h , s, a) + HT 
+
+=
+
+> H
+
+X 
+
+> h=1
+> T−1
+
+X
+
+> t=0
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft,h , s, a) + HT 
+
+≤
+
+> H
+
+X
+
+> h=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft,h , s, a) + HT, 
+
+where the first inequality uses the fact that 
+
+ℓ(fh, s, a) = D2 
+
+> H
+
+(Pf,h (·| s, a)∥Ph(·| s, a)) ≤ 1, (89) the second line shifts the index of t by 1, and the last line follows by noticing the first summand is 0 at t = 0 . Plugging the above relation back to (88) leads to (iii) ≤ η
+
+2N
+
+> H
+
+X
+
+> h=1
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n h (ρ)ℓ(ft,h , s, a)+ H
+
+ 4dH (λ)Hη +
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT + η
+
+2 T
+
+
+
+. (90) Finally, similar to (90) , letting bft,h = ft−1, bπt,h = πt for each n ∈ [N ] and replace η by 2η in Lemma B.9, we can bound (iv) as follows: (iv) ≤ ηN
+
+> H
+
+X
+
+> h=1
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼dπih (ρ)ℓ(ft,h , s, a)+ H
+
+ 2Hd H (λ)
+
+η +
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT + ηT 
+
+
+
+. (91) 
+
+Step 3: combining the bounds. Letting η = 2 
+
+> α
+
+in (87) , (90) and (91) , and adding (85) , (87) , (90) and (91) together, we have with probability at least 1 − δ:
+
+Regret (T ) ≤ 4HT α
+
+√2 + log 
+
+ (N + 1) HT δ
+
+
+
++ d log 
+
+
+
+1 + 2 √d|S| 2T 2
+
++ H
+
+
+
+5αd H (λ)H + 3 
+
+√d + H
+
+
+
+min {dH (λ), T } + 3 √dλT + 3
+
+α T
+
+
+
+.
+
+By setting 
+
+λ =
+
+r dT , α =
+
+vuuut log 
+
+ (N +1) HT δ
+
+
+
++ d log 
+
+
+
+1 + 2 √d|S| 2T 2
+
+
+
+Hd log 
+
+
+
+1 + H2T 3/2
+
+> √d
+
+ T , (92) in the above expression, we have with probability at least 1 − δ:
+
+Regret (T ) ≤ 4(1 + √2) 
+
+vuuut d log 
+
+
+
+1 + H2T 3/2
+
+> √d
+
+
+
+log 
+
+ (N +1) HT δ
+
+
+
++ d log 
+
+
+
+1 + 2 √d|S| 2T 2
+
+ · √HT 
+
+25 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+14 d√H3T ·
+
+s 1
+
+d log 
+
+ (N + 1) HT δ
+
+
+
++ log 
+
+
+
+1 + √d|S| 2T 2
+
+
+
+log 
+
+
+
+1 + H2T 3/2
+
+√d
+
+
+
++ 6 H
+
+√d + H
+
+
+
+d log 
+
+
+
+1 + H2T 3/2
+
+√d
+
+
+
++ 3 dH √T , (93) which gives the desired result after simplifying the expression. B.3.1. P ROOF OF LEMMA B.8 Same as in (58), for the parameter spaces Θh, h ∈ [H], by Assumption 3.1 and Lemma B.5 we have 
+
+∀h ∈ [H] : log N (Θ h, ϵ, ∥·∥ 2) ≤ d log 1 + 2√dϵ
+
+!
+
+(94) for any ϵ > 0. Thus for any ϵ > 0, there exists an ϵ-net Θh,ϵ of Θh (Θh,ϵ ⊂ Θh) such that log |Θh,ϵ | ≤ d log 
+
+
+
+1 + 2√dϵ
+
+
+
+,
+
+∀h ∈ [H]. Define 
+
+Fh,ϵ := fh ∈ F h : fh(s, a, s h+1 ) = ϕh(s, a, s h+1 )⊤θh, θ h ∈ Θh,ϵ .
+
+For any f ∈ F , there exists θh ∈ Θh such that fh(s, a, s h+1 ) = ϕh(s, a, s h+1 )⊤θh. In addition, there exists θh,ϵ ∈ Θh,ϵ 
+
+such that ∥θh − θh,ϵ ∥2 ≤ ϵ. We let fϵ(s, a, s h+1 ) = ϕh(s, a, s h+1 )⊤θh,ϵ . Then fϵ ∈ F h,ϵ , and we have 
+
+|Pf,h (sh+1 |s, a) − Pfϵ,h (sh+1 |s, a)| = |ϕh(s, a, s h+1 )⊤(θh − θh,ϵ )| ≤ ϵ, (95) from which we deduce 
+
+∀t ∈ [T ], h ∈ [H] : −Xft,h ≤ − log 
+
+ Ph(st,h +1 |st,h , at,h )
+
+Pfϵ,h (st,h +1 |st,h , at,h ) + ϵ
+
+
+
+:= −Xfϵ
+
+> t,h
+
+(ϵ). (96) Let Ft := σ(Dt) be the σ-algebra generated by the dataset Dt. By Lemma B.4 we have with probability at least 1 − δN +1 :
+
+∀t ∈ [T ], h ∈ [H], f h,ϵ ∈ F h,ϵ : − 12
+
+> t−1
+
+X
+
+> i=1
+
+Xfϵ
+
+> i,h
+
+(ϵ) ≤
+
+> t−1
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ
+
+> i,h
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
++ log 
+
+ (N + 1) HT δ
+
+
+
++ d log 1 + 2√dϵ
+
+!
+
+. (97) Then we have for all t ∈ [T ], h ∈ [H] and f ∈ F :
+
+− 12
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+Xfi,h ≤ − 12
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+Xfϵ
+
+> i,h
+
+(ϵ)
+
+≤
+
+> t
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ
+
+> i,h
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
++ H log 
+
+ (N + 1) HT δ
+
+
+
++ dH log 1 + 2√dϵ
+
+!
+
+, (98) where the first line follows (96), and the second line follows from (97). The first term in the last line of (98) can be further bounded as follows: 
+
+> t
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ
+
+> i,h
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
+=
+
+> t−1
+
+X
+
+> i=1
+> H
+
+X
+
+> h=1
+
+log E
+
+"s 
+
+Pfϵ,h (si,h +1 |si,h , ai,h ) + ϵ
+
+Ph(si,h +1 |si,h , ai,h ) Fs−1
+
+#
+
+26 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+=
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+log E (si,h ,ai,h )∼dπih (ρ),si,h +1 ∼Ph(·| si,h ,ai,h )
+
+"s 
+
+Pfϵ,h (si,h +1 |si,h , ai,h ) + ϵ
+
+Ph(si,h +1 |si,h , ai,h )
+
+#
+
+=
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+log E(si,h ,ai,h )∼dπih (ρ)
+
+Z 
+
+S
+
+q
+
+(Pfϵ,h (si,h +1 |si,h , ai,h ) + ϵ) Ph(si,h +1 |si,h , ai,h )ds i,h +1 
+
+
+
+≤
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+log E(si,h ,ai,h )∼dπih (ρ)
+
+Z 
+
+S
+
+q
+
+(Pf,h (si,h +1 |si,h , ai,h ) + 2 ϵ) Ph(si,h +1 |si,h , ai,h )ds i,h +1 
+
+
+
+, (99) where the last inequality uses (95). Furthermore, we have 
+
+E(si,h ,ai,h )∼dπih (ρ)
+
+Z 
+
+S
+
+q
+
+(Pf,h (si,h +1 |si,h , ai,h ) + 2 ϵ) Ph(si,h +1 |si,h , ai,h )ds i,h +1 
+
+
+
+≤ E(si,h ,ai,h )∼dπih (ρ)
+
+Z 
+
+S
+
+q
+
+Pf,h (si,h +1 |si,h , ai,h )Ph(si,h +1 |si,h , ai,h )ds i,h +1 
+
+
+
++ E(si,h ,ai,h )∼dπih (ρ)
+
+Z 
+
+S
+
+q
+
+2ϵPh(si,h +1 |si,h , ai,h )ds i,h +1 
+
+
+
+≤ 1 − 12 E(si,h ,ai,h )∼dπih (ρ)
+
+"Z
+
+S
+
+q 
+
+Pf,h (si,h +1 |si,h , ai,h ) −
+
+q
+
+Ph(si,h +1 |si,h , ai,h )
+
+2
+
+ds i,h +1 
+
+#
+
++ √2ϵ|S| 
+
+= 1 − E(si,h ,ai,h )∼dπih (ρ)
+
+D2
+
+H (Pf,h (·| si,h , ai,h )∥Ph(·| si,h , ai,h ))  + √2ϵ|S| , (100) where in the first inequality we use the fact that √a + b ≤ √a + √b for any a, b ≥ 0, and the last line uses the definition of the Hellinger distance in (80). Plugging (100) into (99), we have 
+
+tX
+
+i=1 
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ
+
+i,h (ϵ)
+
+
+
+Fi−1
+
+
+
+≤
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+log 
+
+
+
+1 − E(si,h ,ai,h )∼dπih (ρ)
+
+D2
+
+H (Pf,h (·| si,h , ai,h )∥Ph(·| si,h , ai,h ))  + √2ϵ|S| 
+
+
+
+≤ − 
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+E(si,h ,ai,h )∼dπih (ρ)
+
+D2
+
+H (Pf,h (·| si,h , ai,h )∥Ph(·| si,h , ai,h ))  + √2ϵ|S| 
+
+= −
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+E(si,h ,ai,h )∼dπih (ρ) [ℓ(fh, s i,h , ai,h )] + T H √2ϵ|S| ,
+
+where the second inequality follows from log( x) ≤ x − 1 for any x > 0, and the last line follows the definition (81). Plugging the above inequality into (98), we have with probability at least 1 − δN +1 :
+
+∀t ∈ [T ], f ∈ F : −
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+Xfi,h ≤ − 2
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+E(si,h ,ai,h )∼dπih (ρ) [ℓ(fh, s i,h , ai,h )] + 2 T H √2ϵ|S| + 2 H log 
+
+ (N + 1) HT δ
+
+
+
++ 2 dH log 1 + 2√dϵ
+
+!
+
+. (101) Then analogous to (101) , we can bound − Pt−1
+
+i=1 
+
+PHh=1 Y fi,h,n for all n ∈ [N ] with probability at least 1 − N δ N +1 as follows: 
+
+∀t ∈ [T ], f ∈ F , n ∈ [N ] : −
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+Y fi,h,n ≤ − 2
+
+t−1X
+
+i=1 
+
+HX
+
+h=1 
+
+E(sni,h ,ani,h )∼d eπi,n h (ρ)
+
+ℓ(fh, s ni,h , ani,h )
+
+27 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
++ 2 T H √2ϵ|S| + 2 H log 
+
+ (N + 1) HT δ
+
+
+
++ 2 dH log 1 + 2√dϵ
+
+!
+
+. (102) Letting ϵ = 1  
+
+> T2|S| 2
+
+in (101) and (102), we obtain (83) and (84) in Lemma B.8. B.3.2. P ROOF LEMMA B.9 To prove Lemma B.9, we first express the value difference sum PTt=1 V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) on the left hand side of (86) as sum of the expectation of the model estimation errors E bπt 
+
+> n
+
+( bft,h , s h, ah).
+
+Step 1: reformulating the value difference sum. For any f ∈ F and π = ( π1, · · · , π N ) : S × [H] → ∆( A), we have (recall we defined the state-action visitation distribution dπ 
+
+> h
+
+(ρ) in (82)) for n ∈ [N ]:
+
+V π
+
+> f,n
+
+(ρ) = E ∀h∈[H]:( sh,ah)∼dπ 
+
+> h(ρ),sh+1 ∼Ph(·| sh,ah)
+
+" HX
+
+> h=1
+
+ V π
+
+> f,h,n
+
+(sh) − V π
+
+> f,h +1 ,n
+
+(sh+1 )#
+
+= E ∀h∈[H]:( sh,ah)∼dπ 
+
+> h(ρ),sh+1 ∼Ph(·| sh,ah)
+
+" HX
+
+> h=1
+
+
+
+Qπ
+
+> f,h,n
+
+(sh, ah) − β log πn(anh |snh )
+
+πn 
+
+> ref
+
+(anh |snh ) − V π
+
+> f,h +1 ,n
+
+(sh+1 )
+
+#
+
+, (103) where in the second line we use the fact that 
+
+V π
+
+> f,h,n
+
+(s) = Ea∼π(·| s)
+
+
+
+Qπ
+
+> f,h,n
+
+(s, a) − β log πn(an|sn)
+
+πn 
+
+> ref
+
+(an|sn)
+
+
+
+.
+
+By the definition of V π 
+
+> n
+
+we have 
+
+∀n ∈ [N ] : V π 
+
+> n
+
+(ρ) = E ∀h∈[H]:( sh,ah)∼dπ 
+
+> h(ρ),sh+1 ∼Ph(·| sh,ah)
+> H
+
+X
+
+> h=1
+
+
+
+rnh (sh, ah) − β log πn(anh |snh )
+
+πn 
+
+> ref
+
+(anh |snh )
+
+
+
+. (104) To simplify the notation, we define 
+
+∀g ∈ F , h ∈ [H] : Pg,h V π
+
+> f,h +1 ,n
+
+(sh, ah) := Esh+1 ∼Pg,h (·| sh,ah)
+
+V π
+
+> f,h +1 ,n
+
+(sh+1 ) . (105) Combining (103) and (104), we have 
+
+V π
+
+> f,n
+
+(ρ) − V π 
+
+> n
+
+(ρ) = E ∀h∈[H]:( sh,ah)∼dπ 
+
+> h(ρ),sh+1 ∼Ph(·| sh,ah)
+
+" HX
+
+> h=1
+
+ Qπ
+
+> f,n
+
+(sh, ah) − rnh (sh, ah) − V π
+
+> f,h +1 ,n
+
+(sh+1 )#
+
+=
+
+> H
+
+X
+
+> h=1
+
+E(sh,ah)∼dπ 
+
+> h(ρ)
+
+[Pf,h V π
+
+> f,h +1 ,n
+
+(sh, ah) − PhV π
+
+> f,h +1 ,n
+
+(sh, ah)
+
+| {z } 
+
+> =: Eπ
+> n(fh,s h,ah)
+
+]. (106) Therefore, we can express the value difference sum PTt=1 V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) as sum of the expectation of the model estimation errors E bπt 
+
+> n
+
+( bft,h , s h, ah):
+
+> T
+
+X
+
+> t=1
+
+V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) =
+
+> T
+
+X
+
+> t=1
+> H
+
+X
+
+> h=1
+
+E(s, a)∼d bπth (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft,h , s, a)
+
+i
+
+. (107) Thus we only need to bound the right-hand side of (107). 
+
+Step 2: bounding the sum of model estimation errors. 
+
+By Assumption 3.1, there exist θf,h and θ⋆h in Θh such that fh(sh+1 |sh, ah) = ϕh(sh, ah, s h+1 )⊤θf,h and 
+
+Ph(sh+1 |sh, ah) = ϕh(sh, ah, s h+1 )⊤θ⋆h for all h ∈ [H]. Thus we have 
+
+E(sh,ah)∼dπ  
+
+> h(ρ)
+
+[Eπ 
+
+> n
+
+(fh, s h, ah)] = ( θf,h − θ⋆h)⊤ E(sh,ah)∼dπ 
+
+> h(ρ)
+
+Z 
+
+> S
+
+ϕh(sh, ah, s h+1 )V π
+
+> f,h +1 ,n
+
+(sh+1 )ds h+1 
+
+| {z }
+
+> =: xh,n (f, π)
+
+. (108) 28 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+We let xih,n (f, π) denote the i-th component of xh,n (f, π), i.e., 
+
+xih,n (f, π) = E(sh,ah)∼dπ 
+
+> h(ρ)
+
+Z 
+
+> S
+
+ϕih(sh, ah, s h+1 )V π
+
+> f,h +1 ,n
+
+(sh+1 )ds h+1 
+
+
+
+.
+
+Then we have 
+
+∀i ∈ [d] : |xih,n (f, π)| ≤ H (109) (recall that by the definition of the linear mixture model (c.f. Assumption 3.1), ϕih(s, a, ·) ∈ ∆( S) for all i ∈ [d] and 
+
+(s, a) ∈ S × A ), which gives 
+
+∥xh,n (f, π)∥2 ≤ H√d. (110) For each t ∈ [T ], we define Λt,h ∈ Rd×d as 
+
+Λt,h := λI d +
+
+> t−1
+
+X
+
+> i=1
+
+xh,n ( bfi, bπi)xh,n ( bfi, bπi)⊤. (111) We can decompose the sum of model estimation errors as follows: 
+
+> T
+
+X
+
+> t=1
+
+E(s, a)∼d bπth (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft,h , s, a)
+
+i
+
+=
+
+> T
+
+X
+
+> t=1
+
+⟨xh,n ( bft, bπt), bθt,h − θ⋆h⟩ 1
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+≤ 1
+
+| {z }
+
+> (a)
+
++
+
+> T
+
+X
+
+> t=1
+
+⟨xh,n ( bft, bπt), bθt,h − θ⋆h⟩ 1
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+> 1
+
+| {z }
+
+> (b)
+
+. (112) Below we bound (a) and (b) respectively. 
+
+Step 1: bounding term (a). By the Cauchy-Schwarz inequality, we have 
+
+(a) ≤
+
+> T
+
+X
+
+> t=1
+
+bθt,h − θ⋆h Λt,h 
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+1
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+≤ 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+bθt,h − θ⋆h Λt,h 
+
+min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+, (113) where the last inequality uses the fact that 
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+1
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+≤ 1
+
+
+
+≤ min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+.
+
+By the definition of Λt,h (c.f. (111)) and Assumption 3.1 we have 
+
+bθt,h − θ⋆h Λt,h 
+
+≤ 2√λd +
+
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt,h − θ⋆h, x h,n ( bfi, bπi)⟩| 2
+
+!1/2
+
+, (114) which gives 
+
+> T
+
+X
+
+> t=1
+
+bθt,h − θ⋆h Λt,h 
+
+min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+29 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+≤
+
+> T
+
+X
+
+> t=1
+
+2√λd +
+
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt,h − θ⋆h, x h,n ( bfi, bπi)⟩| 2
+
+!1/2 · min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+4λd 
+
+!1/2 TX
+
+> t=1
+
+min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+!1/2
+
++
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt,h − θ⋆h, x h,n ( bfi, bπi)⟩| 2
+
+!1/2 TX
+
+> t=1
+
+min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+!1/2
+
+, (115) where the first inequality uses (67) and the second inequality uses the Cauchy-Schwarz inequality and the fact that 
+
+min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+2
+
+≤ min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+.
+
+By Lemma B.2, Lemma B.3 and (110), we have 
+
+> t
+
+X
+
+> i=1
+
+min 
+
+
+
+xh,n ( bfi, bπi) Λ−1
+
+> i,h
+
+, 1
+
+
+
+≤ 2d log 
+
+
+
+1 + H2Tλ
+
+
+
+:= dH (λ) (116) holds for any λ > 0 and t ∈ [T ]. By (116), (115) and (113), we have 
+
+(a) ≤ 2pλdT min {dH (λ), T } + dH (λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt,h − θ⋆h, x h,n ( bfi, bπi)⟩| 2
+
+!1/2
+
+. (117) To continue, we have 
+
+|⟨ bθt,h − θ⋆h, x h,n ( bfi, bπi)⟩| 2 = E(s, a)∼d bπih (ρ)
+
+Z 
+
+> S
+
+
+
+P bft,h (sh+1 |s, a) − Ph(sh+1 |s, a)
+
+
+
+V bπi
+
+> bfi,h +1 ,n
+
+(sh+1 )ds h+1 
+
+ 2
+
+≤ E(s, a)∼d bπih (ρ)
+
+"Z 
+
+> S
+
+
+
+P bft,h (sh+1 |s, a) − Ph(sh+1 |s, a)
+
+
+
+V bπi
+
+> bfi,h +1 ,n
+
+(sh+1 )ds h+1 
+
+2#
+
+≤ 4 V bπi
+
+> bfi,h +1 ,n
+
+(·) ∞
+
+E(s, a)∼d bπth (ρ)D2
+
+> TV
+
+
+
+P bft,h (·| s, a) Ph(·| s, a)
+
+
+
+≤ 8HE(s, a)∼d bπih (ρ)D2
+
+> H
+
+
+
+P bft,h (·| s, a)∥Ph(·| s, a)
+
+
+
+= 8 HE(s, a)∼d bπih (ρ)ℓ( bft,h , s, a), (118) where the second line uses the Cauchy-Schwarz inequality, the third line follows from H ¨older’s inequality, and DTV denote the TV distance: 
+
+DTV (P ∥Q) := 12
+
+Z
+
+> X
+
+|P (x) − Q(x)|dx. (119) The fourth line uses the following inequality: 
+
+D2
+
+> TV
+
+(P ∥Q) ≤ 2D2 
+
+> H
+
+(P ∥Q) ,
+
+and the fact that V bπt,h 
+
+> bft,h +1 ,n
+
+(·) ∞
+
+≤ H (recall we assume r(s, a) ∈ [0 , 1] ). The last line uses (81). Plugging (118) into (117), we have 
+
+(a) ≤ 2√d · pλT min {dH (λ), T } + 8Hd H (λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπih (ρ)ℓ( bft,h , s, a)
+
+!1/2
+
+. (120) 30 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Step 2: bounding term (b). Now we bound (b) in (112). Note that 
+
+1
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+> 1
+
+
+
+≤ min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+,
+
+which gives 
+
+(b) ≤
+
+> T
+
+X
+
+> t=1
+
+⟨xh,n ( bft, bπt), bθt,h − θ⋆h⟩ min 
+
+
+
+xh,n ( bft, bπt) Λ−1
+
+> t,h
+
+, 1
+
+
+
+. (121) We also have 
+
+⟨xh,n ( bft, bπt), bθt,h − θ⋆h⟩ = E(s, a)∼d bπth (ρ)
+
+h
+
+P bft,h V bπt,h 
+
+> bft,h +1 ,n
+
+(s, a) − PhV bπt,h 
+
+> bft,h +1 ,n
+
+(s, a)
+
+i
+
+≤ H. (122) Combining the (122),(116) with (121), we have 
+
+(b) ≤ H min {T, d H (λ)}. (123) 
+
+Step 3: combining everything together. Plugging (120) and (123) into (112), we have 
+
+> T
+
+X
+
+> t=1
+
+E(s, a)∼d bπth (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft,h , s, a)
+
+i
+
+≤ 2√d · pλT min {dH (λ), T } + 8Hd H (λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπih (ρ)ℓ( bft,h , s, a)
+
+!1/2
+
++ H min {T, d H (λ)}≤ 8Hd H (λ)
+
+η · η
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπih (ρ)ℓ( bft,h , s, a)
+
+!1/2
+
++
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT 
+
+≤ 4dH (λ)Hη + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπih (ρ)ℓ( bft,h , s, a) + 
+
+√d + H
+
+
+
+min {dH (λ), T } + √dλT 
+
+for any η > 0, where the second and third inequalities both use the fact that √ab ≤ a+b 
+
+> 2
+
+for any a, b ≥ 0.Finally, combining (107) with the above inequality, we have (86). 
+
+## C. Extension to the Infinite-horizon Setting 
+
+In this section, we consider the N -player general-sum episodic Markov game with infinite horizon denoted as MP := (S, A, P, r, γ ) as a generalization of the finite-horizon case in the main paper, where γ ∈ [0 , 1) is the discounted factor, and 
+
+P : S × A → ∆( S) is the homogeneous transition kernel: the probability of transitioning from state s to state s′ by the action a = ( a1, · · · , a n) is P(s′|s, a). For the infinite horizon case, the KL-regularized value function is defined as 
+
+∀s ∈ S : V π 
+
+> n
+
+(s) := EP,π
+
+" ∞X
+
+> h=0
+
+γh
+
+
+
+rn(sh, ah) − β log πn(ah|sh)
+
+πn 
+
+> ref
+
+(ah|sh)
+
+
+
+s0 = s
+
+#
+
+= 11 − γ E(¯ s, ¯a)∼dπ (s)
+
+
+
+rn(¯ s, ¯a) − β log πn(¯ an|¯s)
+
+πn 
+
+> ref
+
+(¯ an|¯s)
+
+
+
+, (124) where sh and ah are the state and action at timestep h, respectively, dπ (s) ∈ ∆( S × A ) is the discounted state-action visitation distribution under policy π starting from state s:
+
+dπ
+
+> ¯s, ¯a
+
+(s) := (1 − γ)
+
+> ∞
+
+X
+
+> h=0
+
+γhPπ (sh = ¯ s, ah = ¯ a|s0 = s). (125) 31 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+We assume ρ ∈ ∆( S) is the initial state distribution, i.e. s0 ∼ ρ. We define dπ (ρ) := Es0∼ρ[dπ (s0)] as the discounted state-action visitation distribution under policy π starting from the initial state distribution ρ. The KL-regularized Q-function is defined as 
+
+∀(s, a) ∈ S × A : Qπ 
+
+> n
+
+(s, a) := rn(s, a) + γEs′∼P(·| s, a) [V π 
+
+> n
+
+(s′)] . (126) We let F denote the function class of the estimators of the transition kernel of the Markov game, and we denote f = Pf ∈ F .Without otherwise specified, we assume the other notations and settings are the same as the finite-horizon case stated in Section 3. 
+
+C.1. Algorithm development 
+
+The algorithm for solving the (KL-regularized) Markov game is shown in Algorithm 6, where in (128) we set the loss function at each iteration t as the negative log-likelihood of the transition kernel estimator f :
+
+Lt(f ) := X
+
+> (s, a,s ′)∈D t−1
+
+− log Pf (s′|s, a). (127) Except for the loss function, the main change in Algorithm 6 is that we need to sample the state-action pair (s, a) from the discounted state-action visitation distribution dπ (ρ), and sample the next state s′ from the transition kernel P(·| s, a), which can be done by calling Algorithm 7. Algorithm 7 is adapted from Algorithm 3 in Yuan et al. (2023), see also Algorithm 5 in Yang et al. (2024a). Algorithm 7 satisfies E[h + 1] = 11−γ , and P(sh = s, ah = a) = dπ (ρ) (Yuan et al., 2023). 
+
+Algorithm 6 Value-incentive Infinite-horizon Markov Game 
+
+1: Input: reference policies πref , KL coefficient β, initial state distribution ρ, initial transition kernel estimator f0 ∈ F ,regularization coefficient α > 0, iteration number T .
+
+2: Initialization: dataset Dn 
+
+> 0
+
+:= ∅, ∀n ∈ [N ]. D0 = ∪Nn=1 Dn 
+
+> 0
+
+.
+
+3: for t = 1 , · · · , T do 
+
+4: πt ← Equilibrium (Mft−1 ). ▷ Equilibrium (Mf ) returns a CCE or NE of game Mf .
+
+5: Model update: Update the estimator ft by minimizing the following objective: 
+
+ft = arg min  
+
+> f∈F
+
+X
+
+> (s, a,s ′)∈D t−1
+
+− log Pf (s′|s, a) − α
+
+> N
+
+X
+
+> n=1
+
+V ⋆, π−nt 
+
+> f,n
+
+(ρ). (128) 
+
+6: Compute best-response policies {eπnt }n∈[N ]:For all n ∈ [N ] : eπnt = arg max 
+
+> πn∈∆( An)
+
+V πn,π−nt 
+
+> ft,n
+
+(ρ). (129) 
+
+7: Data collection: sample (st, at, s ′
+
+> t
+
+) ← Sampler (πt, ρ ). For all n ∈ [N ], sample (snt , ant , s nt ′) ←
+
+Sampler (( eπnt , π−nt ), ρ ), and update the dataset Dnt = Dnt−1 ∪ { (st, at, s ′
+
+> t
+
+), (snt , ant , s nt ′)}. Dt = ∪Nn=1 Dnt . ▷
+
+Sampler (π, ρ ) returns (s, a) ∼ dπ (ρ) and s′ ∼ P(·| s, a), see Algorithm 7. 
+
+8: end for C.2. Theoretical guarantee 
+
+We first state our assumptions on the function class for Markov game with infinite horizon. 
+
+Assumption C.1 (linear mixture model, infinite horizon) . The function class F is 
+
+F := f |f (s, a, s ′) = ϕ(s, a, s ′)⊤θ, ∀(s, a, s ′) ∈ S × A × S , θ ∈ Θ ,
+
+where ϕ : S × A × S → Rd is the known feature map, ∥ϕ(s, a, s ′)∥2 ≤ 1 for all (s, a, s ′), and Θ ⊆ Bd
+
+> 2
+
+(√d). Moreover, for each f ∈ F and (s, a) ∈ S × A , f (·| s, a) ∈ ∆( S).We also assume the function class F is expressive enough to describe the true transition kernel of the Markov game. 32 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Algorithm 7 Sampler for (s, a) ∼ dπ (ρ) and s′ ∼ P(·| s, a)
+
+1: Input: policy π, initial state distribution ρ, player index n.
+
+2: Initialization: s0 ∼ ρ, a0 ∼ π(·| s0), time step h = 0 , variable X ∼ Bernoulli( γ). 
+
+3: while X = 1 do 
+
+4: Sample sh+1 ∼ P(·| sh, ah)
+
+5: Sample ah+1 ∼ π(·| sh+1 )
+
+6: h ← h + 1 
+
+7: X ∼ Bernoulli( γ)
+
+8: end while 
+
+9: Sample sh+1 ∼ P(·| sh, ah)
+
+10: Return (sh, ah, s h+1 ).
+
+Assumption C.2 (realizability) . There exists f ⋆ ∈ F such that Pf ⋆ = P.Theorem C.3 states our main result for the regret of the infinite-horizon online Markov game, whoes proof is deferred to Appendix C.3. 
+
+Theorem C.3. Under Assumption C.1 and Assumption C.2, if setting the regularization coefficient α as 
+
+α = (1 − γ)3/2
+
+γ
+
+vuut log   Nδ
+
+ + d log ( d|S| T )
+
+d log 
+
+
+
+1 + T 3/2
+
+> (1 −γ)2√d
+
+ T , 
+
+then for any β ≥ 0, with any initial state distribution ρ, transition kernel estimator f0 ∈ F and reference policy πref , the regret of Algorithm 2 satisfies the following bound with probability at least 1 − δ for any δ ∈ (0 , 1) :
+
+∀T ∈ N+ : Regret (T ) ≤ eO γd √T
+
+(1 − γ)3/2 ·
+
+s
+
+1
+
+d log 
+
+ Nδ
+
+
+
++ log ( d|S| T )
+
+!
+
+. (130) Note that 
+
+min   
+
+> t∈[T]
+
+Gap (πt) ≤ Regret (T )
+
+T , (131) similar to earlier arguments, Theorem C.3 also implies an order of eO
+
+ γ2N d 2
+
+> (1 −γ)4ε2
+
+
+
+sample complexity for Algorithm 2 to find an ε-NE or ε-CCE of MP.
+
+C.3. Proof of Theorem C.3 
+
+The proof of Theorem C.3 resembles that of Theorem 3.3. We repeat some of the proof for clarity and completeness. Here we also have (76), and will upper bound each term in (76) separately. 
+
+Step 1: bounding (i). By Assumption C.2 we know that there exists f ⋆ ∈ F such that f ⋆ := P = Pf ⋆
+
+(77) also holds here, and we define random variables Xft and Y ft as 
+
+Xft := log 
+
+ P(s′
+
+> t
+
+|st, at)
+
+Pf (s′
+
+> t
+
+|st, at)
+
+
+
+and Y ft,n := log 
+
+ P(snt ′|snt , ant )
+
+Pf (snt ′|snt , ant )
+
+
+
+, ∀n ∈ [N ]. (132) Then by the definition of the loss function (127), we have 
+
+Lt(f ⋆) − L t(f ) = −
+
+> t−1
+
+X
+
+> i=1
+> N
+
+X
+
+> n=1
+
+
+
+Xfi + Y fi,n 
+
+
+
+. (133) Same as in the proof of Theorem 3.3, we define 
+
+eπt,n := ( eπnt , π−nt ), ∀n ∈ [N ]. (134) 33 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+We also define 
+
+ℓ(f, s, a) := D2 
+
+> H
+
+(Pf (·| s, a)∥P(·| s, a)) . (135) In the following lemma we provide a concentration result for the random variables Xft and Y ft,n in (133). 
+
+Lemma C.4. When Assumption C.1,C.2 hold, for any δ ∈ (0 , 1) , with probability at least 1 − δ, we have 
+
+∀t ∈ [T ], f ∈ F : −
+
+> t−1
+
+X
+
+> i=1
+
+Xfi ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+
+E(si,ai)∼dπi (ρ) [ℓ(f, s i, ai)] + 2 √2 + 2 log 
+
+ (N + 1) Tδ
+
+
+
++ 2 d log 
+
+
+
+1 + 2 √dT 2|S| 2
+
+, (136) 
+
+and 
+
+∀t ∈ [T ], f ∈ F , n ∈ [N ] : −
+
+> t−1
+
+X
+
+> i=1
+
+Y fi,n ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+
+E(sni ,ani )∼d eπi,n (ρ) [ℓ(f, s ni , ani )] + 2 √2 + 2 log 
+
+ (N + 1) Tδ
+
+
+
++ 2 d log 
+
+
+
+1 + 2 √dT 2|S| 2
+
+. (137) The proof of Lemma C.4 is provided in Appendix C.3.1. By (77), (133) and Lemma C.4, we have with probability at least 1 − δ:(i) ≤ − 2
+
+N α 
+
+> N
+
+X
+
+> n=1
+
+( TX
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(si,ai)∼dπi (ρ) [ℓ(ft, s i, ai)] + 
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(sni ,ani )∼d eπi,n (ρ) [ℓ(ft, s ni , ani )] 
+
+)
+
++ 4Tα
+
+√2 + log 
+
+ (N + 1) Tδ
+
+
+
++ d log 
+
+
+
+1 + √d|S| 2T 2
+
+. (138) 
+
+Step 2: bounding (ii), (iii) and (iv). To bound (ii), (iii) and (iv), we introduce the following lemma. 
+
+Lemma C.5. Under Assumption C.1 and Assumption C.2, for any n ∈ [N ], β ≥ 0, {bπt : S → ∆( A)}t∈[T ] and 
+
+{ bft}t∈[T ] ⊂ F , we have 
+
+> T
+
+X
+
+> t=1
+
+V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) ≤ γ
+
+1 − γ
+
+ η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπi (ρ)ℓ( bft, s, a)+ 4dγ (λ)(1 − γ)η +
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT 
+
+
+
+(139) 
+
+for any η > 0 and λ > 0, where dγ (λ) is defined as 
+
+dγ (λ) := 2 d log 
+
+
+
+1 + Tdλ 
+
+
+
+.
+
+The proof of Lemma C.5 is provided in Appendix C.3.2. Now we are ready to bound (ii), (iii) and (iv). To bound (ii), letting bft = ft and bπt = eπt,n for each n in Lemma C.5 (recall we define eπt,n := ( eπnt , π−nt ) in (73)), we have for any η > 0:(ii) ≤ γ
+
+1 − γ · η
+
+2N
+
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft, s, a)+ γ
+
+1 − γ
+
+ 4dγ (λ)(1 − γ)η +
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT 
+
+
+
+. (140) 34 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Letting bft = ft−1 and bπt = eπt,n for each n in Lemma C.5, we can bound (iii) as follows: (iii) ≤ γ
+
+1 − γ · η
+
+2N
+
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft−1, s, a)+ γ
+
+1 − γ
+
+ 4dγ (λ)(1 − γ)η +
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT 
+
+
+
+. (141) To continue to bound the first term, note that 
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft−1, s, a) ≤
+
+> T
+
+X
+
+> t=1
+> t−2
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft−1, s, a) + T
+
+= 
+
+> T−1
+
+X
+
+> t=0
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft−1, s, a) + T
+
+≤
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft−1, s, a) + T, (142) where the first inequality uses the fact that 
+
+ℓ(f, s, a) = D2 
+
+> H
+
+(Pf (·| s, a)∥P(·| s, a)) ≤ 1, (143) the second line shifts the index of t by 1, and the last line follows by noticing the first summand is 0 at t = 0 .Plugging the above relation back to (141) leads to (iii) ≤ γ
+
+1 − γ · η
+
+2N
+
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d eπi,n (ρ)ℓ(ft, s, a)+ γ
+
+1 − γ
+
+ 4dγ (λ)(1 − γ)η +
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT + η
+
+2 T
+
+
+
+. (144) Finally, similar to (144), letting bft = ft−1, bπt = πt for each n and η ← 2η in Lemma C.5, we can bound (iv) as follows: (iv) ≤ γ
+
+1 − γ · ηN
+
+> N
+
+X
+
+> n=1
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼dπi (ρ)ℓ(ft, s, a)+ γ
+
+1 − γ
+
+ 2dγ (λ)(1 − γ)η +
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT + ηT 
+
+
+
+. (145) 
+
+Step 3: combining the bounds. Letting η = 2(1 −γ) 
+
+> γα
+
+in (140), (144) and (145), we have with probability at least 1 − δ:
+
+Regret (T ) ≤ 4Tα
+
+√2 + log 
+
+ (N + 1) Tδ
+
+
+
++ d log 
+
+
+
+1 + √d|S| 2T 2
+
++ γ
+
+1 − γ
+
+ 5γαd γ (λ)(1 − γ)2 + 3 
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + 3 √dλT + 3(1 − γ)
+
+γα T
+
+
+
+.
+
+By setting 
+
+λ =
+
+r dT , α = (1 − γ)3/2
+
+γ
+
+vuuut log 
+
+ (N +1) Tδ
+
+
+
++ d log 
+
+
+
+1 + √d|S| 2T 2
+
+
+
+d log 
+
+
+
+1 + T 3/2
+
+> (1 −γ)2√d
+
+ T (146) 35 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+in the above expression, we have with probability at least 1 − δ:
+
+Regret (T ) ≤ 4(1 + √2) γ
+
+(1 − γ)3/2
+
+vuuut d log 
+
+
+
+1 + T 3/2
+
+> (1 −γ)2√d
+
+
+
+log 
+
+ (N +1) Tδ
+
+
+
++ d log 
+
+
+
+1 + √d|S| 2T 2
+
+ · √T
+
++ γd √T
+
+(1 − γ)3/2 · 14 
+
+s 1
+
+d log 
+
+ (N + 1) Tδ
+
+
+
++ log 
+
+
+
+1 + √d|S| 2T 2
+
+
+
+log 
+
+
+
+1 + T 3/2
+
+(1 − γ)2√d
+
+
+
++ 6γ
+
+1 − γ
+
+√d + 11 − γ
+
+
+
+d log 
+
+
+
+1 + T 3/2
+
+(1 − γ)2√d
+
+
+
++ 3γ
+
+1 − γ d√T , (147) which gives the desired result. C.3.1. P ROOF OF LEMMA C.4 Same as in (58), for the parameter space Θ, by Assumption C.1 and Lemma B.5 we have 
+
+log N (Θ , ϵ, ∥·∥ 2) ≤ d log 1 + 2√dϵ
+
+!
+
+(148) for any ϵ > 0. Thus there exists an ϵ-net Θϵ of Θ (Θϵ ⊂ Θ) such that log |Θϵ| ≤ d log 
+
+
+
+1 + 2√dϵ
+
+
+
+. Define 
+
+Fϵ := f ∈ F : f (s, a, s ′) = ϕ(s, a, s ′)⊤θ, θ ∈ Θϵ .
+
+For any f ∈ F , there exists θ ∈ Θ such that f (s, a, s ′) = ϕ(s, a, s ′)⊤θ. And there exists θϵ ∈ Θϵ such that ∥θ − θϵ∥2 ≤ ϵ.We let fϵ(s, a, s ′) = ϕ(s, a, s ′)⊤θϵ. Then fϵ ∈ F ϵ, and we have 
+
+|Pf (s′|s, a) − Pfϵ (s′|s, a)| = |ϕ(s, a, s ′)⊤(θ − θϵ)| ≤ ϵ, (149) from which we deduce 
+
+∀t ∈ [T ] : −Xft ≤ − log 
+
+ P(s′
+
+> t
+
+|st, at)
+
+Pfϵ (s′
+
+> t
+
+|st, at) + ϵ
+
+
+
+:= −Xfϵ 
+
+> t
+
+(ϵ). (150) Let Ft := σ(Dt) be the σ-algebra generated by the data Dt. By Lemma B.4 we have with probability at least 1 − δN +1 :
+
+∀t ∈ [T ], f ϵ ∈ F ϵ : − 12
+
+> t−1
+
+X
+
+> i=1
+
+Xfϵ 
+
+> i
+
+(ϵ) ≤
+
+> t−1
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ 
+
+> i
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
++ log 
+
+ (N + 1) Tδ
+
+
+
++ d log 1 + 2√dϵ
+
+!
+
+. (151) Thus we have 
+
+∀t ∈ [T ], f ∈ F : − 12
+
+> t−1
+
+X
+
+> i=1
+
+Xfi
+
+> (150)
+
+≤ − 12
+
+> t−1
+
+X
+
+> i=1
+
+Xfϵ 
+
+> i
+
+(ϵ)
+
+> (151)
+
+≤
+
+> t
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ 
+
+> i
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
++ log 
+
+ (N + 1) Tδ
+
+
+
++ d log 1 + 2√dϵ
+
+!
+
+.
+
+(152) We can further bound the first term in (152) as follows: 
+
+> t
+
+X
+
+> i=1
+
+log E
+
+
+
+exp 
+
+
+
+− 12 Xfϵ 
+
+> i
+
+(ϵ)
+
+
+
+Fi−1
+
+
+
+36 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+=
+
+> t−1
+
+X
+
+> i=1
+
+log E (si,ai)∼dπi (ρ),s′
+
+> i∼P(·| si,ai)
+
+"s 
+
+Pfϵ (s′
+
+> i
+
+|si, ai) + ϵ
+
+P(s′
+
+> i
+
+|si, ai)
+
+#
+
+=
+
+> t−1
+
+X
+
+> i=1
+
+log E
+
+"s 
+
+Pfϵ (s′
+
+> i
+
+|si, ai) + ϵ
+
+P(s′
+
+> i
+
+|si, ai) Fs−1
+
+#
+
+=
+
+> t−1
+
+X
+
+> i=1
+
+log E(si,ai)∼dπi (ρ)
+
+Z 
+
+> S
+
+q
+
+(Pfϵ (s′
+
+> i
+
+|si, ai) + ϵ) P(s′
+
+> i
+
+|si, ai)ds ′
+
+> i
+
+
+
+> (95)
+
+≤
+
+> t−1
+
+X
+
+> i=1
+
+log E(si,ai)∼dπi (ρ)
+
+Z 
+
+> S
+
+q
+
+(Pf (s′
+
+> i
+
+|si, ai) + 2 ϵ) P(s′
+
+> i
+
+|si, ai)ds ′
+
+> i
+
+
+
+. (153) Moreover, we have 
+
+E(si,ai)∼dπi (ρ)
+
+Z 
+
+> S
+
+q
+
+(Pf (s′
+
+> i
+
+|si, ai) + 2 ϵ) P(s′
+
+> i
+
+|si, ai)ds ′
+
+> i
+
+
+
+≤ E(si,ai)∼dπi (ρ)
+
+Z 
+
+> S
+
+q
+
+Pf (s′
+
+> i
+
+|si, ai)P(s′
+
+> i
+
+|si, ai)ds ′
+
+> i
+
+
+
++ E(si,ai)∼dπi (ρ)
+
+Z 
+
+> S
+
+q
+
+2ϵP(s′
+
+> i
+
+|si, ai)ds ′
+
+> i
+
+
+
+≤ 1 − 12 E(si,ai)∼dπi (ρ)
+
+"Z
+
+> S
+
+q 
+
+Pf (s′
+
+> i
+
+|si, ai) −
+
+q
+
+P(s′
+
+> i
+
+|si, ai)
+
+2
+
+ds ′
+
+> i
+
+#
+
++ √2ϵ|S| 
+
+= 1 − E(si,ai)∼dπi (ρ)
+
+D2 
+
+> H
+
+(Pf (·| si, ai)∥P(·| si, ai))  + √2ϵ|S| , (154) where the first inequality we use the fact that √a + b ≤ √a + √b for any a, b ≥ 0.Then combining (152), (154) and (135), we have 
+
+∀t ∈ [T ], f ∈ F : − 12
+
+> t−1
+
+X
+
+> i=1
+
+Xfi ≤ − 
+
+> t−1
+
+X
+
+> i=1
+
+E(si,ai)∼dπi (ρ) [ℓ(f, s i, ai)] + T √2ϵ|S| + log 
+
+ (N + 1) Tδ
+
+
+
++ d log 1 + 2√dϵ
+
+!
+
+,
+
+where we use the fact that log( x) ≤ x − 1 for any x > 0. Multiplying both sides by 2, we have with probability at least 
+
+1 − δN +1 :
+
+∀t ∈ [T ], f ∈ F : −
+
+> t−1
+
+X
+
+> i=1
+
+Xfi ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+
+E(si,ai)∼dπi (ρ) [ℓ(f, s i, ai)] + 2 T √2ϵ|S| + 2 log 
+
+ (N + 1) Tδ
+
+
+
++ 2 d log 1 + 2√dϵ
+
+!
+
+. (155) Analogously, we can buond − Pt−1 
+
+> i=1
+
+Y fi,n for all n ∈ [N ] with probability at least 1 − N δ N +1 as follows: 
+
+∀t ∈ [T ], f ∈ F , n ∈ [N ] : −
+
+> t−1
+
+X
+
+> i=1
+
+Y fi,n ≤ − 2
+
+> t−1
+
+X
+
+> i=1
+
+E(sni ,ani )∼d eπi,n (ρ) [ℓ(f, s ni , ani )] + 2 T √2ϵ|S| + 2 log 
+
+ (N + 1) Tδ
+
+
+
++ 2 d log 1 + 2√dϵ
+
+!
+
+. (156) By letting ϵ = 1  
+
+> T2|S| 2
+
+in the above two inequalities, we have the desired result. C.3.2. P ROOF OF LEMMA C.5 Similar as in the proof of Lemma B.9 in Appendix B.3.2, we first reformulate the value difference sequence 
+
+PTt=1 V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) .37 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Step 1: reformulation of the value difference sequence. For any f ∈ F and π = ( π1, · · · , π N ) : S → ∆( A), we have 
+
+∀n ∈ [N ] : V π
+
+> f,n
+
+(ρ) = E s0∼ρ, ah∼π(·| sh),sh+1 ∼P(·| sh,ah)
+
+" ∞X
+
+> h=0
+
+γhV π
+
+> f,n
+
+(sh) − γh+1 V π
+
+> f,n
+
+(sh+1 )
+
+#
+
+= E s0∼ρ, ah∼π(·| sh),sh+1 ∼P(·| sh,ah)
+
+" ∞X
+
+> h=0
+
+γh
+
+
+
+Qπ
+
+> f,n
+
+(sh, ah) − β log πn(anh |snh )
+
+πn 
+
+> ref
+
+(anh |snh ) − γV π
+
+> f,n
+
+(sh+1 )
+
+#
+
+, (157) where in the second line we use the fact that 
+
+V π
+
+> f,n
+
+(s) = Ea∼π(·| s)
+
+
+
+Qπ
+
+> f,n
+
+(s, a) − β log πn(an|sn)
+
+πn 
+
+> ref
+
+(an|sn)
+
+
+
+.
+
+And by the definition of V π 
+
+> n
+
+we have 
+
+∀n ∈ [N ] : V π 
+
+> n
+
+(ρ) = E s0∼ρ, ah∼π(·| sh),sh+1 ∼P(·| sh,ah)
+
+" ∞X
+
+> h=0
+
+γh
+
+
+
+rn(sh, ah) − β log πn(anh |snh )
+
+πn 
+
+> ref
+
+(anh |snh )
+
+#
+
+. (158) To simplify the notation, we define 
+
+∀g ∈ F : Pg V π
+
+> f,n
+
+(s, a) := Es′∼Pg (·| s, a)
+
+V π
+
+> f,n
+
+(s′) . (159) Combining (157) and (104), we have 
+
+V π
+
+> f,n
+
+(ρ) − V π 
+
+> n
+
+(ρ) = E s0∼ρ, ah∼π(·| sh),sh+1 ∼P(·| sh,ah)
+
+" ∞X
+
+> h=0
+
+γh  Qπ
+
+> f,n
+
+(sh, ah) − rn(sh, ah) − γV π
+
+> f,n
+
+(sh+1 )#
+
+= 11 − γ E(s, a)∼dπ (ρ)
+
+Qπ
+
+> f,n
+
+(s, a) − rn(s, a) − γPV π
+
+> f,n
+
+(s, a)
+
+= γ
+
+1 − γ E(s, a)∼dπ (ρ)
+
+ Pf V π
+
+> f,n
+
+(s, a) − PV π
+
+> f,n
+
+(s, a)
+
+| {z } 
+
+> := Eπ
+> n(f,s, a)
+
+, (160) where the last relation follows from (126), and we define 
+
+Eπ 
+
+> n
+
+(f, s, a) := Pf V π
+
+> f,n
+
+(s, a) − PV π
+
+> f,n
+
+(s, a). (161) Thus we have 
+
+> T
+
+X
+
+> t=1
+
+V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) = γ
+
+1 − γ
+
+> T
+
+X
+
+> t=1
+
+E(s, a)∼d bπt (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft, s, a)
+
+i
+
+. (162) Therefore, to bound PTt=1 V bπt
+
+> bft,n
+
+(ρ) − V bπt 
+
+> n
+
+(ρ) , it suffices to bound the sum of model estimation errors 
+
+PTt=1 E(s, a)∼d bπt (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft, s, a)
+
+i
+
+.
+
+Step 2: bounding the sum of model estimation errors. By Assumption 3.1, there exist θf and θ⋆ in Θ such that 
+
+f (s′|s, a) = ϕ(s, a, s ′)⊤θf and P(s′|s, a) = ϕ(s, a, s ′)⊤θ⋆. Thus we have 
+
+E(s, a)∼dπ (ρ) [Eπ 
+
+> n
+
+(f, s, a)] = ( θf − θ⋆)⊤ E(s, a)∼dπ (ρ)
+
+Z 
+
+> S
+
+ϕ(s, a, s ′)V π
+
+> f,n
+
+(s′)ds ′
+
+| {z }
+
+> := xn(f, π)
+
+. (163) We let xin(f, π) denote the i-th component of xn(f, π), i.e., 
+
+xin(f, π) = E(s, a)∼dπ (ρ)
+
+Z 
+
+> S
+
+ϕi(s, a, s ′)V π
+
+> f,n
+
+(s′)ds ′
+
+
+
+.
+
+38 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+Then we have 
+
+∀i ∈ [d] : |xin(f, π)| ≤ 11 − γ (164) (recall that by the definition of linear mixture model (c.f. Assumption C.1), ϕi(s, a, ·) ∈ ∆( S) for each i ∈ [d]), which gives 
+
+∥xn(f, π)∥2 ≤ 11 − γ
+
+√d. (165) For each t ∈ [T ], we define Λt ∈ Rd×d as 
+
+Λt := λI d +
+
+> t−1
+
+X
+
+> i=1
+
+xn( bfi, bπi)xn( bfi, bπi)⊤. (166) We write bθt as the parameter of bft. Then we have the following decomposition: 
+
+> T
+
+X
+
+> t=1
+
+E(s, a)∼d bπt (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft, s, a)
+
+i
+
+=
+
+> T
+
+X
+
+> t=1
+
+⟨xn( bft, bπt), bθt − θ⋆⟩ 1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+≤ 1
+
+| {z }
+
+> (a)
+
++
+
+> T
+
+X
+
+> t=1
+
+⟨xn( bft, bπt), bθt − θ⋆⟩ 1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+> 1
+
+| {z }
+
+> (b)
+
+. (167) Below we bound (a) and (b) separately. 
+
+Bounding (a). 
+
+By the Cauchy-Schwarz inequality, we have 
+
+(a) ≤
+
+> T
+
+X
+
+> t=1
+
+bθt − θ⋆
+
+> Λt
+
+xn( bft, bπt) Λ−1
+
+> t
+
+1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+≤ 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+bθt − θ⋆
+
+> Λt
+
+min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+, (168) where the last inequality follows from the fact that 
+
+xn( bft, bπt) Λ−1
+
+> t
+
+1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+≤ 1
+
+
+
+≤ min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+.
+
+By Lemma B.2, Lemma B.3 and (165), we have 
+
+> t
+
+X
+
+> i=1
+
+min 
+
+
+
+xn( bfi, bπi) Λ−1
+
+> i
+
+, 1
+
+
+
+≤ 2d log 
+
+
+
+1 + T
+
+(1 − γ)2λ
+
+
+
+:= dγ (λ). (169) holds for any λ > 0 and t ∈ [T ].Further, by the definition of Λt (c.f. (166)) and Assumption C.1 we have 
+
+bθt − θ⋆
+
+> Λt
+
+≤ 2√λd +
+
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt − θ⋆, x n( bfi, bπi)⟩| 2
+
+!1/2
+
+, (170) 39 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+which gives 
+
+> T
+
+X
+
+> t=1
+
+bθt − θ⋆
+
+> Λt
+
+min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+2√λd +
+
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt − θ⋆, x n( bfi, bπi)⟩| 2
+
+!1/2 · min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+4λd 
+
+!1/2 TX
+
+> t=1
+
+min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+!1/2
+
++
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt − θ⋆, x n( bfi, bπi)⟩| 2
+
+!1/2 TX
+
+> t=1
+
+min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+!1/2
+
+≤ 2
+
+q
+
+λdT min {dγ (λ), T } + dγ (λ)
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+|⟨ bθt − θ⋆, x n( bfi, bπi)⟩| 2
+
+!1/2
+
+, (171) where the first inequality uses (170) and the second inequality uses the Cauchy-Schwarz inequality and the fact that 
+
+min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+2
+
+≤ min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+,
+
+and the last inequality uses (169). Furthermore, we have 
+
+|⟨ bθt − θ⋆, x n( bfi, bπi)⟩| 2 = E(s, a)∼d bπi (ρ)
+
+Z 
+
+> S
+
+
+
+P bft (s′|s, a) − P(s′|s, a)
+
+
+
+V bπi
+
+> bfi,n
+
+(s′)ds ′
+
+ 2
+
+≤ E(s, a)∼d bπi (ρ)
+
+"Z 
+
+> S
+
+
+
+P bft (s′|s, a) − P(s′|s, a)
+
+
+
+V bπi
+
+> bfi,n
+
+(s′)ds ′
+
+2#
+
+≤ 4 V bπi
+
+> bfi,n
+
+(·) ∞
+
+E(s, a)∼d bπt (ρ)D2
+
+> TV
+
+
+
+P bft (·| s, a) P(·| s, a)
+
+
+
+≤ 81 − γ E(s, a)∼d bπi (ρ)D2
+
+> H
+
+
+
+P bft (·| s, a)∥P(·| s, a)
+
+
+
+= 81 − γ E(s, a)∼d bπi (ρ)ℓ( bft, s, a), (172) where the second line uses the Cauchy-Schwarz inequality, the third line follows from H ¨oder’s inequality, the fourth line uses the inequality D2
+
+> TV
+
+(P ∥Q) ≤ 2D2 
+
+> H
+
+(P ∥Q) and the fact that V bπt
+
+> bft,n
+
+(·) ∞
+
+≤ 11−γ . The last line uses (135). Plugging (172) into (171), we have 
+
+(a) ≤ 2√d ·
+
+q
+
+λT min {dγ (λ), T } + 8dγ (λ)1 − γ
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπi (ρ)ℓ( bft, s, a)
+
+!1/2
+
+. (173) 
+
+Bounding (b). 
+
+(b) = 
+
+> T
+
+X
+
+> t=1
+
+⟨xn( bft, bπt), bθt − θ⋆⟩ 1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+> 1
+
+
+
+≤
+
+> T
+
+X
+
+> t=1
+
+⟨xn( bft, bπt), bθt − θ⋆⟩ min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+, (174) 40 Incentivize without Bonus: Provably Efficient Model-based Online Multi-agent RL for Markov Games 
+
+where the inequality follows from the fact that 
+
+1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+> 1
+
+
+
+≤ min 
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+, 1
+
+
+
+.
+
+Note that 
+
+xn( bft, bπt) Λ−1
+
+> t
+
+1
+
+
+
+xn( bft, bπt) Λ−1
+
+> t
+
+≤ 1
+
+
+
+≤ min 
+
+n
+
+∥x(bμt, bνt)∥Λ−1
+
+> t
+
+, 1
+
+o
+
+Thus by (169) and (174), we have 
+
+(b) ≤ 11 − γ min {T, d γ (λ)}. (175) Plugging (173), (175) into (167), we have 
+
+> T
+
+X
+
+> t=1
+
+E(s, a)∼d bπt (ρ)
+
+h
+
+E bπt 
+
+> n
+
+( bft, s, a)
+
+i
+
+≤ 2√d ·
+
+q
+
+λT min {dγ (λ), T } + 8dγ (λ)1 − γ
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπi (ρ)ℓ( bft, s, a)
+
+!1/2
+
++ 11 − γ min {T, d γ (λ)}≤ 8dγ (λ)(1 − γ)η · η
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπi (ρ)ℓ( bft, s, a)
+
+!1/2
+
++
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT 
+
+≤ 4dγ (λ)(1 − γ)η + η
+
+2
+
+> T
+
+X
+
+> t=1
+> t−1
+
+X
+
+> i=1
+
+E(s, a)∼d bπi (ρ)ℓ( bft, s, a) + 
+
+√d + 11 − γ
+
+
+
+min {dγ (λ), T } + √dλT (176) for any η > 0, where the second and third inequalities both use the fact that √ab ≤ a+b 
+
+> 2
+
+for any a, b ≥ 0.Finally, combining (162) with the above inequality, we have (139). 41

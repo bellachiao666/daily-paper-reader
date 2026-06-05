@@ -1,0 +1,925 @@
+Title: Towards Efficient Online Tuning of VLM Agents via  Counterfactual Soft Reinforcement Learning
+
+URL Source: https://openreview.net/pdf?id=H76PMm7hf2
+
+Number of Pages: 20
+
+Markdown Content:
+# Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+Lang Feng 1 Weihao Tan 1 Zhiyi Lyu 1 Longtao Zheng 1 Haiyang Xu 2 Ming Yan 2 Fei Huang 2 Bo An 1
+
+Abstract 
+
+Online fine-tuning vision-language model (VLM) agents with reinforcement learning (RL) has shown promise for equipping agents with multi-step, goal-oriented capabilities in dynamic envi-ronments. However, their open-ended textual ac-tion space and non-end-to-end nature of action generation present significant challenges to effec-tive online exploration in RL, e.g., explosion of the exploration space. We propose a novel on-line fine-tuning method, Counterfactual Soft Re-inforcement Learning (CoSo), better suited to the textual output space of VLM agents. Compared to prior methods that assign uniform uncertainty to all tokens, CoSo leverages counterfactual rea-soning to dynamically assess the causal influence of individual tokens on post-processed actions. By prioritizing the exploration of action-critical tokens while reducing the impact of semantically redundant or low-impact tokens, CoSo enables a more targeted and efficient online rollout process. We provide theoretical analysis proving CoSo’s convergence and policy improvement guarantees, and extensive empirical evaluations supporting CoSo’s effectiveness. Our results across a di-verse set of agent tasks, including Android de-vice control, card gaming, and embodied AI, highlight its remarkable ability to enhance ex-ploration efficiency and deliver consistent perfor-mance gains. The code is available at https: //github.com/langfengQ/CoSo .
+
+1. Introduction 
+
+Large Vision-Language Models (VLMs) like Qwen-VL (Bai et al., 2025b), Gemini (Team et al., 2023), and GPT-4o (Achiam et al., 2023), are increasingly employed as      
+
+> 1Nanyang Technological University 2Alibaba Group. Corre-spondence to: Bo An <boan@ntu.edu.sg >.
+> Proceedings of the 42 nd International Conference on Machine Learning , Vancouver, Canada. PMLR 267, 2025. Copyright 2025 by the author(s).
+
+decision-making agents for autonomous tasks in both physi-cal or virtual environments, with applications in device con-trol (Wang et al., 2024b; Hu et al., 2024; Furuta et al., 2024), gaming (Wang et al., 2024a; Tan et al., 2024b), robotic control (Zhao et al., 2023; Zitkovich et al., 2023), and au-tonomous driving (Tian et al., 2024). Despite these advantages, adapting VLM agents to dynamic environments remains a challenge due to the limited task-specific capabilities of the base models (Zeng et al., 2023; Chen et al., 2023). Recent advances (Bai et al., 2024; Zhai et al., 2024; Wen et al., 2024) leverage reinforcement learn-ing (RL) (Sutton & Barto, 2018) for online fine-tuning, which has shown particular promise. RL enables VLM agents to iteratively interact with online environments and optimize for multi-step, goal-directed objectives. This aligns naturally with the requirements of autonomous systems. For instance, in Android device controls, agents manage multi-step workflows like launching the Amazon app, locating specific items, and completing purchases. However, the RL fine-tuning of VLM agents presents unique challenges for the online exploration . Two primary factors contribute to these difficulties. First, VLM agents operate in a text-based action space, where the open-ended text of-ten includes thoughts, planning, and actions (Zhang et al., 2023; Niu et al., 2024). Unlike traditional RL, which en-ables vectorized action sampling via softmax distributions, the sampling space for VLM agents’ textual outputs scales exponentially with the vocabulary size and sequence length. This immense policy space significantly complicates effec-tive exploration. Second, action generation in VLM agents is not end-to-end. Generated textual outputs (utterances) need to be post-processed into executable actions via pars-ing functions that match the environment’s API calls (Zhai et al., 2024; Bai et al., 2024). It introduces a misalignment between exploring textual utterances and exploring final parsed actions. Many tokens in the utterances, particularly those with fixed formats or semantically redundant elements, do not contribute meaningful changes to the post-processed actions. As a result, naive RL exploration becomes ineffi-cient and struggles to drive meaningful progress. In this study, we propose a novel RL fine-tuning method, better suited to the online exploration of VLM agents’ tex-1Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+tual action space. The core insight of our approach is that the influence of tokens on the parsed action varies, with a small subset of action-critical tokens decisively shaping the final outcome. In contrast to naive RL training that treats all tokens as equally important, our proposal, Coun-terfactual Soft Reinforcement Learning (CoSo), analyzes the causal contributions of VLM-generated tokens to the actions. By leveraging counterfactual reasoning to com-pute causal weights for tokens, CoSo introduces a causal-weighted entropy-regularized optimization built upon soft RL (Haarnoja et al., 2017). This mechanism performs more targeted and efficient exploration, focusing on the causally significant tokens that induce meaningful variations in ac-tions rather than random trial-and-error. As such, CoSo significantly reduces the redundant exploration space and enables the exploration of open-ended utterances to align more closely with the exploration of final parsed actions. We provide a theoretical justification of CoSo’s convergence and effectiveness. In our analysis, CoSo establishes guaran-tees for both policy evaluation and policy improvement. As CoSo provides a highly general objective, it can be flexibly adapted to the more specific RL objective for agents’ fine-tuning. In our empirical evaluations, we extend CoSo to two RL fine-tuning objectives: an AWR-based approach (Bai et al., 2024) and a PPO-based approach (Zhai et al., 2024), subjecting VLM agents across various autonomous tasks, including Android device control (Rawles et al., 2024), card gaming (Brockman, 2016), and embodied AI (Shrid-har et al., 2021). Our results demonstrate its impressive ability to enhance the efficiency and effectiveness of online fine-tuning. Over existing RL frameworks, CoSo-reinforced agents achieve consistent performance improvements, with average gains of 12.3% in Android device control, 9.3% in card gaming, and 16.7% in embodied AI tasks. 
+
+2. Related Work 
+
+LLM/VLM as agents. Recently, there has been a surge of interest in using large language models (LLMs) or VLMs as goal-driven agents in various domains like code (Zhang et al., 2024b), device control (Gur et al., 2024), gam-ing (Wang et al., 2024a), and robotic control (Zitkovich et al., 2023). One line of works focuses on test-time scaling by incorporating sophisticated modules (Wang et al., 2024b; Tan et al., 2024b), prompting techniques (Yao et al., 2023; Shinn et al., 2024), or external tools (Schick et al., 2023; Xie et al., 2024; Zhang et al., 2024a) with frozen models like GPT-4 (Achiam et al., 2023). Another line explores improving the task adaptability of agents by fine-tuning the base models with Supervised Fine-Tuning (SFT) (Zhang & Zhang, 2024) or RL (Carta et al., 2023; Tan et al., 2024a). These fine-tuned models often exhibit improved generaliza-tion and robustness, making them better suited for special-ized tasks. 
+
+Reinforcement learning for LLM/VLM training. RL has become a cornerstone for improving the capabilities of LLMs and VLMs. A prominent application is Reinforce-ment Learning with Human Feedback (RLHF) (Ouyang et al., 2022; Rafailov et al., 2024), which aligns models with human preferences and ethical guidelines by iteratively refining their outputs. Also, RL has been applied to en-hance reasoning capabilities like DeepSeek-R1 (Liu et al., 2024a; Guo et al., 2025), enabling models to perform com-plex multi-step reasoning and logical deductions. In the LLM/VLM agent domain, works like (Wen et al., 2024; Zhai et al., 2024; Bai et al., 2024; 2025a; Wang et al., 2025) have employed RL for online fine-tuning, creating agents that can adapt and learn from dynamic environments. Yet, they rely on classic trial-and-error for online exploration, which can be inefficient in open-ended text action spaces. 
+
+Exploration in RL. Effective exploration remains a key challenge in RL, particularly in complex environments. In-trinsic motivation methods (Bellemare et al., 2016; Pathak et al., 2017; Burda et al., 2018) address this challenge by introducing auxiliary reward signals that drive agents to ex-plore novel states. On the other hand, entropy-based meth-ods (Ziebart, 2010; Haarnoja et al., 2017; 2018; Ji et al., 2024) encourage diverse policy behaviors by increasing de-cision uncertainty. While effective in balancing exploration and exploitation for RL agents operating in vectorized ac-tion spaces, such uncertainty on textual action could inadver-tently complicate exploration for VLM agents. Our method reduces unnecessary complexity by prioritizing impactful to-kens, enabling efficient online fine-tuning for VLM agents. 
+
+3. Preliminaries 
+
+Problem Settings and MDP. The task-completion process of a VLM agent involves completing a series of actions in response to a user instruction in natural language to achieve a specified goal. The entire process of agent-environment interactions can be modeled as a finite-horizon Markov De-cision Process (MDP) (Sutton & Barto, 2018), defined by the tuple (S, A, P, r, γ ). The state space S combines visual and textual modalities, defined as S = O × V m, where O
+
+denotes the RGB image space, V denotes the vocabulary (token) space, and m denotes the maximum token length of the input sequence. A is the action space, consisting of executable actions translated from the VLM-generated utterances via a deterministic parsing (post-processing) func-tion f parse : Vn → A with n denoting the maximum out-put token length. The transition probability function P :
+
+S × A × S → [0 , 1] defines the likelihood of transitioning between states given an action. r : S × A → [rmin , r max ] is the reward function and γ is the discounted factor. At each time step t, the VLM agent occupies a state st = ( ot, xt),2Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+where ot ∈ O and xt ∈ V m, and then generates an action 
+
+at = f parse (yt) with the utterance yt ∈ V n. This action induces a transition to the next state st+1 = P (st, at), and the agent receives a reward r(st, at).
+
+RL fine-tuning for VLM agents. VLM with parameter 
+
+θ is used as the policy of agent πθ (a|s), i.e., given a envi-ronment state s, output an action a. To use RL to online fine-tune the VLM agent, the process typically follows two key steps: (1) Online exploration : the VLM agent interacts with the environment to sample rollout data based on its current policy. (2) Exploitation : the collected rollout data is then used to optimize the VLM policy using RL algorithms like PPO (Schulman et al., 2017). The general objective of RL fine-tuning is to maximize the expected cumulative re-ward: max π
+
+P 
+
+> t
+
+E(st,at)∼ρπ [γtr(st, at)] , where ρπ is the state-action visitation distribution under policy π. We omit the subscript of πθ for convenience. 
+
+Online exploration with entropy regularization. Effi-cient data sampling during the online exploration phase is crucial for optimizing the VLM agent’s performance. To this end, RL often incorporates an entropy regularization term to encourage exploration, yielding the soft RL optimization, the objective of which can be expressed as: 
+
+max 
+
+> π
+
+X
+
+> t
+
+E(st,at)∼ρπ
+
+γt(r(st, at) + αH(π(·| st)))  , (1) where α ≥ 0 is a weighting coefficient, and H(π(·| s)) 
+
+denotes the entropy of the policy. Note that, unlike traditional RL agents, the policy of the VLM agent is not an end-to-end function but rather a multi-step, segmented process: ( 1) The VLM first autoregres-sively generates an output utterance y = ( y1, . . . , y n) via 
+
+π(yi|y1: i−1, s), where y typically includes elements such as chain-of-thought (CoT) (Wei et al., 2022) and textual actions. ( 2) The sequence y is then transformed into an executable action a through a deterministic parsing function 
+
+a = f parse (y). In this context, the entropy term H(π(·| s)) 
+
+over action a in Equation (1) is decomposed into the sum of the conditional entropies over the tokens y1, . . . , y n:
+
+H(π(·| s)) = Xni=1 H(yi|y1: i−1), (2) where H(yi|y1: i−1) denotes the conditional entropy of yi
+
+given y1: i−1. We provide the proof in Appendix A.1. This feature introduces a significant challenge for RL in train-ing VLM agents: explosion of the exploration space . For instance, we consider a VLM agent applied to Android mobile control tasks. Typically, there are six actions avail-able: Type , Click , Slide , Home , Back , and Enter .In traditional RL, the action sampling space at each state is 
+
+|A| = 6 . However, in the case of VLM agents, the explo-ration space scales exponentially with sequence length and vocabulary size: |V| n = 32 , 100 100 (assuming a vocabulary size of 32,100 and a sequence length of 100 tokens). No-tably, this space includes many tokens with fixed formats or semantic redundancies, which contribute little to meaningful action exploration. This immense combinatorial complex-ity significantly impedes exploration efficiency during the online fine-tuning of VLM agents, posing a fundamental challenge for RL online optimization. 
+
+4. Training VLM Agents with CoSo 
+
+While VLM policies offer the advantage of executing in-termediate reasoning and planning steps, enabling efficient cognitive steps that lead to final decisions, their text-based outputs cause the online exploration highly inefficient when using RL for fine-tuning. This problem grows more pro-nounced as the sequence length increases. To address this, we introduce our Counterfactual Soft Reinforcement Learn-ing (CoSo) in this section. CoSo innovatively introduces a counterfactual structure to analyze the causal relationships between the VLM-generated tokens y = ( y1, . . . , y n) and the post-processed action a. Built upon this, CoSo intro-duces a causal-weighted entropy-regularized optimization based on soft RL (Haarnoja et al., 2017). This process en-hances agents’ exploration of action-critical tokens ( < 10% 
+
+in our experiments) while minimizing perturbations to low-impact tokens ( > 80% ). Considering our previous example, CoSo can effectively narrow the sampling space to approxi-mately 10 key tokens out of 100 total tokens, significantly improving the efficiency of exploration by 32 , 100 90 -fold. In the following sections, we will delve into the process of deriving token-to-action causality through counterfactual reasoning, outline the causal-weighted entropy-regularized objective, provide a theoretical analysis of CoSo’s effective-ness, and finally present its practical implementation. 
+
+4.1. Token-to-Action Causality 
+
+In VLM-powered agents, the relationship between the gen-erated utterance y and the resulting parsed action a can be viewed as a structured causal process. Each token in the sequence y contributes to the action a via f parse , yet not all tokens y1, . . . , y n exert the same level of influence on 
+
+a. Some tokens are pivotal in determining the action, while others have negligible or no causal impact. To formalize this relationship, we explicitly encode the token-to-action causal structure into the parsing function as follows: 
+
+a = f parse (By→a ⊙ y) , (3) where ⊙ denotes the element-wise product, By→a ∈ Rn×1
+
+is a vector that represents the graph structure encoding both causal directions and causal effects. Specifically, Bi 
+
+> y→a
+
+= 0 
+
+indicates the absence of a causal edge between token yi and action a, while Bi 
+
+> y→a
+
+= c (where c > 0) implies that yi
+
+3Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning RL     
+
+> Fine-Tuning
+> Replay Buffer
+> Environment
+> VLM Agent
+> Parsing via 𝑓𝑓 parse
+> Utterance
+> Action
+> CoSo
+> Observation &Reward
+> Data
+> Counterfactual
+> Action Plan: [DUAL_POINT, ... “[0.1941, 0.6172]”, “typed_text”: “”
+> Utterance 𝒚𝒚
+> Causal-Weighted
+> Entropy
+> Causal Weights
+> Action Plan: [DUAL_POINT, ... “[0.1941, 0.6172]”, “typed_text”: “”
+> Exploration & Rollout CoSo
+
+Figure 1. Overview of the CoSo framework for online fine-tuning VLM agents. The process includes two modules: (1) Exploration and rollout , where the VLM agent interacts with the environment to generate online data; (2) CoSo , which fine-tunes the VLM for multi-step, goal-directed objectives while promoting efficient exploration of action-critical tokens. Darker red indicates higher causal importance. 
+
+has a causal influence on a with effect magnitude c.
+
+4.2. Counterfactual Reasoning 
+
+To determine the causal weights By→a, we leverage counter-factual reasoning, which facilitates the analysis of “what-if” scenarios by considering hypothetical interventions. To for-malize this, we begin by introducing the basic assumption for conducting counterfactual analysis. 
+
+Assumption 4.1 (Structural Causal Model) . We assume that the relationship between the tokens yi and the action a can be captured using a structural causal model (SCM) defined by a = f SCM (y, ϵ a), where ϵa represents an exogenous independent and identically distributed (i.i.d.) noise term. Then, we compute the causal weight of each token yi by measuring the sensitivity of the parsed action a to coun-terfactual interventions on yi. Specifically, for each token 
+
+yi, we compare the action a resulting from the original sequence y with the action resulting from a counterfactual sequence in which yi is replaced with a nullified value yi
+
+> null
+
+while keeping all other tokens unchanged. Formally, this process is defined as: 
+
+Bi 
+
+> y→a
+
+= Ey−i
+
+D  f SCM (y, ϵ a), f SCM (y−i ∪ yi
+
+> null
+
+, ϵ a) ,
+
+(4) where D(·, ·) is a distance metric that quantifies the change in the action a resulting from the intervention. y−i denotes the sequence excluding token yi.In practice, the effect of intervening a single token yi on 
+
+f SCM can be subtle, making it challenging to observe an absolute shift on parsed action a. To capture the fine-grained effects, we analyze changes in the output likelihood of the action rather than absolute shifts in outcomes. Specifically, we define f SCM (y, ϵ a) using a probabilistic model followed by an argmax operator, which can be expressed as: 
+
+f SCM (y, ϵ a) = arg max  
+
+> a
+
+P(a|y, ϵ a). (5) This probabilistic formulation is straightforward to imple-ment, for instance, by using a surrogate model with a 
+
+softmax output layer to instantiate the SCM. Building on this, we define the distance metric D(·, ·) as the likeli-hood difference and thereby the causal weight Bi 
+
+> y→a
+
+for each token yi is given by 
+
+Bi 
+
+> y→a
+
+= P(a|y, ϵ a) − P(a|y−i ∪ yi
+
+> null
+
+, ϵ a) . (6) This approach enables a more sensitive measurement of the causal influence each token yi exerts on the action a,thereby facilitating a nuanced analysis of the interactions between VLM-generated utterances and the post-processed actions under the SCM framework. 
+
+4.3. Counterfactual Soft RL 
+
+Based on the causal weights By→a, we next propose our counterfactual soft RL, a novel approach that explicitly lever-ages the identified per-token causal importance to guide the maximization entropy policy optimization of VLM agents. The central idea of CoSo is to prioritize exploration around action-critical tokens in the generated utterance y instead of aggregating uniform uncertainty across all tokens. Specifi-cally, we introduce a causal-weighted entropy term into the soft RL objective (Equation (1)), yielding: 
+
+max 
+
+> π
+
+X
+
+> t
+
+E(st,at)∼ρπ
+
+h
+
+γt  r(st, at) + αHB(π(·| st))  i
+
+,
+
+where HB(π(·| s)) = Xni=1 Bi 
+
+> y→a
+
+· H (yi|y1: i−1) (7) Intuitively, if token yi is causally important (Bi 
+
+> y→a
+
+is high), we prioritize exploring its possibilities since their changes can effectively lead to the changes of the final parsed action. Conversely, tokens that do not lead to meaningful changes in 
+
+a are assigned lower entropy weight, reducing the incentive to explore them. By doing so, CoSo achieves a more effi-cient exploration process, targeting the space with a higher likelihood of meaningful impact on action. 4Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+Algorithm 1 Online fine-tuning VLM agents with CoSo  
+
+> 1:
+
+Require: VLM with parameters θ, SCM with parame-ters ϕ, parsing function f parse , and environment env . 
+
+> 2:
+
+for k = 0 , . . . , K − 1 do  
+
+> 3:
+
+Initialize the environment s0 = env.reset ()  
+
+> 4:
+
+Initialize a replay buffer U = ∅                                                 
+
+> 5: // Rollout phase 6: for t= 0 ,1,2, . . . do
+> 7: Sample output from VLM: yt∼πθ(·| st)
+> 8: Parse action: at=fparse (yt)
+> 9: rt,st+1 =env.step (at)
+> 10: U=U ∪ { (st,at, r t,yt)}
+> 11: end for
+> 12: // Counterfactual reasoning phase 13: Generate nullified sequences: {(y−i∪yi
+> null )}ni=1
+> 14: Compute causal weights By→avia Equation (6) 15: Compute the causal-weighted entropy HB(πθ(·| s))
+> 16: // Model updates phase 17: Update ϕvia CrossEntropy (a,Pϕ(·| y, ϵ a))
+> 18: Update θvia Equation (7) 19:
+
+end for 
+
+While introducing causal-aware adjustments HB(π(·| s)) to guide exploration, CoSo retains the fundamental proper-ties of standard soft RL (Haarnoja et al., 2018), including convergence (Lemma 4.2, Proposition 4.4) and monotonic improvement (Lemma 4.3, Proposition 4.4). Below, we present key theoretical results. 
+
+Lemma 4.2 (Policy Evaluation) . By Equation (7), the Bell-man backup operator of CoSo is T BQ(st, at) = r(st, at)+ 
+
+γEst+1 ∼P
+
+h
+
+αHB(π(·| st+1 )) + Eat+1 ∼π [Q(st+1 , at+1 )] 
+
+i
+
+.Let Q0 : S × A → R be an arbitrary initialization (with 
+
+|A| < ∞), and define the iterative process Qk+1 = T BQk.Then Qk converges to the fixed Q-value as k → ∞ .
+
+Lemma 4.3 (Policy Improvement) . Let π ∈ Π be any policy and ˜π be the solution to the maximization of Equation (7). Then, Q˜π (s, a) ≥ Qπ (s, a) holds for ∀(s, a) ∈ S × A and 
+
+|A| < ∞.
+
+Proposition 4.4 (Policy Iteration) . Repeatedly applying the steps of Lemma 4.2 and Lemma 4.3 starting from any π ∈ Π
+
+obtains a sequence of policies π1, π 2, . . . which converges to π∗, such that, Qπ∗
+
+(s, a) ≥ Qπ (s, a) for ∀(s, a) ∈ S × A and |A| < ∞.
+
+All proofs are provided in Appendix A. Therefore, by lever-aging causal importance, CoSo can achieve a more purpose-ful exploration strategy, leading to faster and more efficient policy optimization for VLM agents, yet it does so without compromising the stability or robustness of the underlying RL algorithm. Moreover, since Equation (7) defines a highly general entropy-based optimization objective, CoSo can be easily adapted to more specific RL objectives (e.g., PPO), making it as flexible as classical maximum entropy RL. 
+
+4.4. Implementation 
+
+In our implementation, we follow prior works (Ouyang et al., 2022; Bai et al., 2024) and adopt a two-stage offline-to-online fine-tuning process to train VLM agents with CoSo. 
+
+Offline phase. Before RL, we initialize the VLM agent using SFT on task-specific datasets. This step is critical for equipping the agent with prior knowledge of the task, such as the expected input-output formats and valid utterances y
+
+interpretable by the parsing function f parse . By grounding the model in task-relevant knowledge, the offline phase ensures the VLM starts with a good initialization, preparing the agent with foundational skills and structures necessary to interact effectively with the environment later. 
+
+Online phase. In this step, the VLM agent interacts with the environment and leverages CoSo to refine its policy. Unlike the offline phase, where the model’s learning is con-strained by static datasets, the online phase allows the agent to dynamically adapt to the environment through real-time feedback. The whole online process is outlined in Figure 1 and Algorithm 1. Specifically, we instantiate SCM using a lightweight BERT-based (Devlin et al., 2019) network 
+
+ϕ with 0.01B parameters, which is used to approximate the probabilistic function Pϕ(a|y, ϵ a). Each iteration starts with a rollout phase to sample online data, where the agent interacts with the environment to explore diverse states and transitions. Next, the causal weights By→a are computed via counterfactual reasoning, a critical step in guiding the agent’s exploration. This enables the agent to perform more targeted and efficient exploration, focusing on causally sig-nificant regions of the policy space rather than random trial-and-error. Finally, we update SCM using cross-entropy loss to improve its approximation of the causal relationships be-tween y and a and update VLM using CoSo objective to enhance the agent’s decision-making and exploration. 
+
+5. Experiments 
+
+In this section, we present the empirical evaluations of the proposed CoSo across a range of VLM agent tasks. We choose two existing RL fine-tuning methods, AWR-based DigiRL (Bai et al., 2024) and PPO-based RL4VLM (Zhai et al., 2024), and adapt CoSo directly. Our experiments are designed to demonstrate (1) the ability of CoSo to boost the performance of VLM agents over existing RL fine-tuning methods; (2) its ability to identify action-critical tokens and achieve more efficient exploration; (3) a comprehensive ablation study to understand the contribution of CoSo’s components. 
+
+5.1. Performance Boosting 
+
+In this part, we evaluate CoSo’s ability to boost the perfor-mance of VLM agents over existing RL fine-tuning methods 5Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+Table 1. Average success rates (%) on AitW General and AitW WebShopping. Results are averaged over 3 random seeds. 
+
+AitW General AitW WebShopping 
+
+Train Test Train Test Avg. 
+
+Prompting 
+
+Gemini 1.5 Pro 32 .3 16 .7 6.3 11 .5 16 .7
+
+GPT-4V 5.2 13 .5 3.1 8.3 7.5
+
+Gemini 1.5 Pro + AppAgent 14 .6 16 .7 5.2 8.3 11 .2
+
+GPT-4V + AppAgent 13 .5 17 .7 12 .5 8.3 13 .0
+
+Learning 
+
+CogAgent 25 .0 25 .0 31 .3 38 .5 30 .0
+
+AutoUI + SFT 38 .8 37 .6 40 .3 41 .5 39 .6
+
+Online Filtered BC 53 .2 ± 7.6 50 .9 ± 8.2 59 .5 ± 7.7 52 .8 ± 6.8 54 .1
+
+DigiRL 64 .6 ± 7.8 62 .7 ± 5.3 68 .1 ± 9.5 64 .2 ± 6.1 64 .9
+
+CoSo (Ours) 72 .9 ± 5.9 71 .3 ± 6.5 77 .0 ± 7.8 70 .5 ± 8.2 72 .9AitW  Gym Cards  ALFWorld  
+
+> Go to ebay.com, search for “logitech g903”, and select the first entry. You are a blackjack player … to choose}", "action": "stand" or "hit“}
+> You are an expert in the ALFRED … "action": "an admissible action"}
+
+Figure 2. Examples of tasks in different environments: (1) AitW :mobile control tasks that involve interacting with GUIs to com-plete multi-step instructions. (2) Gym Cards : virtual card-based reasoning tasks requiring numerical understanding, arithmetic op-erations, and decision-making. (3) ALFWorld : embodied AI tasks that combine visual understanding and textual reasoning to per-form complex, goal-directed actions in interactive environments. 
+
+in both physical and virtual environments. 
+
+Android-in-the-Wild. We first implement CoSo based on DigiRL (Bai et al., 2024) on top of the AutoUI (Zhang & Zhang, 2024), which is used for fine-tuning mobile agents. We evaluate CoSo on the General and WebShopping tasks from the Android-in-the-Wild (AitW) (Rawles et al., 2024), which features a rich variety of real-world mobile control tasks that requires multi-step reasoning and interaction with graphical user interfaces (GUIs) on Android emulators, as illustrated in Figure 2. It can be seen in Table 5 that prompting-based methods, such as Gemini 1.5 Pro (Team et al., 2023), GPT-4V (Achiam et al., 2023), and AppAgent (Zhang et al., 2023), face sig-nificant challenges in completing user instructions as they rely on pre-trained knowledge, which constrains their ability to adapt to task-specific requirements. Online fine-tuning approaches, like Online Filtered BC and DigiRL (Bai et al., 2024), outperform offline learning techniques such as CogA-gent (Hong et al., 2024) and AutoUI + SFT by facilitating interactions with Android emulators. This suggests the im-portance of online adjustment in enhancing VLM agents’ ability to adapt to dynamic environments. However, their ex-ploration of all tokens of utterance remains highly inefficient. In contrast, CoSo excels in online fine-tuning, achieving both higher exploration efficiency and performance gains over prior methods. Notably, CoSo achieves an average success rate of 72.9%, an improvement of 12.3% over the previous state-of-the-art. 
+
+Gym Cards. Next, we implement our approach on RL4VLM (Zhai et al., 2024) on top of the LLaVA-1.6 (Liu et al., 2024b), and evaluate it within the Gym Cards en-vironment (Brockman, 2016), which requires numerical reasoning and arithmetic operations. It includes four tasks: 
+
+NumberLine , involving aligning a value with a specified tar-get using arithmetic operations, EZPoints and Points24 that require constructing arithmetic expressions to achieve target values, and Blackjack that introduces uncertainty by requir-ing decisions based on game states to maximize success. The results are given in Table 2. Prompting-based methods like Gemini-1.5 Pro and GPT-4V perform comparatively better in Gym Cards than in AitW. This is likely due to the proficiency of VLMs in reasoning tasks related to code and mathematics. Nevertheless, their performance remains inferior to learning-based algorithms like LLaVA-1.6 + SFT (Liu et al., 2024b), CNN + RL, and RL4VLM (Zhai et al., 2024), suggesting a limited scope without fine-tuning. With more purposeful online explo-ration, CoSo exhibits a greater ability to adapt efficiently to numerical reasoning and arithmetic operation and demon-strates a 9.3% improvement over RL4VLM. 
+
+ALFWorld. We next test CoSo on the ALFWorld (Shridhar et al., 2021), an embodied environment for testing decision-making in scenarios requiring visual-semantic understand-ing. The ALFWorld domain includes tasks like Pick&Place ,
+
+ExamineInLight , Clean&Place , Heat&Place , Cool&Place ,6Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning  
+
+> Table 2. Average success rates (%) on Gym Cards and ALFWorld. For Gym Cards, the average performance is computed across all tasks, with each task weighted equally. For ALFWorld, the average success rate is calculated as a weighted mean to account for the varying occurrence probabilities of subtasks in the environment. Results are averaged over 3 random seeds.
+
+Gym Cards ALFWorld 
+
+NL EZP P24 BJ Avg. Pick Look Clean Heat Cool Pick2 Avg. 
+
+Prompting 
+
+Gemini-1.5 Pro 82 .5 2.0 0.0 30 .0 28 .6 34 .6 16 .7 0.0 0.0 0.0 12 .0 13 .5
+
+GPT-4V 65 .5 10 .5 0.0 25 .5 25 .4 38 .2 12 .1 18 .8 6.7 17 .8 14 .6 19 .4
+
+LLaVA-1.6 14 .3 2.2 0.0 21 .5 9.5 16 .7 0.0 0.0 0.0 0.0 0.0 5.0
+
+Learning 
+
+CNN + RL 87 .1 0.0 0.0 38 .8 31 .5 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+
+LLaVA-1.6 + SFT 24 .8 23 .0 2.6 23 .1 18 .4 39 .2 0.0 14 .4 11 .1 0.0 28 .6 17 .7
+
+RL4VLM 88 .4 50 .0 2.5 39 .3 45 .1 44 .7 13 .8 18 .3 15 .8 14 .3 16 .8 22 .7
+
+CoSo (Ours) 100 .0 50 .0 5.8 41 .5 49 .3 42 .5 16 .7 21 .4 11 .9 22 .1 25 .9 26 .5
+
+and PickTwo&Place , which involve reasoning over high-level goals and executing step-by-step plans in visual envi-ronments. As depicted in Figure 2, tasks such as Pick&Place require finding an object (e.g., a kettle) and placing it in a specified location (e.g., a countertop), involving navigation and object manipulation. The results in Table 2 demonstrate that online fine-tuning in RL4VLM plays a crucial role in task completion, allowing the agent to dynamically adjust its strategies during training. It achieves the state-of-the-art result (22.7%), surpassing prompting-based methods like Gemini-1.5 Pro and GPT-4V. Consistent with the results observed in AitW and Gym Cards, CoSo leverages causal-aware exploration to attain the best success rate of 26.5%, an improvement of 16.7%. These findings highlight the effectiveness of CoSo in fine-tuning VLM agents across various task domains. 
+
+5.2. Efficient Exploration 
+
+We now evaluate CoSo’s ability to identify action-critical tokens and facilitate more efficient exploration. In this ex-periment, we first analyze the counterfactual results of CoSo and present the AitW results in Figure 3 (above). See Ap-pendix E for additional results in Gym Cards and ALFWorld. As observed, CoSo effectively identifies the causal impor-tance of individual tokens, highlighting in red those that truly shape the action. Notably, these key tokens constitute only a small proportion of the total (less than 10%), whereas over 80% of the tokens have weights below 0.2, indicating minimal influence on the final action. Prioritizing explo-ration of high-weight tokens proves beneficial, as variations in these tokens are more likely to drive meaningful action changes, thereby greatly improving exploration efficiency. To further validate this, we test the VLM agent in a challeng-ing Android mobile control scenario that demands efficient exploration to handle errors and recover from mistakes. As illustrated in Figure 3 (below), the agent mistakenly clicks the “Share” page upon entering the Walmart homepage. Ef-fective recovery in this situation requires corrective actions, such as pressing the “ Back ” or “ Home ” button. In this sce-nario, we compare CoSo’s action exploration performance against other algorithms, including naive RL and RL with entropy regularization. Each algorithm samples multiple utterances to assess whether the agent can produce actions that enable recovery from its own mistake. As demonstrated in Figure 3 (below), naive RL, without entropy-based exploration, tends to repeatedly select the “DUAL POINT ” (i.e., click on the “Search Walmart”) even when this button is unclickable in the given situation, results in repetitive and ineffective exploration. Indeed, naive RL can sample different utterances with varying planning re-sults and coordinates. However, as the exploration space of complete utterances is vast, most token changes cannot re-sult in meaningful variations in actions. Introducing entropy regularization into RL encourages more diverse action sam-pling and facilitates the generation of varied action plans. However, since it uniformly assigns uncertainty to all tokens during optimization, the agent often explores irrelevant to-kens or produces outputs in incorrect formats, as highlighted by the red examples in Figure 3 (below). In contrast, CoSo effectively identifies the causal importance of specific to-kens, such as “ DUAL ” in Figure 3 (above). Hence, CoSo can selectively introduce uncertainty to action-critical tokens by weighting their entropy during optimization (Equation (7)). This ensures more efficient sampling and aligns the sam-pling of utterances more closely with the sampling of final actions. As demonstrated, CoSo successfully samples one of the correct recovery actions (“ Home ”), which greatly con-tributes to the effectiveness of RL online fine-tuning. See more exploration comparison in Appendix F. 
+
+5.3. Ablation Study 
+
+Next, we conducted an ablation study on the WebShopping and NumberLine tasks, comparing standard RL (RL), RL with naive entropy (RL + H), and CoSo (RL + HB) to 7Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning Counterfactual Results 
+
+Task: Go to walmart.com, search for "lenovo thinkpad", and select the first entry 
+
+Action Plan: [DUAL_POINT,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.0795, 0.3626]", "lift_point": "[0.0795, 0.3626]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,DUAL_POINT,TYPE,DUAL_POINT] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.143, 0.3855]", "lift_point": "[0.143, 0.3855]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,DUAL_POINT, DUAL_POINT,DUAL_POINT] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.1321, 0.3796]", "lift_point": "[0.1321, 0.3796]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.1345, 0.3855]", "lift_point": "[0.1345, 0.3855]", "typed_text": "" 
+
+Repeated Action Sampling of Naïve RL 
+
+Action Plan: [DUAL_POINT,DUAL_POINT,TYPE,DUAL_POINT] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.5381, 0.5855]", "lift_point": "[0.5381, 0.5855]", "typed_text": "" 
+
+Action Plan: [PRESSMEA,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "PRE45", "touch_point": "[-1.0, -1.0]", "lift_point": "[-1.0, -1.0]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.1328, 0.4035]", "lift_point": "[0.1328, 0.8036]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,DUAL_POINT28,TYPE,DUAL_POINT] ; Action Decision: "action_type": "DUAL_POINT", "touch": "[0.3543, 0.4541]", "lifter": "[0.3543, 0.4780]", "typed_text": "" 
+
+Repeated Action Sampling of RL + Entropy 
+
+Action Plan: [DUAL_POINT,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.0978, 0.3606]", "lift_point": "[0.0978, 0.3606]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,DUAL_POINT,TYPE,DUAL_POINT] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.143, 0.3622]", "lift_point": "[0.143, 0.3622]", "typed_text": "" 
+
+Action Plan: [DUAL_POINT,TYPE,DUAL_POINT,STATUS_TASK_COMPLETE] ; Action Decision: "action_type": "DUAL_POINT", "touch_point": "[0.0765, 0.3605]", "lift_point": "[0.0765, 0.3605]", "typed_text": "" 
+
+Action Plan: [PRESS_HOME,DUAL_POINT, DUAL_POINT,DUAL_POINT] ; Action Decision: "action_type": "PRESS_HOME", "touch_point": "[-1.0, -1.0]", "lift_point": "[-1.0, -1.0]", "typed_text": "" 
+
+Repeated Action Sampling of CoSo 
+
+Ground truth: “Back” or “Home” 
+
+Figure 3. Counterfactual results (above) and repeated action sampling (below). For the counterfactual results, causal weights By→a are normalized to [0, 1]. In the repeated action sampling, the action fields are highlighted in blue, while format errors are indicated in red. H HHB HB
+
+Figure 4. Ablation results. The curve of WebShopping is smoothed with exponential weighting over the x-axis. 
+
+evaluate the impact of each component on performance. The results are presented in Figure 4. As shown, RL with naive entropy provided only marginal improvement over standard RL. This is because applying uniform randomness to all tokens fails to focus on those that are truly critical for action generation. It also leads to ineffi-cient exploration and increases the likelihood of generating invalid or irrelevant outputs, as discussed in Figure 3. As a result, naive entropy struggles to address the exploration issue posed by the textual action space of VLM agents. After introducing causal weights, CoSo introduces meaning-ful variability where it matters most, which can drastically reduce the exploration space and make the process more efficient. As shown in Figure 4, CoSo outperforms standard RL and RL with naive entropy in terms of both convergence speed and final task success. 
+
+6. Conclusions and Limitations 
+
+In this paper, we address the challenge of inefficient explo-ration in RL online fine-tuning of VLM agents. We pro-posed a novel and effective solution, CoSo, which leverages counterfactual reasoning to assess the causal importance of tokens. By prioritizing the exploration of action-critical tokens instead of random trial and error, CoSo introduces a principled approach to efficient fine-tuning. Its general ob-jective enables adaptability to various RL objectives, making it a scalable framework for future advancements in online RL fine-tuning. Theoretical analysis and empirical results both support the effectiveness of CoSo. Notably, it consis-tently outperforms existing RL fine-tuning methods across diverse agent tasks, including Android device control, card 8Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+gaming, and embodied AI. Despite its strong performance, the longest utterances in our experiments contain less than 300 tokens. Its effectiveness on ultra-long CoT has not yet been explored. Investigating strategies to extend CoSo to such settings, possibly through hierarchical reasoning, is a promising direction for future work. 
+
+Acknowledgements 
+
+This research is supported by the National Research Foun-dation, Singapore under its Industry Alignment Fund – Pre-positioning (IAF-PP) Funding Initiative. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not re-flect the views of National Research Foundation, Singapore. This research is supported by the RIE2025 Industry Align-ment Fund – Industry Collaboration Projects (IAF-ICP) (Award I2301E0026), administered by A*STAR, as well as supported by Alibaba Group and NTU Singapore through Alibaba-NTU Global e-Sustainability CorpLab (ANGEL). 
+
+Impact Statement 
+
+This paper presents work whose goal is to advance the field of Machine Learning. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here. 
+
+References 
+
+Achiam, J., Adler, S., Agarwal, S., Ahmad, L., Akkaya, I., Aleman, F. L., Almeida, D., Altenschmidt, J., Altman, S., Anadkat, S., et al. GPT-4 technical report. arXiv preprint arXiv:2303.08774 , 2023. Bai, H., Zhou, Y., Pan, J., Cemri, M., Suhr, A., Levine, S., and Kumar, A. DigiRL: Training in-the-wild device-control agents with autonomous reinforcement learning. 
+
+Advances in Neural Information Processing Systems , 37: 12461–12495, 2024. Bai, H., Zhou, Y., Li, L. E., Levine, S., and Kumar, A. Digi-Q: Learning VLM q-value functions for training device-control agents. In The Thirteenth International Confer-ence on Learning Representations , 2025a. URL https: //openreview.net/forum?id=CjfQssZtAb .Bai, S., Chen, K., Liu, X., Wang, J., Ge, W., Song, S., Dang, K., Wang, P., Wang, S., Tang, J., et al. Qwen2.5-VL technical report. arXiv preprint arXiv:2502.13923 ,2025b. Bellemare, M., Srinivasan, S., Ostrovski, G., Schaul, T., Saxton, D., and Munos, R. Unifying count-based ex-ploration and intrinsic motivation. Advances in Neural Information Processing Systems , 29, 2016. Brockman, G. OpenAI Gym. arXiv preprint arXiv:1606.01540 , 2016. Burda, Y., Edwards, H., Pathak, D., Storkey, A., Darrell, T., and Efros, A. A. Large-scale study of curiosity-driven learning. arXiv preprint arXiv:1808.04355 , 2018. Carta, T., Romac, C., Wolf, T., Lamprier, S., Sigaud, O., and Oudeyer, P.-Y. Grounding large language models in interactive environments with online reinforcement learn-ing. In International Conference on Machine Learning ,pp. 3676–3713. PMLR, 2023. Chen, B., Shu, C., Shareghi, E., Collier, N., Narasimhan, K., and Yao, S. Fireact: Toward language agent fine-tuning. 
+
+arXiv preprint arXiv:2310.05915 , 2023. Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K. Bert: Pre-training of deep bidirectional transformers for lan-guage understanding. In Proceedings of the 2019 confer-ence of the North American chapter of the association for computational linguistics: human language technologies, volume 1 (long and short papers) , pp. 4171–4186, 2019. Furuta, H., Lee, K.-H., Nachum, O., Matsuo, Y., Faust, A., Gu, S. S., and Gur, I. Multimodal web navigation with instruction-finetuned foundation models. In The Twelfth International Conference on Learning Representations ,2024. URL https://openreview.net/forum? id=efFmBWioSc .Guo, D., Yang, D., Zhang, H., Song, J., Zhang, R., Xu, R., Zhu, Q., Ma, S., Wang, P., Bi, X., et al. Deepseek-R1: Incentivizing reasoning capability in LLMs via reinforce-ment learning. arXiv preprint arXiv:2501.12948 , 2025. Gur, I., Furuta, H., Huang, A. V., Safdari, M., Matsuo, Y., Eck, D., and Faust, A. A real-world webagent with plan-ning, long context understanding, and program synthesis. In The Twelfth International Conference on Learning Representations , 2024. URL https://openreview. net/forum?id=9JQtrumvg8 .Haarnoja, T., Tang, H., Abbeel, P., and Levine, S. Rein-forcement learning with deep energy-based policies. In 
+
+International conference on machine learning , pp. 1352– 1361. PMLR, 2017. Haarnoja, T., Zhou, A., Abbeel, P., and Levine, S. Soft actor-critic: Off-policy maximum entropy deep reinforce-ment learning with a stochastic actor. In International conference on machine learning , pp. 1861–1870. PMLR, 2018. Hong, W., Wang, W., Lv, Q., Xu, J., Yu, W., Ji, J., Wang, Y., Wang, Z., Dong, Y., Ding, M., et al. CogAgent: A visual language model for GUI agents. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pp. 14281–14290, 2024. 9Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+Hu, S., Ouyang, M., Gao, D., and Shou, M. Z. The dawn of GUI agent: A preliminary case study with claude 3.5 computer use. arXiv preprint arXiv:2411.10323 , 2024. Ji, T., Liang, Y., Zeng, Y., Luo, Y., Xu, G., Guo, J., Zheng, R., Huang, F., Sun, F., and Xu, H. ACE: Off-policy actor-critic with causality-aware entropy regularization. In Forty-first International Conference on Machine Learn-ing , 2024. Liu, A., Feng, B., Xue, B., Wang, B., Wu, B., Lu, C., Zhao, C., Deng, C., Zhang, C., Ruan, C., et al. DeepSeek-V3 technical report. arXiv preprint arXiv:2412.19437 ,2024a. Liu, H., Li, C., Wu, Q., and Lee, Y. J. Visual instruction tun-ing. Advances in Neural Information Processing Systems ,36, 2024b. Niu, R., Li, J., Wang, S., Fu, Y., Hu, X., Leng, X., Kong, H., Chang, Y., and Wang, Q. Screenagent: A vision language model-driven computer control agent. arXiv preprint arXiv:2402.07945 , 2024. Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., et al. Training language models to follow instructions with human feedback. Advances in Neural Information Processing Systems , 35:27730–27744, 2022. Pathak, D., Agrawal, P., Efros, A. A., and Darrell, T. Curiosity-driven exploration by self-supervised predic-tion. In International conference on machine learning ,pp. 2778–2787. PMLR, 2017. Peng, X. B., Kumar, A., Zhang, G., and Levine, S. Advantage-weighted regression: Simple and scalable off-policy reinforcement learning. arXiv preprint arXiv:1910.00177 , 2019. Rafailov, R., Sharma, A., Mitchell, E., Manning, C. D., Er-mon, S., and Finn, C. Direct preference optimization: Your language model is secretly a reward model. Ad-vances in Neural Information Processing Systems , 36, 2024. Rawles, C., Li, A., Rodriguez, D., Riva, O., and Lillicrap, T. Android in the wild: A large-scale dataset for android de-vice control. Advances in Neural Information Processing Systems , 36, 2024. Schick, T., Dwivedi-Yu, J., Dess `ı, R., Raileanu, R., Lomeli, M., Hambro, E., Zettlemoyer, L., Cancedda, N., and Scialom, T. Toolformer: Language models can teach themselves to use tools. Advances in Neural Information Processing Systems , 36:68539–68551, 2023. Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. Proximal policy optimization algorithms. 
+
+arXiv preprint arXiv:1707.06347 , 2017. Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., and Yao, S. Reflexion: Language agents with verbal rein-forcement learning. Advances in Neural Information Processing Systems , 36, 2024. Shridhar, M., Yuan, X., Cote, M.-A., Bisk, Y., Trischler, A., and Hausknecht, M. ALFWorld: Aligning text and embodied environments for interactive learning. In 
+
+International Conference on Learning Representations ,2021. URL https://openreview.net/forum? id=0IOX0YcCdTn .Sutton, R. S. and Barto, A. G. Reinforcement Learning: An Introduction . MIT press, 2018. Tan, W., Zhang, W., Liu, S., Zheng, L., Wang, X., and An, B. True knowledge comes from practice: Aligning large language models with embodied environments via rein-forcement learning. In The Twelfth International Confer-ence on Learning Representations , 2024a. URL https: //openreview.net/forum?id=hILVmJ4Uvu .Tan, W., Zhang, W., Xu, X., Xia, H., Ding, G., Li, B., Zhou, B., Yue, J., Jiang, J., Li, Y., et al. Cradle: Empowering foundation agents towards general computer control. In 
+
+NeurIPS 2024 Workshop on Open-World Agents , 2024b. Team, G., Anil, R., Borgeaud, S., Alayrac, J.-B., Yu, J., Sori-cut, R., Schalkwyk, J., Dai, A. M., Hauth, A., Millican, K., et al. Gemini: A family of highly capable multimodal models. arXiv preprint arXiv:2312.11805 , 2023. Tian, X., Gu, J., Li, B., Liu, Y., Wang, Y., Zhao, Z., Zhan, K., Jia, P., Lang, X., and Zhao, H. Drivevlm: The conver-gence of autonomous driving and large vision-language models. arXiv preprint arXiv:2402.12289 , 2024. Wang, G., Xie, Y., Jiang, Y., Mandlekar, A., Xiao, C., Zhu, Y., Fan, L., and Anandkumar, A. Voyager: An open-ended embodied agent with large language models. Transac-tions on Machine Learning Research , 2024a. ISSN 2835-8856. Wang, J., Xu, H., Jia, H., Zhang, X., Yan, M., Shen, W., Zhang, J., Huang, F., and Sang, J. Mobile-Agent-v2: Mobile device operation assistant with effective naviga-tion via multi-agent collaboration. Advances in Neural Information Processing Systems , 37:2686–2710, 2024b. Wang, T., Wu, Z., Liu, J., HAO, J., Wang, J., and Shao, K. DistRL: An asynchronous distributed reinforcement learn-ing framework for on-device control agent. In The Thir-teenth International Conference on Learning Represen-tations , 2025. URL https://openreview.net/ forum?id=LPG8pPSfQD .10 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Xia, F., Chi, E., Le, Q. V., Zhou, D., et al. Chain-of-thought prompting elicits reasoning in large language models. 
+
+Advances in Neural Information Processing Systems , 35: 24824–24837, 2022. Wen, M., Wan, Z., Wang, J., Zhang, W., and Wen, Y. Reinforcing LLM agents via policy optimization with action decomposition. In The Thirty-eighth Annual Conference on Neural Information Processing Systems ,2024. URL https://openreview.net/forum? id=Hz6cSigMyU .Xie, T., Zhang, D., Chen, J., Li, X., Zhao, S., Cao, R., Hua, T. J., Cheng, Z., Shin, D., Lei, F., Liu, Y., Xu, Y., Zhou, S., Savarese, S., Xiong, C., Zhong, V., and Yu, T. OS-World: Benchmarking multimodal agents for open-ended tasks in real computer environments. In The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track , 2024. Yang, A., Yang, B., Zhang, B., Hui, B., Zheng, B., Yu, B., Li, C., Liu, D., Huang, F., Wei, H., et al. Qwen2. 5 technical report. arXiv preprint arXiv:2412.15115 , 2024. Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K. R., and Cao, Y. ReAct: Synergizing reasoning and acting in language models. In The Eleventh In-ternational Conference on Learning Representations ,2023. URL https://openreview.net/forum? id=WE_vluYUL-X .Zeng, A., Liu, M., Lu, R., Wang, B., Liu, X., Dong, Y., and Tang, J. AgentTuning: Enabling generalized agent abilities for LLMs. arXiv preprint arXiv:2310.12823 ,2023. Zhai, S., Bai, H., Lin, Z., Pan, J., Tong, P., Zhou, Y., Suhr, A., Xie, S., LeCun, Y., Ma, Y., et al. Fine-tuning large vision-language models as decision-making agents via reinforcement learning. Advances in Neural Information Processing Systems , 37:110935–110971, 2024. Zhang, C., Yang, Z., Liu, J., Han, Y., Chen, X., Huang, Z., Fu, B., and Yu, G. Appagent: Multimodal agents as smartphone users. arXiv preprint arXiv:2312.13771 ,2023. Zhang, C., Li, L., He, S., Zhang, X., Qiao, B., Qin, S., Ma, M., Kang, Y., Lin, Q., Rajmohan, S., et al. UFO: A UI-focused agent for windows OS interaction. arXiv preprint arXiv:2402.07939 , 2024a. Zhang, K., Li, J., Li, G., Shi, X., and Jin, Z. CodeAgent: Enhancing code generation with tool-integrated agent systems for real-world repo-level coding challenges. In 
+
+Proceedings of the 62nd Annual Meeting of the Associ-ation for Computational Linguistics (Volume 1: Long Papers) , pp. 13643–13658, 2024b. Zhang, Z. and Zhang, A. You only look at screens: Mul-timodal chain-of-action agents. In Findings of the As-sociation for Computational Linguistics ACL 2024 , pp. 3132–3149, 2024. Zhao, H., Pan, F., Ping, H., and Zhou, Y. Agent as cerebrum, controller as cerebellum: Implementing an embodied lmm-based agent on drones. arXiv preprint arXiv:2311.15033 , 2023. Ziebart, B. D. Modeling purposeful adaptive behavior with the principle of maximum causal entropy . Carnegie Mel-lon University, 2010. Zitkovich, B., Yu, T., Xu, S., Xu, P., Xiao, T., Xia, F., Wu, J., Wohlhart, P., Welker, S., Wahid, A., et al. RT-2: Vision-language-action models transfer web knowledge to robotic control. In Conference on Robot Learning , pp. 2165–2183. PMLR, 2023. 11 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+A. Proofs 
+
+A.1. Equation (2) 
+
+Proof. The entropy H(π(·| s)) over action is equivalent to the entropy of the output utterance y = ( y1, y 2, . . . , y n), which is defined as: 
+
+H(y) = −Ey [log πθ (y|s)] (A.1) 
+
+= − Ey
+
+" nX
+
+> i=1
+
+log πθ (yi|y1: i−1, s)
+
+#
+
+(A.2) 
+
+=
+
+> n
+
+X
+
+> i=1
+
+−Ey
+
+log πθ (yi|y1: i−1, s) (A.3) 
+
+=
+
+> n
+
+X
+
+> i=1
+
+−Ey1: i
+
+log πθ (yi|y1: i−1, s) (A.4) 
+
+=
+
+> n
+
+X
+
+> i=1
+
+− X
+
+> y1: i
+
+πθ (y1: i|s) log πθ (yi|y1: i−1, s) (A.5) 
+
+=
+
+> n
+
+X
+
+> i=1
+
+H(yi|y1: i−1), (A.6) where H(yi|y1: i−1) denotes the conditional entropy of yi given y1: i−1.
+
+A.2. Lemma 4.2 Lemma 4.2 (Policy Evaluation). Derived from Equation (7), the Bellman backup operator of CoSo is given by 
+
+T BQ(st, at) = r(st, at) + γEst+1 ∼P
+
+h
+
+αHB(π(·| st+1 )) + Eat+1 ∼π [Q(st+1 , at+1 )] 
+
+i
+
+. Let Q0 : S × A → R be an arbitrary initialization (with |A| < ∞), and define the iterative process Qk+1 = T BQk. Then Qk converges to the fixed Q-value as k → ∞ .Proof. The Q-function of Equation (7) is given by 
+
+Q(s, a) = E(s1,a1,... )∼ρπ
+
+"
+
+r(s0, a0) + X
+
+> t=1 ,2,...
+
+γt  r(st, at) + αHB(π(·| st))  s0 = s, a0 = a
+
+#
+
+(A.7) 
+
+=E(s1,a1,... )∼ρπ
+
+h
+
+r(s0, a0) + γ
+
+
+
+r(s1, a1) + αHB(π(· | s1)) + γ
+
+
+
+r(s2, a2) + . . . 
+
+ 
+
+s0 = s, a0 = a
+
+i
+
+.
+
+This recursive structure simplifies to: 
+
+Q(s, a) = r(s, a) + γEs′∼P
+
+h
+
+αHB(π(· | s′)) + Ea′∼π [Q(s′, a′)] 
+
+i
+
+. (A.8) We see that the Q-function can be updated iteratively using the operator: 
+
+T BQ(st, at) = r(st, at) + γEst+1 ∼P
+
+h
+
+αHB(π(·| st+1 )) + Eat+1 ∼π [Q(st+1 , at+1 )] 
+
+i
+
+. (A.9) Then, we re-organize the operator: 
+
+T BQ(st, at) = r(st, at) + γEst+1 ∼P
+
+h
+
+αHB(π(·| st+1 )) + Eat+1 ∼π [Q(st+1 , at+1 )] 
+
+i
+
+(A.10) 
+
+=r(st, at) + γEst+1 ∼P
+
+αHB(π(·| st+1 ))  + Eat+1 ∼π [Q(st+1 , at+1 )] (A.11) 
+
+=rB(st, at) + γEat+1 ∼π [Q(st+1 , at+1 )] , (A.12) 12 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+where rB(st, at) is the CoSo-augmented reward. The key observation is that HB(π(· | s)) is bounded above for any policy 
+
+π and state s since it is a weighted sum of the (per-token) discrete entropies H(yi|y1: i−1). Specifically, for each token yi
+
+and weights Bi 
+
+> y→a
+
+≥ 0, we have 
+
+0 ≤
+
+> n
+
+X
+
+> i=1
+
+Bi 
+
+> y→a
+
+· H (yi|y1: i−1) ≤
+
+
+
+max  
+
+> i
+
+Bi
+
+> y→a
+
+
+
+· n log |V| , (A.13) where V is the token (vocabulary) set. As such, rB(st, at) is bounded by 
+
+h
+
+rmin , r max + α
+
+
+
+max i Bi
+
+> y→a
+
+
+
+· n log |V| 
+
+i
+
+which satisfies the boundedness requirement of standard policy evaluation (Sutton & Barto, 2018). As a consequence, T B remains a contraction mapping in an appropriate norm (e.g., an ℓ∞ norm), guaranteeing convergence of Qk.
+
+A.3. Lemma 4.3 Lemma 4.3 (Policy Improvement). Let π ∈ Π be any policy and ˜π be the solution to the maximization of Equation (7). Then, Q˜π (s, a) ≥ Qπ (s, a) holds for ∀(s, a) ∈ S × A and |A| < ∞.Proof. By Equation (A.7), the CoSo policy objective can be defined as 
+
+max 
+
+> π
+
+X
+
+> t
+
+Eat∼π
+
+h
+
+Qπ (st, at) + αHB(π(·| st)) 
+
+i
+
+(A.14) If consider greedy maximization from π to ˜π, we have 
+
+Ea∼˜π
+
+Qπ (s, a) + αHB(˜ π(·| s)) ≥ Ea∼π
+
+Qπ (s, a) + αHB(π(·| s)) . (A.15) In a similar way to the proof of the soft policy improvement (Haarnoja et al., 2017), we derive the following inequality (we denote r(st, at) as rt for convenience): 
+
+Qπ (s, a) = r0 + γEs1
+
+h
+
+αHB(π(·| s1)) + Ea1∼π [Qπ (s1, a1)] 
+
+i
+
+≤ Es1
+
+r0 + γ  αHB(˜ π(· | s1)) + Ea1∼˜π [Qπ (s1, a1)]  
+
+≤ Es1,a1∼˜π
+
+r0 + γ αHB(˜ π(· | s1)) + r1 + γ2Es2
+
+αHB(˜ π(· | s2)) + Ea2∼˜π [Qπ (s2, a2)]  
+
+...
+
+≤ Es1,a1∼˜π, s2,a2∼˜π,... 
+
+"
+
+r0 + X
+
+> t=1 ,2,...
+
+γt rt + αHB(˜ π(· | st)) #
+
+= Q˜π (s, a).
+
+A.4. Proposition 4.4 Proposition 4.4 (Policy Iteration). Repeatedly applying the steps of Lemma 4.2 and Lemma 4.3 starting from any π ∈ Π
+
+obtains a sequence of policies π1, π 2, . . . which converges to π∗, such that, Qπ∗
+
+(s, a) ≥ Qπ (s, a) for ∀(s, a) ∈ S × A 
+
+and |A| < ∞.Proof. By Lemma 4.3, the sequence of Q-function ( Qπ1 , Q π2 , . . . ) is monotonically improving. Moreover, it converges since the sequence of Q-function is bounded from above as discussed in Lemma 4.2. Let Q∗ be its limit. By continuity of the contraction operator (Lemma 4.2) and the construction of each improved policy (Lemma 4.3), the limiting Q∗ must be the unique Qπ∗
+
+satisfying Qπ∗
+
+(s, a) ≥ Qπk (s, a), ∀k and ∀(s, a) ∈ S × A . Consequently, π∗ is a fixed-point policy that cannot be further improved. 13 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+B. Experiment Details 
+
+B.1. AitW Overview. AitW provides a diverse set of real-world mobile control tasks designed to evaluate the ability to perform complex reasoning and interact with GUIs. We choose two sets in our experiments: General and WebShopping . The General set focuses on information search and basic application usage, such as searching for news in Chile and opening Gmail. The training set includes all 545 tasks, while the test set comprises the first 96 tasks. The maximum allowed steps per task is 10. The WebShopping set comprises search instructions on various shopping websites, such as “go to ebay.com, search for “logitech g903”, and select the first entry”. The training set consists of 438 tasks, with 96 tasks reserved for testing. The maximum allowed steps per task is 20. Prompt 'Previous Actions: "action_type": "TYPE", "touch_point": "[-1.0, -1.0]", "lift_point": "[-1.0, -1.0]", "typed_text": "Whats the price of the EGO 14-in 56-Volt Brushless Cordless Chainsaw?" Goal: What\'s the price of the EGO 14-in 56-Volt Brushless Cordless Chainsaw?</s>' 
+
+Figure B.1. Example of observation and prompt in AitW. 
+
+Observations. The observation space consists of the Android GUI screenshot and textual task descriptions provided as user instructions, and action history. 
+
+Actions. The action space includes various types of mo-bile operations. Dual Point : represents both click and slide actions through touch and lift points, which uses normalized coordinates to ensure adaptability across dif-ferent screen resolutions and device sizes. Coordinates are scaled to the range [0 , 1] relative to the screen dimen-sions. Type : allows text input; Home , Back , Enter :standard navigation actions. 
+
+Baselines. We compare the performance of several base-line models using scores reported in Table 1 of (Bai et al., 2024). The baselines include: Gemini 1.5 Pro (with and without AppAgent), GPT-4V (with and without AppA-gent), CogAgent. We run AutoUI + SFT, Online Filtered BC, and DigiRL, an online RL fine-tuning method based on AWR (Peng et al., 2019), using the official implementation 1.
+
+CoSo. We implement CoSo on DigiRL (Bai et al., 2024) with a 0.01B BERT-based SCM. Similar to the VLM agent, SCM is trained in two stages: offline and online. The learning rate for SCM is set to 1 × 10 −5, and the entropy coefficient α is set to 1.0. All other hyperparameters remain consistent with the DigiRL setup. 
+
+B.2. Gym Cards Overview. Gym Cards is a “gym-like” environment designed to evaluate a VLM’s vision recognition and arithmetic reasoning. It consists of four tasks, including NumberLine , EZPoints , Points24 , and Blackjack , designed to evaluate the decision-making capabilities of VLM agents. The first three tasks are deterministic, focusing on number recognition and arithmetic reasoning with increasing complexity. Blackjack, on the other hand, is a stochastic task that requires reasoning based on visual inputs and adapting to uncertain outcomes. 
+
+Observations. The observation space includes visual inputs, such as images of cards or numbers, and textual task descriptions provided as prompts. See an example of the observation and prompt in Figure B.2. 
+
+Actions. The action space varies by task. In the NumberLine, actions are + and -, representing increments or decrements to the current number. In the EZPoints and Points24, actions include natural numbers ( 1-10 ) and arithmetic operators ( +, *,
+
+=, etc.). In the Blackjack task, actions are stand (to hold) and hit (to request a new card). 
+
+Baselines. The baseline models evaluated in our experiments include Gemini 1.5 Pro, GPT4-V, CNN + RL, LLaVA-1.6 + SFT (results sourced from Table 2 in (Zhai et al., 2024)). Additionally, we run LLaVA-1.6 and RL4VLM, an online RL fine-tuning method based on PPO (Schulman et al., 2017), using the the official implementation 2 of RL4VLM. 
+
+CoSo. We implement CoSo on RL4VLM (Zhai et al., 2024) using a 0.01B BERT-based SCM. Similar to AitW, the learning 
+
+> 1
+
+https://github.com/DigiRL-agent/digirl 
+
+> 2
+
+https://github.com/RL4VLM/RL4VLM 
+
+14 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning Prompt You are a blackjack player. Given the current state, you can choose between ['stand', 'hit’] . Your response should be a valid json file in the following format: {\"thoughts\": {first describe your total points and the dealer's total points then think about which action to choose}, \"action\": \"stand\" or \"hit\" 
+
+Figure B.2. Example of observation and prompt in Gym Cards. 
+
+rate for SCM was set to 1 × 10 −5, with the entropy coefficient α set to 1.0. All other hyperparameters, including the configuration of PPO and the scaling factor λ for CoT reasoning, were consistent with the RL4VLM configuration. 
+
+B.3. ALFWorld Overview. ALFWorld is an embodied AI environment designed to evaluate decision-making tasks requiring visual semantic reasoning. The environment integrates text-based interaction with visual observations, allowing agents to complete household-related tasks in a simulated environment. There are 4639 games categorized into six types: Pick & Place ,
+
+Examine in Light , Clean & Place , Heat & Place , Cool & Place , and Pick Two & Place , which involve interacting with objects and their surroundings in contextually appropriate ways. 
+
+Observations. At each state st in ALFWorld, the agent observes an RGB image and a text-based description of the environment. These observations provide the necessary visual and semantic information for the agent to make decisions. The text-based descriptions are inherited from the Text World environment, offering detailed contextual information about the objects and receptacles in the scene. See an example of the observation and prompt in Figure B.3. Your are an expert in the ALFRED Embodied Environment. You are also given the following text 
+
+> description of the current scene: ['-= Welcome to TextWorld, ALFRED! =-\\n\\nYou are in the middle of a
+> room. Looking quickly around you, you see a countertop 1, a sink 1a sinkbasin 1, a drawer 1, a drawer 2, a
+> drawer 3, a drawer 4, a drawer 5, a drawer 6, a sink 2, a sinkbasin 2, a drawer 7, a drawer 8, and a toilet
+> 1.\\n\\nYour task is to: find two toiletpaper and put them in drawer']. Your task is to put two toiletpaper in
+> drawer. Your admissible actions of the current situation are: ['go to countertop 1'\n 'go to sink 1'\n 'go to
+> sinkbasin 1'\n 'go to drawer 1'\n 'go to drawer 2'\n 'go to drawer 3'\n 'go to drawer 4'\n 'go to drawer 5'\n
+> 'go to drawer 6'\n 'go to sink 2'\n 'go to sinkbasin 2'\n 'go to drawer 7'\n 'go to drawer 8'\n 'go to toilet 1'\n
+> 'inventory'\n 'look']. Your response should be a valid json file in the following format: \n\\{\n\"thoughts\":
+> \"{first describe what do you see in the image using the text description, then carefully think about which
+> action to complete the task. }\", \n\"action\": \"{an admissible action}\"\n\\
+
+,
+
+Prompt 
+
+Figure B.3. Example of observation and prompt in ALFWorld. 
+
+Actions. The action space consists of admissible text-based commands, which vary across different tasks. For exam-ples, the action template includes "go to {recep }", "open {recep }", "close {recep }", "take {obj }
+
+from {recep }", "put {obj } in/on {recep }", "use {lamp }", "heat {obj } with {microwave }",
+
+"cool {obj } with {fridge }", "clean {obj } with {cleaner }", "slice {obj } with {knife }",
+
+"inventory" , "look" , "examine {obj }", and "examine {recep }". Here, {obj } represents objects and 
+
+{recep } represents receptacles. The action space is state-dependent, meaning that only certain actions are available or valid in specific states, depending on the agent’s current task and environment configuration. 
+
+Baselines. The baseline models evaluated include Gemini 1.5 Pro, GPT4-V, CNN + RL, and LLaVA-1.6 + SFT. Results for these baselines are sourced from Table 2 in (Zhai et al., 2024). Additionally, we run LLaVA-1.6 and RL4VLM using the official implementation of RL4VLM. 
+
+CoSo. We implement CoSo on RL4VLM (Zhai et al., 2024) using a 0.01B BERT-based SCM. The learning rate for SCM was set to 1 × 10 −5, and the entropy coefficient α was set to 1.0. All other hyperparameters, including the configuration of PPO and the scaling factor λ for CoT reasoning, were consistent with the RL4VLM configuration. 15 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+C. Extension to LLM Agents 
+
+While our method is primarily designed for VLM agents, it naturally extends to LLM agents operating in purely textual environments. To demonstrate this, we conduct experiments on AlfredTWEnv, a fully text-based environment within the ALFWorld suite (Shridhar et al., 2021). We implement RL4VLM and CoSo using Qwen2.5-7B-Instruct (Yang et al., 2024) and train the LLM agents from scratch (i.e., without SFT) over 12,000 environment steps. Table C.1 summarizes the results, showing that CoSo outperforms the RL baseline in average task success.  
+
+> Table C.1. Performance comparison between RL4VLM and CoSo on the AlfredTWEnv with LLM agents.
+
+AlfredTWEnv Pick Look Clean Heat Cool Pick2 Avg. RL4VLM (LLM Agent) 62.9 38.5 35.0 33.3 25.9 11.1 32.8 CoSo (LLM Agent) 77.1 24.2 40.7 37.5 35.3 7.0 39.6 
+
+D. Computational Budget 
+
+In this part, we evaluate the computational budge of CoSo’s online fine-tuning and compare its overhead with the baseline RL method (Zhai et al., 2024) and RL with naive entropy regularization on NumberLine. The evaluation includes metrics such as parameter count, memory usage, and training time, with all results obtained using NVIDIA H100 cores. As summarized in Table D.1, CoSo introduces a modest computational overhead due to the need to compute causal weights for each token in the generated utterances. However, this overhead is relatively small because the SCM is implemented using lightweight BERT-based networks. Specifically, CoSo adds only 0.01 B parameters ( < 0.2% ), 0.7 GB of GPU memory (< 2% ), and 0.5 H100 GPU hours ( < 4% ). This volume of the budget is modest while achieving significant performance improvements in exploration efficiency and task success rates, as shown in Section 5.1 and Section 5.2.  
+
+> Table D.1. Computational budget including parameter count (B), GPU memory usage (GB), and training time (H100 GPU hours).
+
+Parameter GPU Memory Training Time Method VLM SCM Total VLM SCM Total Rollout Update HB Total 
+
+RL 7.96 N/A 7.96 37.0 N/A 37.0 10.4 3.5 N/A 13.9 RL + Entropy 7.96 N/A 7.96 37.0 N/A 37.0 10.4 3.6 N/A 14.0 CoSo 7.96 0.01 7.97 37.0 0.7 37.7 10.4 3.6 0.5 14.5 16 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+E. Visual Counterfactual Results 
+
+We present the visual counterfactual results in Figure E.1 and the distribution of weights in Figure E.2. As observed, the SCM can effectively identify the tokens that truly shape the outcome action. These tokens represent a small fraction ( <10%) of the total, while over 80% of the tokens have weights in the range of [0, 0.2), which indicates minimal impact on the action. Moreover, ALFWorld results indicate that utterances with longer CoT may contain a higher proportion of low-impact tokens. By reducing the exploration of these tokens, CoSo substantially improves action exploration efficiency. ALFWorld     
+
+> Gym Cards
+> AitW
+> Figure E.1. Visual counterfactual results on AitW, Gym Cards, and ALFWorld. Darker colors indicate greater weights.
+> Figure E.2. Distribution of counterfactual weights By→a(normalized)
+
+17 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 
+
+F. More Exploration Comparison Your are an expert in the ALFRED Embodied Environment. You are also given the following text description of the current scene: [\'You arrive at loc 7. On the coffeemachine 1, you see a saltshaker 1, a spoon 1, and a bread 1.\']. Your task is to put a hot cup in diningtable. Your admissible actions of the current situation are: [\'go to fridge 1\'\n \'go to cabinet 1\'\n \'go to sink 1\'\n \'go to countertop 1\'\n \'go to sinkbasin 1\'\n \'go to cabinet 2\'\n \'go to toaster 1\'\n \'go to cabinet 3\'\n \'go to cabinet 4\'\n \'go to cabinet 5\'\n \'go to drawer 1\'\n \'go to drawer 2\'\n \'go to microwave 1\'\n \'go to stoveburner 1\'\n \'go to cabinet 6\'\n \'go to stoveburner 2\'\n \'go to stoveburner 3\'\n \'go to garbagecan 1\'\n \'go to cabinet 7\'\n \'go to cabinet 8\'\n \'go to stoveburner 4\'\n \'go to diningtable 1\'\n \'take saltshaker 1 from coffeemachine 1\'\n \'take spoon 1 from coffeemachine 1\'\n \'take bread 1 from coffeemachine 1\'\n \'inventory\'\n \'look\'\n \'examine coffeemachine 1\']. Your response should be a valid json file in the following format: \n\\{\n"thoughts": "{first describe what do you see in the image using the text description, then carefully think about which action to complete the task. }", \n"action": "{an admissible action}"\n\\} 
+
+1.  '{\n "thoughts": "Based on the text description, I see a saltshaker, a spoon, and a piece of bread on the coffee machine. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in the cabinets or on the countertops. After acquiring a cup, I would need to use the coffee machine to heat the water. However, the first step is to find a cup.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+2.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup, fill it with coffee, and then heat it up. Since the coffee machine is already in view, I should look for a cup nearby, possibly in a cabinet or on a countertop. After acquiring a cup, I can then use the coffee machine to heat the water. However, the first step is to find a cup, so I will go to a location where cups are commonly stored, such as a cabinet.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+3.  '{\n "thoughts": "In the image, I see a coffee machine with a toaster to the left and a saltshaker, a spoon, and a piece of bread on top of it. To complete the task of putting a hot cup on the dining table, I need to find a cup, fill it with coffee, and then heat it up. Since there is no direct action to \'heat cup\' or \'take cup\', I should look for a cup first, which might be in a cabinet or on a countertop. The action \'go to diningtable 1\' will bring me closer to the dining table, but I need the cup before I can place it there. Therefore, I should look for a cup in the cabinets or on the countertops.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+4.  '{\n "thoughts": "Based on the text description, I am at loc 7 and there is a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there\'s no mention of a cup on the coffee machine, I should look for a cup in the cabinets or on the countertops. After securing a cup, I would need to use the coffee machine to heat the water or the microwave to heat the cup if available. Since \'go to microwave 1\' is an admissible action, it suggests that there is a microwave in the environment. However, I need to find a cup first, so I should go to a location where cups are typically stored, such as a cabinet.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+5.  '{\n "thoughts": "I can see a coffee machine and on it next to a toaster, a tolte. There are no cups nearby that are listed under admissible actions. To accomplish the task. However, I need to find a cup that I could possibly hot if I find coffeemaker could also fill it with water. Given my current available actions, the best course would be to look for a cup first, and then likely use the coffee machine to fill it with water. Since a coffeemachine could have it in hand to provide coffeemaker, and a mug might not typically be stored in a coffeemaker, it would be beneficial to use actions such as \'look\' or \'examine coffeemachine 1\' to gather more information and possibly spot a location for a mug to use.", \n "action": "look"\n}\n</s>' 
+
+6.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in the cabinets or on the countertops. Once I have the cup, I can use the coffee machine to heat the water. However, the action to heat the water is not available, so I will focus on finding a cup first. The most logical next step is to go to a location where cups are usually stored, such as a cabinet.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+7.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup, fill it with coffee, and then heat it up. Since the coffee machine is already in view, I should look for a cup nearby, possibly in a cabinet or on a countertop. The action \'go to diningtable 1\' will bring me closer to the dining table, but I need the cup first. Therefore, I should look for a cup in the nearby storage areas.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+8.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in the cabinets or on the countertops. The action \'go to diningtable 1\' is the final step, but I need to find a cup first. I will choose to go to a location where cups are typically stored, such as a cabinet.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+9.  '{\n "thoughts": "Based on the text description, I see a saltshaker, a spoon, and a piece of bread on the coffee machine. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in a likely location such as a cabinet or on a countertop. After acquiring a cup, I would need to use the coffee machine to heat the water. However, the first step is to locate a cup.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+10.  '{\n "thoughts": "In the image, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on top of it, which matches the text description provided. To put a hot cup on the dining table, I first need to find a cup, fill it with coffee, and then heat it up. Since the coffee machine is already in view, I should look for a cup nearby, possibly in a cabinet or on a countertop. The \'go to diningtable 1\' action is the final step to complete the task, but first, I need to find and heat the cup.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+Ground truth: cup in diningtable 1. 
+
+Naïve RL 
+
+Figure F.1. Ten repeated action samplings of naive RL. 
+
+18 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 1.  '{\n "thoughts": "In the image, I see a coffee machine with items on top of it, which matches the text description provided. On top of the coffee machine, there is a saltshaker, a spoon, and a piece of bread. The task is to put a hot cup on the dining table. Since no cup is visible in the current scene, I must find a cup first. One would typically find cups in a cabinet or on a countertop. The \'go to diningtable 1\' action seems irrelevant to the immediate objective of finding and heating a cup. Therefore, I will need to start by exploring the kitchen to locate a cup for heating.", \n "action": "go to cabinet 1"\n}\n</s>' 
+
+2.  '{\n"thoughts": "In the image, there is a coffee machine, a toaster to the left, and other items not fully visible. A to the right on the countertop is what might be a salt shaker, which is part of our text description provided. Since the task is to put a hot cup on the dining table, first, we need to find a cup. If a cup isn\'t already on the countertop or in our immediate view in the current situation, we might need to interact with locations such as cabinets where cups are commonly kept. Since hot water may indicate there is a cup nearby that we could interact with, our subsequent actions should be to \'go to countertop 1\' or similar specific to where the coffeemachine and related items are. Unfortunately, based on our current information, the best course of action is to choose \'go to\' any location that\'s closely related to our goal, even though a direct \'go to diningtable 1\' would be in line with our final goal of the task completion. However, given time and constraints within the provided options and text (adhere to \'admissible action\' and follow through on available interactions), selecting "look" should give' 
+
+3.  '{\n "thoughts": "The text description of the scene indicates that we are at loc 7 near a coffee machine with items such as a saltshaker, spoon, and bread on it. The task is to put a hot cup on the dining table. In the image, I can see the coffee machine to the right, the toaster to the left, and what appears to be a saltshaker to the right side of the toaster. Given the actions available, the first step should be to find a cup, possibly fill it with coffee, heat it up (likely using the coffee machine to make hot coffee), and then place it on the dining table. The action \'go to coffeetable\' or \'examine coffeemachine 1\' could potentially give us more information about the coffee machine, but \'inventory\' would allow us to check if we already have a cup in our possession.",\n "action": "inventory"\n}\n</s>' 
+
+4.  '{\n"thoughts": "Based on the text description and the provided image, we are situated at loc 7 where there is a coffee machine with several items on top of it. The task requires putting a \'hot cup\' on the dining table. To achieve this task, we would need to fill the coffee machine with coffee and heat the contents. Currently, the coffee machine is in front of us. Considering that there\'s no listed option to grab or interact directly with a hot cup, it suggests that we may need to find the \'cool cup,\' a pot to warm the cup, then use the coffee machine to heat the liquid. First the necessary steps involve clearing the coffee machine to prevent any obstination, moving towards completing our task. Thus, we can start by examining the coffee machine, taking actions to interact with it.",\n"action": "examine coffeemachine 1"\n}</s>' 
+
+5.  '{\n"thoughts": "In case if one follows the prompt for a cup, one of these common components seen on a surface may match with what "go to coffeemachine 1" references which includes a saltshaker 1 - potentially mistaken for a hot \'cup\'. The available actions give various loc destinations, but to place "a hot cup on our floor or furniture is not directly among them. Normally, cups aren\'t interacted with directly (other than possibly found) which hints this may imply to take it at room, temperature status doesn\'t come clearly into play, and it\'s impossible to directly place anything on a \'dating \'table\'. Also not straightforward for AL language commands was the phricking \'cup\' when the usual \'some object on a place like on a toaster to mean it was used; it may better refer to a \'toiled paper holder\' such as on an office toilet, since these locations commonly do not possess warm cupmaking process and only in realistic interpretate scenarios where cup is mentioned can action relate directly the \'floor-mountinated cup type\'. To move away in a different angle related to finding the object we eventually need (\'go to drawer x\'; to find a' 
+
+6.  '{\n "thoughts": "In the current scene, I observe coffeemachine 1 on which there are several items resting upon top: a saltshaker, a spoon, and a piece of bread. Since the task is to put a hot cup on the dining table, I need to locate a cup and make it hot, possibly by using the coffee machine, but there is no admissible action immediately available for filling a cup with coffeemachine product that makes hot bead coffee, like using coffee brewin grounds. To proceed with finding a cup to be potentially utilized for hot coffee, first I should move to where the cups are likely to be stored, such as a cabinet. I can choose \'go to cabinet 1\' as it is one of the multiple cabinets listed as admissible actions.", \n "action": "go to cabinet 1"\n}\n</s>' 
+
+7.  '{\n "thoughts": "In the image, I see a coffee machine with a toaster to the left, a saltshaker, a spoon, and a piece of bread on top of it. To complete the task of putting a hot cup on the dining table, I first need to find a cup and heat it. Since the coffee machine is present, it might be used to heat the water in the cup. However, I need to find a cup first, which is not currently visible in the scene. The logical next step would be to look for a cup, which could be in a cabinet or on a countertop. Since \'go to diningtable 1\' is an admissible action, I will choose to go there first to be ready to place the hot cup once I have it.",\n "action": "go to diningtable 1"\n}\n</s>’ 
+
+8.  'As an updated text summary would yield updated content response, please fill within format expected (e.g., follow formatting rules as for your context like "receive input" and the "interpretations" format listed.\n\nI’ve been directed or assisted\n\n {\n "thoughts": "I see a countertop with a coffee machine, toaster, as well as smaller objects including a saltshaker, a spoon, and bread - matching a text description from a context likely meant for a domestic scene: location 7 with food preparation present. However, these objects are irrelevant for the described objective in this image with nothing that resembles, from here, a \'cup\' that could actually produce some \'hot liquid-for\' without further instructions on hotwater or a mug specifically with either coffee coffains. Assuming we either require an intermediate-step within cooking or aim at creating hot beverage within the context of hot drinks or appliances, nor a simulation where cooking processes should operate automatically without such a choice - then perhaps the closest associated object here is the microwave, though without specific clarification of that or context given for completing tasks, the first logical action would be no eventual final step involving cooking is provided' 
+
+9.  '{\n "thoughts": "Based on the given text description of \'This scene\' and what\'s visible on top of the image that matches a variety of items including both toaster and saltshaker. However, none of these match \'coffreem\', so it needs a bit contextual context. To put a hot cup on the dining table, I will first need a cup. They are typically stored in a cabinet often above their heads at floor l eye at. So that should be loc 5, since coffco\'ve probably located \'mitebrass\' for 1. Hence I will go toward a cabinet since that appears to be the best likely location of utensils including cupphones, hence is the initial and appropriate starting by placing that down on the diningtable. Choosing cabinets for searching usually is based on their closeness proximity first, as we\'d otherwise prioritize taking objects closest first.", \n{\n "thoughts": "You cannot clearly observe where the dining table or cup is just from the image or text as my view points, thus cannot directly relate with the task objective at this vantage point. However, referencing scene content descriptions, I\'ll need items like toile' 
+
+10.  '{\n "thoughts": "Based on the text description and the image provided, we see a red coffee machine, presumably in a kitchen setting. This corresponds with the given coffee. On top of the tomato coffee machine on the countertop, there is a white saltshaker and below on there might be items like a spoon and what probably contains the bread. However, there is no clear indication of where cup nor an action involving a cup is within the admissible actions or the scene description. Hence, it might just be assumed that a cup exists in the environment which probably must already be hot, although there\'s no \'heat up cup\' or similar option in the immediate action choices that can be taken from within the set. According to the task, we need to put a hot cup on the dining table, which seems impossible with the admissible actions being only the ones given. Therefore, we could only perform the \'take\' movements and possibly identify a cup by using \'look\' next to further see if an action related to obtaining a cup becomes visible.",\n "action": "look"\n}\n</s>' 
+
+RL + Entropy 
+
+Your are an expert in the ALFRED Embodied Environment. You are also given the following text description of the current scene: [\'You arrive at loc 7. On the coffeemachine 1, you see a saltshaker 1, a spoon 1, and a bread 1.\']. Your task is to put a hot cup in diningtable. Your admissible actions of the current situation are: [\'go to fridge 1\'\n \'go to cabinet 1\'\n \'go to sink 1\'\n \'go to countertop 1\'\n \'go to sinkbasin 1\'\n \'go to cabinet 2\'\n \'go to toaster 1\'\n \'go to cabinet 3\'\n \'go to cabinet 4\'\n \'go to cabinet 5\'\n \'go to drawer 1\'\n \'go to drawer 2\'\n \'go to microwave 1\'\n \'go to stoveburner 1\'\n \'go to cabinet 6\'\n \'go to stoveburner 2\'\n \'go to stoveburner 3\'\n \'go to garbagecan 1\'\n \'go to cabinet 7\'\n \'go to cabinet 8\'\n \'go to stoveburner 4\'\n \'go to diningtable 1\'\n \'take saltshaker 1 from coffeemachine 1\'\n \'take spoon 1 from coffeemachine 1\'\n \'take bread 1 from coffeemachine 1\'\n \'inventory\'\n \'look\'\n \'examine coffeemachine 1\']. Your response should be a valid json file in the following format: \n\\{\n"thoughts": "{first describe what do you see in the image using the text description, then carefully think about which action to complete the task. }", \n"action": "{an admissible action}"\n\\} 
+
+Ground truth: cup in diningtable 1. 
+
+Figure F.2. Ten repeated action samplings of RL with entropy. 
+
+19 Towards Efficient Online Tuning of VLM Agents via Counterfactual Soft Reinforcement Learning 1.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since I don\'t see a cup in the current description or image, I should look for a cup in the cabinets or on the countertops. After finding a cup, I would need to use the coffee machine to heat the water or the microwave to heat the cup. Since \'go to coffeemachine 1\' is not an admissible action, I will choose to go to a location where I might find a cup, such as a cabinet or countertop.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+2.  '{\n "thoughts": "In the image, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on top of it, which matches the text description provided. To put a hot cup on the dining table, I first need to find a cup, fill it with coffee, and then heat it up. Since the coffee machine is already in view, the next logical step is to interact with it. However, the admissible actions do not include interacting with the coffee machine directly. Therefore, I should go to the coffee machine to be in a position to interact with it.",\n "action": "go to coffeemachine 1"\n}\n</s>' 
+
+3.  '{\n "thoughts": "In the image, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on top of it, which matches the text description provided. To put a hot cup on the dining table, I first need to find a cup and heat it. Since the coffee machine is typically used to heat water, I should look for a cup nearby, possibly in a cabinet or on a countertop, and then use the coffee machine to heat the water. However, the current admissible actions do not include interacting with a cup or heating it. Therefore, the first logical step is to navigate to a location where I can find a cup, such as a cabinet or countertop.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+4.  '{\n "thoughts": "Based on the text description, I see a saltshaker, a spoon, and a bread on the coffee machine. To complete the task of putting a hot cup on the dining table, I need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in the cabinets or drawers where cups are usually stored. Once I have the cup, I can use the coffee machine to heat it up. However, since the task specifies a \'hot cup\', I may need to find a cup that is already hot or heat it up. Since the admissible actions do not include heating a cup directly, I will first go to the dining table to understand the environment better and to be ready to place the hot cup once I have it.",\n "action": "go to diningtable 1"\n}\n</s>' 
+
+5.  '{\n "thoughts": "In the image, I see a coffee machine with a toaster and a salt shaker on top of it. This matches the text description provided, which indicates that I am at location 7, where there is a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To complete the task of putting a hot cup on the dining table, I would first need to find a cup and then heat it. Since there is no cup mentioned in the current scene, I should look for a cup, possibly in a cabinet or on a countertop. Then I\'ll need to use the coffee machine or another appliance to heat the cup. However, none of the admissible actions suggest that there is a cup in the immediate vicinity or that I can interact with the coffee machine to heat the cup. Therefore, my first action should be to find a cup, which might involve going to a location where cups are typically stored, such as a cabinet.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+6.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since the coffee machine is not mentioned to have a cup, I should look for a cup in the cabinets or on the countertops. The action \'go to diningtable 1\' will move me closer to the dining table, but I need to find a cup first. I will choose to go to a location where I might find a cup, such as a cabinet or countertop.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+7.  '{\n "thoughts": "In the image, I can see a toaster to the left and a coffee machine to the right, which corresponds with the text description indicating the presence of a coffee machine with a saltshaker, a spoon, and a bread on it. To put a hot cup on the dining table, I would first need to find a cup, fill it with coffee from the coffee machine, heat it if necessary, and then place it on the dining table. However, since the admissible actions do not include interacting with the coffee machine or taking a cup, I should navigate to the dining table as the first step to complete the task.",\n "action": "go to diningtable 1"\n}\n</s>' 
+
+8.  '{\n "thoughts": "Based on the text description, I see a saltshaker, a spoon, and a piece of bread on the coffee machine. To put a hot cup on the dining table, I first need to find a cup and heat it. The coffee machine is not the right appliance for heating a cup, so I should look for a cup in the cabinets or drawers, and then use the microwave to heat it. Since \'go to microwave 1\' is an admissible action, I should go to the microwave first to check if there is a cup nearby that I can use.",\n "action": "go to microwave 1"\n}\n</s>' 
+
+9.  '{\n "thoughts": "Based on the text description, I see a coffeemachine with a saltshaker, a spoon, and a bread on it. The task is to put a hot cup on the dining table. However, there is no mention of a cup or how to heat it in the current description or image. Since I need to heat a cup, I should look for a cup and a way to heat it, possibly using the coffeemachine or another appliance. The first step should be to find a cup, which might be in a cabinet or on a countertop. I will choose to go to the countertop as it is a likely place to find a cup.",\n "action": "go to countertop 1"\n}\n</s>' 
+
+10.  '{\n "thoughts": "Based on the text description, I see a coffee machine with a saltshaker, a spoon, and a piece of bread on it. To put a hot cup on the dining table, I first need to find a cup and heat it. Since there is no mention of a cup on the coffee machine, I should look for a cup in the cabinets or on the countertops. The action \'go to diningtable 1\' will bring me closer to the dining table, but first, I need to find a cup and heat it. Therefore, I should go to a location where I might find a cup, such as a cabinet or countertop.",\n "action": "go to cabinet 1"\n}\n</s>' 
+
+CoSo 
+
+Your are an expert in the ALFRED Embodied Environment. You are also given the following text description of the current scene: [\'You arrive at loc 7. On the coffeemachine 1, you see a saltshaker 1, a spoon 1, and a bread 1.\']. Your task is to put a hot cup in diningtable. Your admissible actions of the current situation are: [\'go to fridge 1\'\n \'go to cabinet 1\'\n \'go to sink 1\'\n \'go to countertop 1\'\n \'go to sinkbasin 1\'\n \'go to cabinet 2\'\n \'go to toaster 1\'\n \'go to cabinet 3\'\n \'go to cabinet 4\'\n \'go to cabinet 5\'\n \'go to drawer 1\'\n \'go to drawer 2\'\n \'go to microwave 1\'\n \'go to stoveburner 1\'\n \'go to cabinet 6\'\n \'go to stoveburner 2\'\n \'go to stoveburner 3\'\n \'go to garbagecan 1\'\n \'go to cabinet 7\'\n \'go to cabinet 8\'\n \'go to stoveburner 4\'\n \'go to diningtable 1\'\n \'take saltshaker 1 from coffeemachine 1\'\n \'take spoon 1 from coffeemachine 1\'\n \'take bread 1 from coffeemachine 1\'\n \'inventory\'\n \'look\'\n \'examine coffeemachine 1\']. Your response should be a valid json file in the following format: \n\\{\n"thoughts": "{first describe what do you see in the image using the text description, then carefully think about which action to complete the task. }", \n"action": "{an admissible action}"\n\\} 
+
+Ground truth: cup in diningtable 1. 
+
+Figure F.3. Ten repeated action samplings of CoSo. 
+
+20

@@ -1,0 +1,591 @@
+Title: Ad Hoc Teamwork via Offline Goal-Based Decision Transformers
+
+URL Source: https://openreview.net/pdf?id=tl3FlgWScA
+
+Number of Pages: 15
+
+Markdown Content:
+# Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+Xinzhi Zhang 1 Hohei Chan 1 Deheng Ye 2 Yi Cai 1 Mengchen Zhao 1
+
+# Abstract 
+
+The ability of agents to collaborate with previ-ously unknown teammates on the fly, known as ad hoc teamwork (AHT), is crucial in many real-world applications. Existing approaches to AHT require online interactions with the environment and some carefully designed teammates. How-ever, these prerequisites can be infeasible in prac-tice. In this work, we extend the AHT problem to the offline setting, where the policy of the ego agent is directly learned from a multi-agent in-teraction dataset. We propose a hierarchical se-quence modeling framework called TAGET that addresses critical challenges in the offline setting, including limited data, partial observability and online adaptation. The core idea of TAGET is to dynamically predict teammate-aware rewards-to-go and sub-goals, so that the ego agent can adapt to the changes of teammates’ behaviors in real time. Extensive experimental results show that TAGET significantly outperforms existing solu-tions to AHT in the offline setting. 
+
+# 1. Introduction 
+
+Ad hoc teamwork (AHT) refers to enabling autonomous agents to collaborate with unknown teammates without prior coordination (Stone et al., 2010). This capability is crucial in dynamic and uncertain environments where agents must quickly form teams, adapt to new teammates and achieve common goals efficiently (Barrett et al., 2017). For instance, rescue robots should form an ad hoc team in real time to survey affected areas, locate survivors, and deliver supplies. Each robot must adapt to the changes in teammates’ policies caused by some unpredictable events. Another typical appli-cation of AHT is autonomous driving, where each car must collaborate with random cars nearby to accomplish tasks such as cross-passing and overtaking (Teng et al., 2023).      
+
+> 1School of Software Engineering, South China University of Technology, Guangzhou, China 2Tencent, Shenzhen, China. Cor-respondence to: Mengchen Zhao <zzmc@scut.edu.cn >.
+> Proceedings of the 42 nd International Conference on Machine Learning , Vancouver, Canada. PMLR 267, 2025. Copyright 2025 by the author(s).
+
+Previous research on AHT primarily focuses on online rein-forcement learning (RL) methods (Barrett & Stone, 2015; Durugkar et al., 2020; Mirsky et al., 2020; Ye et al., 2020), which typically require the access to the environment in-volving various pre-trained teammates. However, these approaches face significant challenges in practice. First, the teammates’ joint policy space could be extremely large, and it is impossible to simulate all combinations of teammates’ policies during training. Existing works (Gu et al., 2021) usually train the ego agent’s policy against a subset of team-mates’ policies, which greatly reduces the generalization ability of the learned policy. Second, environmental sim-ulators are often unavailable or expensive, especially for real-world environments, without which the online RL ap-proaches cannot be applied. Fortunately, in many cases, of-fline data collection provides a safer and more cost-effective alternative. For instance, numerous traffic data is recorded by cameras and road sensors every day. This motivates us to study the problem of AHT in an offline setting. However, addressing AHT problems in the offline setting remains challenging: (1) Offline RL heavily relies on the pre-collected datasets, which can hardly cover diverse teammate behaviors and environmental dynamics, leading to a poor generalization of the learned policy; (2) In partially observ-able environments, incomplete information makes it more challenging to accurate teammates modeling. This issue is aggravated in the offline setting because we cannot compen-sate for missing information through active exploration; (3) Existing sequence modeling methods for decision-making (e.g., Decision Transformer (Chen et al., 2021)) primarily rely on the return-guided action generation. However, a sim-ple return signal fails to capture enough information about the frequently changing teammates’ intentions and policies in the setting of AHT. To address the issues mentioned above, we introduce a novel framework called TAGET , which stands for Teammate-
+
+Aware Goal driven hi Erarchical Decision Transformers. Specifically, TAGET adopts a hierarchical framework con-sisting of a high-level module for teammate-aware sub-goal prediction and a low-level module for action generation. The key innovations of TAGET are as follows. (1) We adopt a trajectory mirroring strategy to improve data efficiency, where each agent plays as the ego agent in turn, so that one piece of multi-agent trajectory can be used multiple times 1Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+for training; (2) We employ two separate state encoders for the ego agent and all the agents respectively. By regular-izing the output of the two encoders, the ego agent is able to infer the teamwork information based only on its local observations; (3) We extend the conventional return-to-go (RTG) to teammate-aware return-to-go (TA-RTG), which accurately reflects the team return-to-go conditioned on the current global state. Based on the TA-RTG, a teammate-aware sub-goal (TA-Goal) is decoded and used to guide the low-level Decision Transformer to generate corresponding actions. By dynamically predicting the TA-RTG and the TA-Goal at every step, the ego agent is able to adapt to the changes of teammates in real time. The main contributions of our work are summarized as follows. 1. We extend the AHT problem to the offline setting, where an ego agent needs to learn a policy that adapts to various teammates from the offline dataset. 2. We propose a hierarchical sequence modeling frame-work called TAGET, which successfully addresses the offline AHT problem using a teammate-aware goal-conditioned Decision Transformer. 3. We empirically validate TAGET in three classic envi-ronments. The results show that TAGET achieves the best performance against strong baselines, with an av-erage improvement of 37.83% across all environments. 
+
+# 2. Related Work 
+
+Ad hoc teamwork. Existing works on AHT predominantly rely on online interaction with the environment and associ-ated teammates. Early approaches assume fully observable environments with a fixed small number of teammates, and train an agent to collaborate with them through plenty of online interactions (Barrett et al., 2017; Chen et al., 2020; Rahman et al., 2021b; Huang et al., 2021). Recent works consider more realistic settings. For example, ODITS (Gu et al., 2021) and LIAM (Papoudakis et al., 2021) improve the adaptability of the ego agent in partially observable en-vironments. GPL (Rahman et al., 2021a) and OAHT (Wang et al., 2024) learn to address the open ad hoc problem, where the number of teammates can change. TEAMSTER lever-ages model-based RL methods to approximate the poten-tially complex environments and teammates (Ribeiro et al., 2023). However, these online approaches perform poorly in the offline setting, because they heavily rely on online explorations to estimate the environments and teammates. 
+
+Offline reinforcement learning. Offline RL (Levine et al., 2020) aims to learn policies from static datasets without on-line exploration, effectively reducing data costs and safety risks (Xu et al., 2022a), with notable success in single-agent settings (Qu et al., 2023; Wei et al., 2021). Traditional of-fline RL algorithms, such as Batch-Constrained Q-learning (BCQ) (Fujimoto et al., 2019) and Conservative Q-learning (CQL) (Kumar et al., 2020), focus on addressing the out-of-distribution (OOD) problem by constraining policy learning. Decision Transformer (DT) (Chen et al., 2021; Li et al.; Xie et al., 2023) and Trajectory Transformer (TT) (Janner et al., 2021; Xu et al., 2021) reframe offline RL as a sequence modeling problem, achieving performance comparable to state-of-the-art offline RL methods while providing a novel perspective on policy learning (Zheng et al., 2022; Xu et al., 2022b; Reed et al., 2022; Badrinath et al., 2024; Ma et al., 2023). Furthermore, recent works (Yang et al., 2021; Meng et al., 2021; Tseng et al., 2022; Jiang & Lu, 2023) have ex-tended offline RL to multi-agent settings and tried to learn an optimal joint policy from the offline datasets. However, these works do not apply to the ad hoc setting, where the teammates’ policies may not follow the optimal joint policy. By contrast, we try to learn a teammate-aware policy that can adapt to the changes to teammates’ policies in real time. 
+
+Teammate modeling. Teammate modeling (Barrett et al., 2012) greatly facilitates multi-agent learning by helping the agents to understand each other. Traditional AHT methods primarily rely on accurate teammate modeling to adapt to unknown teammates, which refines teammate models in real time through online interaction using approaches such as meta-learning (Al-Shedivat et al., 2017; Kim et al., 2021), Bayesian inference (Zintgraf et al., 2021), and value decom-position (Zhang et al., 2023; Gu et al., 2021). While these methods perform well in online settings, they struggle in offline settings due to the inability to constantly improve the teammate models by interacting with the environment (Ma et al., 2024). Although some offline teammate modeling approaches leverage methods like in-context learning (Jing et al., 2023) to compensate for the inability to learn from online interactions, they still struggle with low accuracy. In our work, instead of predicting each teammate’s policy, we directly predict the future global states, which are more informative to the ego agent as they effectively summarize the influence of teammates’ policies on the environment. 
+
+# 3. Problem Statement 
+
+Our objective is to train an ego agent to collaborate with unknown teammates in partially observable environments from a fixed dataset. To this end, we formulate the problem as a decentralized partially observable Markov decision pro-cess (Dec-POMDP) with an additional joint policy space of teammates, which can be formally described as a tuple 
+
+⟨N, S, O, A, T , P, R, O, Γ⟩, where N = {1, 2, . . . , n } rep-resents the set of agents involved in the task and S denotes the global state space. We consider a partially observable set-ting in which each agent receives an individual observation 
+
+oi ∈ O via an observation function Oi : S × A 7 → ∆( Oi).The joint action space is defined as A = A1 ×A 2 ×· · ·×A N .2Ad Hoc Teamwork via Offline Goal-Based Decision Transformers Teammates Environment Ego agent Buffer    
+
+> Training Deployment
+> Offline dataset
+> ...
+> Teammates Ego agent
+> Environment
+> Sample
+> Learn Rollout data
+> Joint action Team reward
+> Joint action Team reward
+> Learn
+> (a) Online AHT (b) Offline AHT
+> ... Teammate
+> modeling
+
+Figure 1. Comparison of Online and Offline Ad Hoc Teamwork Frameworks. (a) shows the online AHT framework, where the ego agent learns through real-time interaction, collecting data and updating its policy continuously. (b) illustrates the offline AHT framework, where the agent trains on a pre-collected dataset. 
+
+τ i ∈ T ≡ (O×A )∗ represents the observation-action trajec-tory of agent i. The transition function P : S × A 7 → ∆( S)
+
+determines the probability distribution over the next state, given the current state and joint action. In cooperative scenarios, all agents share the common reward function 
+
+R : S × A 7 → ∆( R). We denote by Γ the joint policy space of teammates. In practice, Γ can be approximated by sampling from a pre-collected diverse policy pool. Figure 1 presents the comparison between online AHT and offline AHT. Unlike online methods, where agents interact with the environment during training, our approach uses an offline dataset D to train an ego agent policy πiθ (ai|oi; D).The trained ego agent is then deployed with unknown team-mates, whose policies are randomly sampled from the joint policy space Γ. The goal for the ego agent is to achieve the maximum expected return: 
+
+max  
+
+> θ
+
+Eπ−i∼Γ,D
+
+" ∞X
+
+> t=0
+
+rt ait ∼ πiθ , π−i
+
+#
+
+. (1) 
+
+# 4. Method 
+
+The offline AHT problem faces many practical challenges, including limited data, inaccurate teammate modeling in partially observable environments, and online adaptation to previously unknown teammates. In this section, we intro-duce a hierarchical goal-based Decision Transformer frame-work called TAGET, which addresses the above challenges by a unified sequence modeling approach. 
+
+4.1. Overview 
+
+TAGET aims to train an ego agent from an offline dataset so that it can maximize the expected team reward given any teammates’ policies. Figure 2 illustrates the framework of TAGET, which comprises three main modules. First, the offline data pre-processing module mitigates the issue of limited data through a trajectory mirroring strategy, where each agent alternates as the ego agent to make the most use of multi-agent trajectory data. Second, the high-level teammate-aware sub-goal prediction module learns a la-tent variable from local observations to capture the core information of teamwork situations. Specifically, it pre-dicts teammate-aware return-to-go and then combines it with the latent variable to predict teammate-aware sub-goal, which guides decision making and improves the adapta-tion to dynamic teammate behaviors. Finally, the low-level goal-conditioned action generation module utilizes the De-cision Transformer to predict actions conditioned on the high-level TA-Goal, ensuring flexibility and robustness in non-stationary environments. 
+
+4.2. Offline data collection and pre-processing 
+
+As illustrated in Figure 2, to enable policy learning without online interaction, we first collect a comprehensive offline dataset of multi-agent interaction trajectories, denoted as 
+
+D = {τ1, τ 2, . . . , τ M }. Each trajectory τj represents a com-plete episode of interaction and is structured as follows: 
+
+τj = { ˆR1, o1, a1, . . . , ˆRT , oT , aT }. (2) Here, ot denotes the joint observations, at denotes the joint actions, and ˆRt = PTt′=t rt′ represents the return-to-go at time step t. Such offline datasets are relatively easy to collect in real-world scenarios, as they can be obtained by recording interactions during task execution. Note that, the raw multi-agent interaction trajectories treat all agents equally without differentiating the ego agent and the teammates. If any agent is arbitrarily selected as the ego agent, it would ignore the decision-making perspective of other agents as the ego agent. Therefore, we propose a data pre-processing technique called trajectory mirroring strat-egy, which reorders the positions of states and observations within a trajectory so that each agent alternates as the ego agent. This strategy effectively utilizes the dataset to extract information from multiple decision-making perspectives and mitigates the challenge of limited data. Formally, for a trajectory τj with N agents, the trajectory mirroring strategy generates N trajectories by re-ordering the positions of the states and observations. For each mir-rored trajectory τj,i , agent i is treated as the ego agent, while the remaining agents are considered as teammates. 3Ad Hoc Teamwork via Offline Goal-Based Decision Transformers Teammates   
+
+> Proxy Encoder Team Context Encoder
+> TA-RTG
+> Predictor TA-Goal
+> Decoder
+
+High-level: Teammate-aware goal prediction 
+
+Low-level: Goal-conditioned action generation 
+
+> Ego agent
+> Pre-collected dataset
+> Sample
+
+... 
+
+> Trajectory
+
+... ... 
+
+> Trajectory
+
+... 
+
+... 
+
+> Trajectory
+
+... ... 
+
+> Trajectory
+
+... 
+
+Offline data collection and pre-processing 
+
+Causal Transformer 
+
+... 
+
+... ... 
+
+> Play as ego agent in turn
+> Trajectories
+> Ego agent
+
+Figure 2. Training overview of the proposed TAGET. First, the (1) Offline data collection and pre-processing module collects trajectories and then generates mirrored trajectories by treating each agent as the ego agent. These processed trajectories are then learned by the hierarchical decision framework. At each time step t, the (2) High-level: Teammate-aware goal prediction module extracts a latent representation zit from local observation oit, approximating the team context hit by regularization. The module predicts TA-RTG Rt based on hit and then utilizes Rt and hit to predict TA-Goal Gt. Finally, the (3) Low-level: Goal-conditioned decision-making module employs a Causal Transformer to condition on the predicted goal Gt, generating the next action for the ego agent. 
+
+The transformation is defined as: 
+
+τj,i = fmirror (τj , i ) = { ˆRt, o it, o−it , a it, a−it }Tt=1 , (3) where oit and ait are the observation and action of the ego agent, while o−it and a−it represent the joint observations and actions of all the other agents. For example, as shown in Figure 2, if a trajectory involves three agents, the trajectory mirroring strategy generates three trajectories: τj, 1, τj, 2, and 
+
+τj, 3. These trajectories are distinct in downstream modules because the information of the ego agent and the teammates is processed in different ways. 
+
+4.3. High-level: teammate-aware goal prediction 
+
+For decision making, vanilla DT relies on a scalar return-to-go (RTG) signal to guide policies. However, teammates may exhibit highly dynamic and unpredictable behaviors in AHT, so a simple RTG can hardly capture uncertain-ties in teammates and the environment. To this end, we introduce a new concept called teammate-aware sub-goal (TA-Goal), the predicted global state at a future step that serves as a high-level objective. TA-Goal captures the dy-namics of teammate behaviors, providing more robust and adaptive guidance than RTG in complex multi-agent set-tings. To predict the TA-Goal, we use the team context and the teammate-aware RTG (TA-RTG) as inputs. The team context encodes the current global state, while the TA-RTG estimates the expected return. Taking these two as inputs, the TA-Goal prediction captures both the current state and future return, serving as the high-level objective to guide the ego agent action generation. First, we learn to represent team context under partial ob-servability. In multi-agent scenarios, each agent typically has access only to local observations, which hinders under-standing of teammates’ intentions. We propose two state encoders: team context encoder for all agents and proxy encoder for the ego agent. With the regularization between the outputs of the two encoders, the ego agent is able to infer the team context based only on its local observations. 
+
+Team context encoder: The team context is a high-level se-mantic representation derived from the current observations of all agents. To model this, we represent the team context in a stochastic embedding space H, where it is encoded as a latent probabilistic variable hi drawn from a multivariate Gaussian distribution. We utilize a function f to learn the parameters of the multivariate Gaussian distribution: 
+
+(μhi , σ hi ) = fφ(oit, o−it ), hi ∼ N (μhi , σ hi ). (4) 4Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+Proxy encoder: Due to the partial observability during execution, directly applying f to capture the team context is infeasible. To overcome this limitation, we introduce a Proxy Encoder f ∗ that approximates the team context from only local observations oit, assuming that oit can partially capture the cooperative context as it inherently reflects team-mate interactions and behavioral features. Similarly, zi, as an approximation of hi, is encoded into a stochastic embed-ding space, where it is represented as a latent probabilistic variable drawn from a multivariate Gaussian distribution. The Proxy Encoder f ∗ is used to learn the parameters of this Gaussian distribution: 
+
+(μzi , σ zi ) = fθ (oit), zi ∼ N (μzi , σ zi ). (5) Here, zi serves as a latent representation of teammate dy-namics, robustly guiding decision-making when global ob-servations are unavailable. 
+
+Latent variable regularization: To ensure zit to effectively represent the team context under partial observability, we aim for zit to remain consistent with hit. Inspired by pre-vious works (Ajay et al., 2020; Pertsch et al., 2021; Xie et al., 2023), we use the following objective to minimize the discrepancy between the two representations and stabilize the high-level representation: 
+
+LReg (θ, φ ) = Eτ ∼D 
+
+" TX
+
+> t=1
+
+DKL 
+
+ fφ(· | oit, o−it )∥N (0 , I )#
+
++ βEτ ∼D 
+
+" TX
+
+> t=1
+
+DKL 
+
+ ⌊fφ(· | oit, o−it )⌋∥ fθ (zit | oit)#
+
+,
+
+(6) where DKL denotes the Kullback-Leibler (KL) divergence, 
+
+⌊·⌋ indicates the stop-gradient operator, and β is a hyperpa-rameter balancing the two regularization terms. The first KL-divergence term DKL 
+
+ fφ(· | oit, o −it ) ∥ N (0 , I ) is de-signed as a reverse KL to enforce a compact latent space. Following the beta-VAE framework (Higgins et al., 2017), reverse KL encourages the learned latent distribution to concentrate around the modes of the prior standard normal distribution, effectively preventing overfitting to noisy obser-vations and improving generalization to unseen teammates. In contrast, the second term employs forward KL, which aligns the proxy encoder’s output with the team context encoder by minimizing the divergence in expectation. This hybrid regularization ensures the latent space regularity and the consistency between local and global representations under partial observability. Then, we learn to predict TA-RTG, which is conditioned on the team context. Unlike traditional RTG in single-agent settings, TA-RTG captures the influence of dynamic team-mates, making it better suited for AHT scenarios. This enables a more accurate and adaptable estimate of future performance and informs the TA-Goal generation process. 
+
+Teammate-aware return-to-go (TA-RTG): The TA-RTG 
+
+Rt represents the predicted return-to-go based on the team context hit, which quantifies the contribution of teamwork situation to long-term task impact. It provides critical dy-namic optimization feedback for generating TA-Goal. To predict the TA-RTG, we design an RTG predictor Rϕ that takes hit as input: Rφ(Rt|hit). The training objective of the predictor is to minimize the discrepancy between the predicted RTG Rt and the ground truth ˆRt. Specifically, we use the following MSE loss function: 
+
+LRT G = Eτ ∼D 
+
+" TX
+
+> t=1
+
+
+
+Rϕ(hit) − ˆRt
+
+2
+
+#
+
+, (7) Although the TA-RTG provides more accurate information than conventional RTG by considering teammates’ behav-iors, it is still less informative for downstream action genera-tion, especially in environments with sparse rewards. There-fore, we further predict the TA-Goal, which is represented by the future global state and provides richer contextual in-formation than the TA-RTG. Based on the team context and the TA-RTG, we predict the TA-Goal to guide the decision of the ego agent. The TA-Goal enables the ego agent to coordinate its actions with dynamic teammate behaviors, thereby enhancing robust collaboration in complex multi-agent environments. 
+
+Teammate-aware goal (TA-Goal): The TA-Goal Gt repre-sents the predicted global state at time t + k, which provides a high-level objective to guide low-level decision-making. It is predicted based on the team context hit and the pre-dicted TA-RTG Rt. To predict the TA-Goal, we designed the TA-Goal decoder Gξ that takes hit and Rt as inputs: 
+
+Gξ (Gt|hit, R t). The TA-Goal decoder is trained by min-imizing the difference between the predicted ˆGt and the ground-truth Gt in the dataset. Gt is constructed by con-catenating the discretized and one-hot encoded observations of all agents at time step t + k, representing the global state at that future moment. The loss function is defined as: 
+
+LTA-Goal = Eτ ∼D 
+
+"
+
+− 1
+
+N
+
+> T
+
+X
+
+> t=1
+> N
+
+X
+
+> i=1
+
+
+
+Gt,i log ˆGt,i 
+
++ (1 − Gt,i ) log(1 − ˆGt,i )
+
+ #
+
+,
+
+(8) where Gt,i = st+k = Concat  {oit+k}ni=1 
+
+. In total, the overall loss function LHigh-level for the high-level network is defined as: 
+
+LHigh-level = λReg LReg + λRTG LRTG + λTA-Goal LTA-Goal , (9) where λMI , λ RTG , λ TA-Goal are weighting parameters used to balance the contributions of different loss terms. 5Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+4.4. Low-level: Goal-conditioned action generation 
+
+We use a goal-based Decision Transformer as the low-level policy network and solve the offline AHT problem through conditioned sequence modeling. The context for the low-level module is composed of two inputs: the TA-Goals predicted by the high-level network and the pre-processed trajectory segments. Specifically, the inputs to the low-level DT are constructed as follows: 
+
+τ ∗ 
+
+> j,i
+
+= {Gt′ , o it′ , a it′ }tt′=t−K+1 , (10) where K denotes the context length, i.e., the number of past time steps included in the sequence. The causal Transformer processes this sequence and outputs the predicted action ait
+
+for the current time step. The training of the low-level mod-ule aims to minimize the deviation between the predicted action and the ground-truth action from the dataset. The loss function for training is defined as: 
+
+LDT (ψ) = E τ ∼D 
+
+> Gt∼Gξ
+
+− log Pψ
+
+ ait | τ 1: t−1, o it, G t
+
+ .
+
+(11) We replace RTG with TA-Goal as the prompt to overcome the limitations of DT in AHT problems. Compared to RTG, TA-Goal empowers the model to take actions based on the future state adapted to dynamic teammate behaviors. This allows the model to effectively collaborate with unknown teammates in dynamic MARL environments. 
+
+# 5. Experiments 
+
+5.1. Environments and Data Collection 
+
+To evaluate the effectiveness of our proposed method, we conducted experiments in three widely used multi-agent reinforcement learning (MARL) environments: Predator-prey (PP) , Level-Based Foraging (LBF) and Overcooked .These environments allow manipulation of teammates’ poli-cies, thus are suitable for evaluating AHT methods. The Predator-Prey environment is a classic MARL benchmark where a team of predators must collaborate to capture prey in a partially observable grid world(Lowe et al., 2017). Suc-cessful teamwork requires coordination, as the prey can evade capture without a joint effort. In the LBF environ-ment, agents are tasked with collecting food items scattered randomly in a grid-world. Each agent and food item is as-signed a level and a group of agents can collect an item only if the sum of their levels meets or exceeds the level of the item (Papoudakis et al., 2020). The Overcooked environment requires agents to prepare and deliver dishes efficiently in complex kitchen layouts (Carroll et al., 2019). Detailed information about the environments is provided in the Appendix A for further reference. To train our model in an offline setting, we utilize pre-collected interaction trajectories. To ensure the model’s adaptability to diverse teammate strategies, we adopt the Soft-Value Diversity (SVD) method proposed in CSP (Ding et al., 2023) to collect data. This method encourages the in-clusion of a wide range of behavioral policies in the dataset. We trained four distinct populations of multi-agent rein-forcement learning (MARL) policies for each environment. From these, one population was randomly sampled as the testing teammate set, while the remaining three were used to collect interaction trajectories for the offline dataset. Each training population consists of three unique checkpoints, while each testing population includes eight checkpoints. Each checkpoint represents a distinct joint strategy, captur-ing a diverse range of behaviors and interaction patterns. By separating training and testing populations, this approach ensures a rigorous evaluation of the model’s ability to adapt to unseen teammate policies. To enhance the coverage of offline datasets, we employed a trajectory mirroring strategy, as we suggested above. For each trajectory in the dataset, this method treats every agent as the ego agent in turn, generating additional trajectories from different perspectives. The resulting dataset enables more robust policy learning in dynamic and partially observ-able environments, as demonstrated in our experiments. 
+
+5.2. Baselines 
+
+We compare our method against several state-of-the-art baselines commonly used in offline reinforcement learn-ing and ad hoc teamwork tasks: Decision Transformer (DT) , Prompt-DT , ODITS-off and LIAM-off . These base-lines are representative as they address the AHT problem from different perspectives. • Decision Transformer (DT) (Chen et al., 2021) refor-mulates reinforcement learning as a sequence modeling task, where the policy is learned by predicting the next action given a sequence of observations, actions and return-to-go. DT has demonstrated strong performance in offline reinforcement learning settings by leverag-ing the transformer architecture to model long-term dependencies in sequential data. • Prompt-DT (Xu et al., 2022b) is an extension of DT that incorporates additional prompts to guide the decision-making process to achieve a few-shot adap-tation. This method has been shown to enhance gen-eralization and adaptability, making it an appropriate baseline for our approach, which also deals with di-verse and dynamic teammate behaviors. • ODITS-off is a variant of the ODITS framework (Gu et al., 2021) which uses mutual information regulariza-tion to infer teammates’ behaviors from local obser-vation. We treat the trajectories in the offline dataset as if they were obtained through online interactions, 6Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 0 50 100                       
+
+> 40
+> 50
+> 60
+> 050 100
+> 0
+> 0.05
+> 0.1
+> 0.15
+> 050 100
+> 0
+> 0.5
+> 1
+> 050 100
+> 40
+> 50
+> 60
+> 050 100
+> 0
+> 0.02
+> 0.04
+> 0.06
+> 0.08
+> 050 100
+> 0
+> 0.5
+> TAGET DT Prompt-DT ODITS-off LIAM-off CQL MADT
+> Epochs Epochs Epochs
+> Return Return
+> PP-4 LBF-4 Overcooked-4
+> PP-8 LBF-8 Overcooked-8
+
+Figure 3. Average evaluation returns curves and 95% confidence interval of the five evaluated methods during training 1     
+
+> 2
+> 4
+> 3
+> 12
+> 4
+> 3
+> 1
+> 24
+> 3
+> 1
+> 2
+> 4
+> 3
+> 1
+> 24
+> 3
+> Ego Agent Teammates TA-Goal Prey
+
+Figure 4. The visualization of one episode of the PP game, illustrates how the TA-Goal guides the ego agent (Red) to collaborate with its teammates in capturing the prey. At each step, instead of directly leading the ego agent to the prey, the TA-Goal leads the ego agent towards the optimal path with consideration and prediction of teammates’ moves. The TA-Goal continuously adjusts as the agents move, ensuring that the ego agent responds to its teammates optimally. 
+
+replacing online interaction and buffer-based learning with direct learning from the offline dataset. • LIAM-off (Papoudakis et al., 2021) is another offline-variant of online AHT method. To adapt LIAM into LIAM-off, we modify it to learn how to reconstruct global information from local observations directly from an offline dataset instead of a replay buffer, en-abling the extraction of strong representational latent variables that guide the controlled agent’s actions with-out requiring online interactions. • Conservative Q-Learning (CQL) (Kumar et al., 2020) is a widely used offline RL algorithm that effectively addresses the overestimation issue by learning conser-vative value functions. It penalizes unseen actions in the Q-function optimization, thus ensuring safer policy learning from static datasets. We adapt CQL to the AHT settings by training the ego agent in the offline data collected under diverse teammate behaviors. • Multi-Agent Decision Transformer (MADT) (Meng et al., 2023) extends the Decision Transformer frame-work to multi-agent scenarios. It models the joint tra-jectory of all agents and leverages inter-agent depen-dencies using a unified transformer-based policy. We adapt it to the AHT settings, providing a strong base-line for evaluating offline AHT performance in settings where coordination and adaptation are essential. 7Ad Hoc Teamwork via Offline Goal-Based Decision Transformers  
+
+> Figure 5. Impact of Model Components on Performance
+
+5.3. Comparisons with Baselines Results . We evaluate our trained model by interacting with teammates in the test teammates sets. These teammates are not involved in the collection of the offline training dataset, making this evaluation an effective measure of the model’s generalization ability. Performance across different sizes of test teammate sets is evaluated for three environments. In the case of PP-8, one teammate set was randomly selected from eight distinct teammate sets to test our method in the PP environment, one teammate set represents a group of agents that interact with our ego agent in one episode, and similarly for other cases. The returns from each evaluation are averaged over fifty episodes of interaction. The shaded region represents the 95% confidence interval. The results, summarized in Appendix B, show that our method achieves superior performance across all testing environments. 
+
+Analysis . The results in Figure 3 provide a comprehen-sive comparison of five evaluated methods: TAGET , DT ,
+
+Prompt-DT , ODITS , and LIAM . Returns are averaged over 50 trials, with shaded regions representing 95% confi-dence intervals using the standard normal distribution for-mula: ¯x = ±1.96 · σ√n , where σ is the sample standard deviation and n = 50 . TAGET consistently achieves the highest returns and demonstrates superior stability across all environments and test teammate set sizes, underscoring its strong generalization ability to unseen teammates, as evidenced by its higher curves. The consistent gap between TAGET and baselines such as DT and Prompt-DT demon-strates the ability of TAGET to effectively model diverse teammate behaviors, a critical challenge in AHT. DT and Prompt-DT show limited performance, with returns plateau-ing at lower levels. They lack explicit mechanisms to adapt to dynamically changing teammates in ad hoc scenarios. Prompt-DT, in particular, shows limited performance in en-vironments where teammate behaviors change rapidly, as it relies on static prompts for guidance. In contrast, our method introduces sub-goals as tokens that dynamically guide the agent’s actions. These TA-Goals , predicted based on dynamic team context and TA-RTG, enable the ego agent to adapt to real-time changes in teammate behaviors effec-tively. Figure 4 shows a real trajectory sampled from the PP game environment, where the yellow pentagram represents the TA-Goal. It demonstrates how the TA-Goal guides the ego agent in cooperating with teammates and capturing the prey effectively. ODITS and LIAM occasionally achieve moderate returns but are characterized by higher variabil-ity and instability, particularly in larger test teammate sets (e.g., PP-8 and Overcooked-8). LIAM exhibits notable fluctuations, likely due to overfitting to specific teammate behaviors during training. In summary, TAGET outperforms all baselines in terms of return, stability, and generalization across a wide range of multi-agent environments. This indicates that TAGET is better equipped to handle the complexities of cooperative tasks with diverse and unseen teammates, addressing key limitations observed in the baseline methods. 
+
+5.4. Ablation Study 
+
+To evaluate the contribution of each component in our pro-posed method, we conducted an ablation study by systemat-ically removing individual components and observing the impact on performance across three benchmark environ-ments. The results are summarized in Figure 5. Across all environments, the full method ( TAGET ) consis-tently outperformed its ablated variants, demonstrating the importance of each component. Notably, the removal of the TA-Goal decoder led to the most significant performance drop, especially in the overcooked environment, where goal-driven actions are crucial due to poor teammate strategy. The absence of data pre-processing also led to consistent per-formance degradation in all three environments, underscor-ing its fundamental contribution to the model’s generaliza-8Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+tion ability. The impact was particularly evident in the LBF environment. By generating diverse interaction trajectories, our trajectory mirroring strategy effectively mitigates overfit-ting, enhancing the adaptability to unknown teammates and the effectiveness of offline learning. These findings strongly validate the design choices in our method, demonstrating that each component of our method contributes synergisti-cally to its overall performance. This collective contribution significantly improves its adaptability in AHT scenarios. 
+
+# 6. Conclusion 
+
+In this work, we introduced TAGET, a novel hierarchical framework that effectively addresses the challenging prob-lem of offline ad hoc teamwork. Through extensive exper-iments, we demonstrated that TAGET successfully over-comes three critical challenges: limited offline data through our mirrored data pre-processing strategy, partial observ-ability via regularization of two state encoders, and online adaptation through teammate-aware return-to-go prediction. The strong empirical results across diverse cooperative en-vironments validate the effectiveness of our hierarchical approach combining teammate-aware goal prediction with goal-conditioned decision making. 
+
+# Acknowledgements 
+
+This research is supported by Guangdong Basic and Applied Basic Research Foundation (2025A1515010247) and the Fundamental Research Funds for the Central Universities (2024ZYGXZR069). 
+
+# Impact Statement 
+
+Our work seeks to advance the field of multi-agent reinforce-ment learning by addressing the challenges of offline ad hoc teamwork with the proposed TAGET framework. We open up exciting opportunities for generative decision-making under the uncertainty of teammates, particularly in scenar-ios where agents must adapt to dynamic and unpredictable changes of teammates. Future research may consider more uncertainties from both the teammates and the environments, making the decision models more robust. We believe that our work facilitates the application of generative decision models in real-world uncertain scenarios. 
+
+# References 
+
+Ajay, A., Kumar, A., Agrawal, P., Levine, S., and Nachum, O. Opal: Offline primitive discovery for acceler-ating offline reinforcement learning. arXiv preprint arXiv:2010.13611 , 2020. Al-Shedivat, M., Bansal, T., Burda, Y., Sutskever, I., Mor-datch, I., and Abbeel, P. Continuous adaptation via meta-learning in nonstationary and competitive environments. 
+
+arXiv preprint arXiv:1710.03641 , 2017. Badrinath, A., Flet-Berliac, Y., Nie, A., and Brunskill, E. Waypoint transformer: Reinforcement learning via su-pervised learning with intermediate targets. Advances in Neural Information Processing Systems , 36, 2024. Barrett, S. and Stone, P. Cooperating with unknown team-mates in complex domains: A robot soccer case study of ad hoc teamwork. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 29, 2015. Barrett, S., Stone, P., Kraus, S., and Rosenfeld, A. Learn-ing teammate models for ad hoc teamwork. In AAMAS Adaptive Learning Agents (ALA) Workshop , pp. 57–63. Citeseer, 2012. Barrett, S., Rosenfeld, A., Kraus, S., and Stone, P. Mak-ing friends on the fly: Cooperating with new teammates. 
+
+Artificial Intelligence , 242:132–171, 2017. Carroll, M., Shah, R., Ho, M. K., Griffiths, T., Seshia, S., Abbeel, P., and Dragan, A. On the utility of learning about humans for human-ai coordination. Advances in neural information processing systems , 32, 2019. Chen, L., Lu, K., Rajeswaran, A., Lee, K., Grover, A., Laskin, M., Abbeel, P., Srinivas, A., and Mordatch, I. De-cision transformer: Reinforcement learning via sequence modeling. Advances in neural information processing systems , 34:15084–15097, 2021. Chen, S., Andrejczuk, E., Cao, Z., and Zhang, J. Aateam: Achieving the ad hoc teamwork by employing the at-tention mechanism. In Proceedings of the AAAI confer-ence on artificial intelligence , volume 34, pp. 7095–7102, 2020. Ding, H., Jia, C., Guan, C., Chen, F., Yuan, L., Zhang, Z., and Yu, Y. Coordination scheme probing for generalizable multi-agent reinforcement learning. 2023. Durugkar, I., Liebman, E., and Stone, P. Balancing indi-vidual preferences and shared objectives in multiagent reinforcement learning. International Joint Conference on Artificial Intelligence, 2020. Fujimoto, S., Meger, D., and Precup, D. Off-policy deep reinforcement learning without exploration. In Interna-tional conference on machine learning , pp. 2052–2062. PMLR, 2019. Gu, P., Zhao, M., Hao, J., and An, B. Online ad hoc team-work under partial observability. In International confer-ence on learning representations , 2021. 9Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+Higgins, I., Matthey, L., Pal, A., Burgess, C., Glorot, X., Botvinick, M., Mohamed, S., and Lerchner, A. beta-vae: Learning basic visual concepts with a constrained variational framework. In International conference on learning representations , 2017. Huang, S., Chen, W., Zhang, L., Xu, S., Li, Z., Zhu, F., Ye, D., Chen, T., and Zhu, J. Tikick: Towards playing multi-agent football full games from single-agent demon-strations. arXiv preprint arXiv:2110.04507 , 2021. Janner, M., Li, Q., and Levine, S. Offline reinforcement learning as one big sequence modeling problem. Ad-vances in neural information processing systems , 34: 1273–1286, 2021. Jiang, J. and Lu, Z. Offline decentralized multi-agent rein-forcement learning. In ECAI , pp. 1148–1155, 2023. Jing, Y., Li, K., Liu, B., Zang, Y., Fu, H., FU, Q., Xing, J., and Cheng, J. Towards offline opponent modeling with in-context learning. In The Twelfth International Conference on Learning Representations , 2023. Kim, D. K., Liu, M., Riemer, M. D., Sun, C., Abdulhai, M., Habibi, G., Lopez-Cot, S., Tesauro, G., and How, J. A policy gradient algorithm for learning to learn in multia-gent reinforcement learning. In International Conference on Machine Learning , pp. 5541–5550. PMLR, 2021. Kumar, A., Zhou, A., Tucker, G., and Levine, S. Con-servative q-learning for offline reinforcement learning. 
+
+Advances in neural information processing systems , 33: 1179–1191, 2020. Levine, S., Kumar, A., Tucker, G., and Fu, J. Offline rein-forcement learning: Tutorial, review, and perspectives on open problems. arXiv preprint arXiv:2005.01643 , 2020. Li, W., Luo, H., Lin, Z., Zhang, C., Lu, Z., and Ye, D. A survey on transformers in reinforcement learning. Trans-actions on Machine Learning Research .Lowe, R., Wu, Y. I., Tamar, A., Harb, J., Pieter Abbeel, O., and Mordatch, I. Multi-agent actor-critic for mixed cooperative-competitive environments. Advances in neu-ral information processing systems , 30, 2017. Ma, L., Wang, Y., Zhong, F., Zhu, S.-C., and Wang, Y. Fast peer adaptation with context-aware exploration. arXiv preprint arXiv:2402.02468 , 2024. Ma, Y., Xiao, C., Liang, H., and Hao, J. Rethinking deci-sion transformer via hierarchical reinforcement learning. 
+
+arXiv preprint arXiv:2311.00267 , 2023. Meng, L., Wen, M., Yang, Y., Le, C., Li, X., Zhang, W., Wen, Y., Zhang, H., Wang, J., and Xu, B. Offline pre-trained multi-agent decision transformer: One big se-quence model tackles all smac tasks. arXiv preprint arXiv:2112.02845 , 2021. Meng, L., Wen, M., Le, C., Li, X., Xing, D., Zhang, W., Wen, Y., Zhang, H., Wang, J., Yang, Y., et al. Offline pre-trained multi-agent decision transformer. Machine Intelligence Research , 20(2):233–248, 2023. Mirsky, R., Macke, W., Wang, A., Yedidsion, H., and Stone, P. A penny for your thoughts: The value of communica-tion in ad hoc teamwork. International Joint Conference on Artificial Intelligence, 2020. Papoudakis, G., Christianos, F., Sch ¨afer, L., and Albrecht, S. V. Benchmarking multi-agent deep reinforcement learning algorithms in cooperative tasks. arXiv preprint arXiv:2006.07869 , 2020. Papoudakis, G., Christianos, F., and Albrecht, S. Agent mod-elling under partial observability for deep reinforcement learning. Advances in Neural Information Processing Systems , 34:19210–19222, 2021. Pertsch, K., Lee, Y., and Lim, J. Accelerating reinforcement learning with learned skill priors. In Conference on robot learning , pp. 188–204. PMLR, 2021. Qu, Y., Wang, B., Shao, J., Jiang, Y., Chen, C., Ye, Z., Linc, L., Feng, Y., Lai, L., Qin, H., et al. Hokoff: Real game dataset from honor of kings and its offline reinforcement learning benchmarks. Advances in Neural Information Processing Systems , 36:22166–22190, 2023. Rahman, M. A., Hopner, N., Christianos, F., and Albrecht, S. V. Towards open ad hoc teamwork using graph-based policy learning. In International conference on machine learning , pp. 8776–8786, 2021a. Rahman, M. A., Hopner, N., Christianos, F., and Albrecht, S. V. Towards open ad hoc teamwork using graph-based policy learning. In International conference on machine learning , pp. 8776–8786. PMLR, 2021b. Reed, S., Zolna, K., Parisotto, E., Colmenarejo, S. G., Novikov, A., Barth-Maron, G., Gimenez, M., Sulsky, Y., Kay, J., Springenberg, J. T., et al. A generalist agent. 
+
+arXiv preprint arXiv:2205.06175 , 2022. Ribeiro, J. G., Rodrigues, G., Sardinha, A., and Melo., F. S. Teamster: Model-based reinforcement learning for ad hoc teamwork. Artificial Intelligence , 324:104013, 2023. Stone, P., Kaminka, G., Kraus, S., and Rosenschein, J. Ad hoc autonomous agent teams: Collaboration without pre-coordination. In Proceedings of the AAAI Conference on Artificial Intelligence , volume 24, pp. 1504–1509, 2010. 10 Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+Teng, S., Hu, X., Deng, P., Li, B., Li, Y., Ai, Y., Yang, D., Li, L., Xuanyuan, Z., Zhu, F., et al. Motion planning for autonomous driving: The state of the art and future perspectives. IEEE Transactions on Intelligent Vehicles ,8(6):3692–3711, 2023. Tseng, W.-C., Wang, T.-H. J., Lin, Y.-C., and Isola, P. Of-fline multi-agent reinforcement learning with knowledge distillation. Advances in Neural Information Processing Systems , 35:226–237, 2022. Wang, J., Li, Y., Zhang, Y., Pan, W., and Kaski, S. Open ad hoc teamwork with cooperative game theory. arXiv preprint arXiv:2402.15259 , 2024. Wei, H., Ye, D., Liu, Z., Wu, H., Yuan, B., Fu, Q., Yang, W., and Li, Z. Boosting offline reinforcement learning with residual generative modeling. In 30th International Joint Conference on Artificial Intelligence, IJCAI 2021 , pp. 3574–3580. International Joint Conferences on Artificial Intelligence, 2021. Xie, Z., Lin, Z., Ye, D., Fu, Q., Wei, Y., and Li, S. Future-conditioned unsupervised pretraining for decision trans-former. In International Conference on Machine Learn-ing , pp. 38187–38203. PMLR, 2023. Xu, H., Zhan, X., and Zhu, X. Constraints penalized q-learning for safe offline reinforcement learning. In Pro-ceedings of the AAAI Conference on Artificial Intelli-gence , volume 36, pp. 8753–8760, 2022a. Xu, K., Zhang, Y., Ye, D., Zhao, P., and Tan, M. Relation-aware transformer for portfolio policy learning. In Pro-ceedings of the twenty-ninth international conference on international joint conferences on artificial intelligence ,pp. 4647–4653, 2021. Xu, M., Shen, Y., Zhang, S., Lu, Y., Zhao, D., Tenenbaum, J., and Gan, C. Prompting decision transformer for few-shot policy generalization. In international conference on machine learning , pp. 24631–24645. PMLR, 2022b. Yang, Y., Ma, X., Li, C., Zheng, Z., Zhang, Q., Huang, G., Yang, J., and Zhao, Q. Believe what you see: Implicit constraint approach for offline multi-agent reinforcement learning. Advances in Neural Information Processing Systems , 34:10299–10312, 2021. Ye, D., Chen, G., Zhang, W., Chen, S., Yuan, B., Liu, B., Chen, J., Liu, Z., Qiu, F., Yu, H., et al. Towards play-ing full moba games with deep reinforcement learning. 
+
+Advances in Neural Information Processing Systems , 33: 621–632, 2020. Zhang, Z., Yuan, L., Li, L., Xue, K., Jia, C., Guan, C., Qian, C., and Yu, Y. Fast teammate adaptation in the presence of sudden policy change. In Uncertainty in Artificial Intelligence , pp. 2465–2476. PMLR, 2023. Zheng, Q., Zhang, A., and Grover, A. Online decision trans-former. In international conference on machine learning ,pp. 27042–27059. PMLR, 2022. Zintgraf, L., Devlin, S., Ciosek, K., Whiteson, S., and Hof-mann, K. Deep interactive bayesian reinforcement learn-ing via meta-learning. arXiv preprint arXiv:2101.03864 ,2021. 11 Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+# A. Details of Environments. 1    
+
+> 2
+> 8
+> 4
+> 6
+> 3
+> 5
+> 7
+> (a) Predator-Prey 12
+> 3
+> 4
+> 1(b) Level-Based Foraging (c) Overcooked
+> Figure 6. Impact of different goal steps
+
+Level-based foraging. In the Level-based Foraging (LBF) environment, two agents forage within a 20 × 20 grid world containing four food items. Each agent perceives the environment through a local observation space defined by a 5 × 5window centered on its current position. The action space for each agent includes five discrete actions: four directional movements (up, down, left, right) and a “collect” action. The agents share a team reward, which is proportional to the level of the collected food and normalized to 1. An episode ends either when all food items are collected or after 50 timesteps. To enhance the challenge, a strict coordination rule is imposed: food can only be collected when both agents are adjacent to the same food item and simultaneously perform the ”collect” action. This rule forces agents to synchronize both spatially and temporally, making cooperation essential. During evaluation, TAGET or baseline methods control one agent, while the other agent’s behavior is governed by teammates sampled from predefined policy sets. The variability in coordination strategies is reflected in the sequence in which agents collect all food items. 
+
+Predatory prey. The Predator-Prey (PP) environment is a more complex variant of the LBF. In this scenario, two predator agents operate within a 10 × 10 grid world, each with a local 5 × 5 observation space centered on its current position. The objective is for the predators to capture four prey, which move randomly across the grid throughout the episode. The action space for each predator consists of four directional movement actions (up, down, left, and right). An episode ends either when all prey have been captured or after 200 timesteps. The random movement of the prey increases the difficulty of the task, as predators must maintain continuous coordination to effectively chase and surround them. To simplify the interaction, explicit “capture” actions are removed, and prey are considered captured once they are fully surrounded by both predators. This eliminates the risk of failed captures but still requires precise spatiotemporal coordination. The coordination strategies adopted by the predators are reflected in how they organize their pursuit and divide roles, as well as in the sequence in which prey are captured. This design highlights the importance of cooperative behaviors in multi-agent environments. 
+
+Overcooked. In the Overcooked environment, two agents must collaborate in a virtual kitchen to complete cooking tasks. Preparing a dish requires a series of actions and includes a waiting period. Once the dish is cooked, an agent must pick it up, transport it to the designated delivery point, and place it to complete an order. In this environment, both agents share an action space consisting of six discrete actions: moving in four directions, interacting with the object in front, and remaining idle. The objective is to complete as many orders as possible within 400 timesteps through efficient collaboration. Specifically, in our environment, we adopted the ”Surrounding” layout, as shown in Fig. In this layout, only the green agent can operate the cookware, while only the blue agent can reach the delivery point. Since a single agent cannot independently complete the entire task, the two agents must cooperate closely to fulfill the orders. In this layout, coordination is mandatory, and agents must adapt to each other’s behavior and preferences to complete the tasks. 12 Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+# B. Experiment Results 
+
+Methods PP-4 LBF-4 Overcooked-4 PP-8 LBF-8 Overcooked-8 DT 54.6 ± 0.6 0.098 ± 0.008 0.16 ± 0.19 55.4 ± 1.6 0.055 ± 0.009 0.08 ± 0.03 Prompt-DT 56.3 ± 0.7 0.102 ± 0.010 0.40 ± 0.19 54.4 ± 1.2 0.045 ± 0.008 0.64 ± 0.15 ODITS-off 55.6 ± 1.6 0.065 ± 0.036 0.24 ± 0.28 54.7 ± 1.4 0.000 ± 0.000 0.06 ± 0.03 LIAM-off 58.2 ± 1.8 0.005 ± 0.009 0.42 ± 0.26 55.3 ± 1.8 0.040 ± 0.010 0.24 ± 0.09 CQL 60.6 ± 1.0 0.065 ± 0.036 0.46 ± 0.08 59.0 ± 0.8 0.005 ± 0.009 0.36 ± 0.08 MADT 61.4 ± 1.1 0.010 ± 0.008 0.12 ± 0.09 62.4 ± 0.6 0.025 ± 0.008 0.12 ± 0.09 
+
+TAGET 63.2 ± 1.1 
+
++2.93% 
+
+0.140 ± 0.080 
+
++37.25% 
+
+0.98 ± 0.15 
+
++113.04% 
+
+62.9 ± 1.3 
+
++8.01% 
+
+0.080 ± 0.010 
+
++45.45% 
+
+0.77 ± 0.15 
+
++20.31%  
+
+> Table 1. Average Return Comparison with Baselines
+
+# C. Impact of Goal Steps 
+
+The hyper-parameter goal steps plays a crucial role in our algorithm, as it determines how far into the future the teammate observations are considered when generating sub-goals. Specifically, we define goal steps as the number of steps ahead whose teammate observations are concatenated to form the sub-goal. These sub-goals are then used for supervised learning, guiding the agent to align its actions with future team objectives. We evaluate the impact of different goal steps by testing the values of 1, 2, 3, and 6 across three environments, the results are shown in Table 2. We observe that the optimal value of goal steps depends on the complexity and dynamics of the environment. In Predator-Prey, the environment’s simplicity and need for long-term planning result in the best performance with goal steps = 6. A larger goal steps enables the agent to make farsighted decisions, coordinating with teammates over extended horizons. In Level-Based Foraging, goal steps = 2 achieves optimal results. In Overcooked, a highly complex environment, goal steps = 3 performs best. Larger goal steps such as 6 lead to reduced accuracy in sub-goal prediction, as the rapidly changing environment introduces noise and mismatches between predicted and actual teammate behaviors. PP LBF Overcooked Step=1 61.4 ± 0.8 0.145 ± 0.009 0.42 ± 0.04 Step=2 60.1 ± 0.7 0.153 ± 0.010 0.90 ± 0.07 Step=3 59.6 ± 0.7 0.137 ± 0.009 0.98 ± 0.15 
+
+Step=6 63.2 ± 1.1 0.123 ± 0.008 0.30 ± 0.03  
+
+> Table 2. Average Return Comparison between different goal steps
+
+# D. Pseudocode of Algorithm 
+
+Algorithm 1 demonstrates our trajectory mirroring strategy for pre-processing the offline dataset. This process iterates through all trajectories, generating new trajectories and adding them to the new dataset. 
+
+Algorithm 1 Offline Data Pre-processing 
+
+Input: Pre-collected dataset D = {τ1, τ 2, . . . , τ m}
+
+Output: Offline dataset D′
+
+Initialize D′ ← ∅ 
+
+for j = 1 to m do for i = 1 to n do 
+
+Apply trajectory mirroring strategy to generate trajectory τj :
+
+τj,i = fmirror (τj , i )
+
+Add τj,i to D′: D′ ← D ′ ∪ { τj,i }
+
+end for end for 
+
+13 Ad Hoc Teamwork via Offline Goal-Based Decision Transformers 
+
+Algorithm 2 demonstrates the offline training process of TAGET. It involves sampling trajectory batches from the offline dataset, computing team context and TA-RTG, generating TA-Goal and action predictions, and optimizing both high-level and low-level objectives using gradient descent. The training is repeated until the high-level and low-level losses converge. 
+
+Algorithm 2 Offline training of TAGET 
+
+Require: Offline dataset D′
+
+repeat 
+
+Sample a batch of trajectories B ⊆ D ′
+
+for each trajectory τ ∈ B do 
+
+Randomly select a sub-sequence of length 3KLHigh-level ← 0, L DT ← 0
+
+for each time step t in sub-sequence do 
+
+Compute (μzi , σ zi ) = f ∗ 
+
+> θ
+
+(oit) , Sample zit ∼ N (μzi , σ zi )
+
+Compute (μhi , σ hi ) = fφ(oit, o −it ) , Sample hit ∼ N (μhi , σ hi )
+
+Compute TA-RTG: Rt = Rϕ(hit)
+
+Compute TA-Goal: Gt = Gξ (hit, R t)
+
+Predict action ait using the low-level network Compute LReg , LRT G , LT A −Goal , L DT using Eq.6, Eq.7, Eq.8, Eq.10 Accumulate high-level loss LHigh-level using Eq. 9 Accumulate low-level loss LDT using Eq. 10 
+
+end for 
+
+Update parameters ψ, φ, θ, ϕ, ξ using gradient descent 
+
+end for until convergence of high-level loss LHigh-level and low-level loss LDT 
+
+Algorithm 3 illustrates the online testing process of TAGET. It updates the sequence iteratively using TA-Goal, observations, and actions. Based on the updated sequence, the low-level network generates action decisions, enabling adaptive and context-aware decision-making throughout the testing phase. 
+
+Algorithm 3 Online testing of TAGET 
+
+Require: parameters ψ, θ, ϕ, ξ 
+
+Initialize sequence S ← ∅ 
+
+for t = 1, . . . , T do 
+
+Keep the length of the sequence S as 3K
+
+Compute (μzi , σ zi ) = f ∗ 
+
+> θ
+
+(oit) , Sample Team Context zit ∼ N (μzi , σ zi )
+
+Compute TA-RTG: ˆRt = Rϕ(zit )
+
+Compute TA-Goal: ˆGt = Gξ (zit , ˆRt)
+
+Add { ˆGt, o it} into sequence S
+
+Generate the action ait through low-level network using S
+
+Add {ait} into sequence S
+
+end for 
+
+# E. Network Architecture and Implementation Details 
+
+We illustrate the overall network structure of our method in Figure 7. Our model adopts the Decision Transformer (DT) backbone, with the following configurations: an embedding dimension of 64, context window length K = 30 , 2 transformer layers with 1 attention head each, ReLU activation, and a dropout rate of 0.3. The network is optimized using AdamW with a learning rate of 0.01, batch size of 2048, and a weight decay of 0.0001. There are several task-specific coefficients to balance different learning objectives in our training loss. Specifically, we set the weighting parameters as follows: α = 0 .0001 ,
+
+β = 100 , γ = 100 , and σ = 0 .001 
+
+14 Ad Hoc Teamwork via Offline Goal-Based Decision Transformers Proxy Encoder 
+
+FC, 512 Units FC, 2 X |z| Units 
+
+> LeakyReLU
+
+Team Context Encoer TA-RTG Predictor 
+
+FC, 512 Units FC, 512 Units 
+
+BatchNorm FC, 1 Units 
+
+BatchNorm 
+
+> LeakyReLU LeakyReLU
+
+FC, 512 Units 
+
+BatchNorm 
+
+BatchNorm 
+
+> LeakyReLU
+
+Multi-head Cross-Attention FC, 64 Units 
+
+hidden=64, head=4 
+
+FC, 2 X |z| Units 
+
+LayerNorm 
+
+LayerNorm  
+
+> LeakyReLU LeakyReLU
+
+TA-Goal Predictor 
+
+FC, 256 Units FC, 512 Units 
+
+BatchNorm FC, |G| Units 
+
+BatchNorm 
+
+> LeakyReLU LeakyReLU LeakyReLU
+
+Figure 7. Architectural details of TAGET 
+
+15
