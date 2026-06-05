@@ -6,100 +6,84 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-07 ~ 2026-06-05
-- 运行时间：2026-06-05 07:50:41 UTC
+- 最新运行日期：2026-05-27 ~ 2026-06-05
+- 运行时间：2026-06-05 08:11:20 UTC
 - 运行状态：成功
-- 本次总论文数：26
-- 精读区：15
+- 本次总论文数：20
+- 精读区：9
 - 速读区：11
 
 ### 今日简报（AI）
-1) 今日精读两篇满分论文：《递归智能体优化》与《智能体驱动的神经架构发现》，聚焦智能体自演进核心突破。  
-2) 最值得关注的方向：智能体自优化机制（如递归学习）与动态神经架构生成，速读中《知识图谱路径》《技能演进》《技能策展》补充了自进化智能体的三大支撑。  
-3) 建议优先精读两篇10分论文，再从速读中选《SkillOS》理解技能管理闭环，可快速把握智能体自演进技术脉络。
-- 详情：[/20260507-20260605/README](/20260507-20260605/README)
+本期精读9篇、速读11篇，重点聚焦智能体安全与语言模型自改进。
+
+最值得深读两篇9.0分论文：递归程序孔实现安全智能体，以及双向进化搜索驱动模型自我提升。
+
+建议普通读者快速翻阅《SKILLC》技能内化方法，对比层级进化与认知自适应探索技巧。
+- 详情：[/20260527-20260605/README](/20260527-20260605/README)
 
 ### 精读区论文标签
-1. [Recursive Agent Optimization](/20260507-20260605/2605.06639v1-recursive-agent-optimization)  
-   标签：评分：10.0/10、query:agent-papers
-   evidence：通过强化学习优化递归智能体
-2. [Agentic Discovery of Neural Architectures: AIRA-Compose and AIRA-Design](/20260507-20260605/2605.15871v1-agentic-discovery-of-neural-architectures-aira-compose-and-aira-design)  
-   标签：评分：10.0/10、query:agent-papers
-   evidence：通过LLM智能体自主设计神经网络架构实现递归自我改进
-3. [Skill1: Unified Evolution of Skill-Augmented Agents via Reinforcement Learning](/20260507-20260605/2605.06130v2-skill1-unified-evolution-of-skill-augmented-agents-via-reinforcement-learning)  
+1. [LACUNA: Safe Agents as Recursive Program Holes](/20260527-20260605/2605.28617v1-lacuna-safe-agents-as-recursive-program-holes)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：通过强化学习统一进化技能选择、利用和蒸馏
-4. [Skill1: Unified Evolution of Skill-Augmented Agents via Reinforcement Learning](/20260507-20260605/2605.06130v3-skill1-unified-evolution-of-skill-augmented-agents-via-reinforcement-learning)  
+   evidence：递归程序孔洞实现安全LLM智能体
+2. [Self-Improving Language Models with Bidirectional Evolutionary Search](/20260527-20260605/2605.28814v1-self-improving-language-models-with-bidirectional-evolutionary-search)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：通过强化学习统一进化技能增强的智能体
-5. [Do Self-Evolving Agents Forget? Capability Degradation and Preservation in Lifelong LLM Agent Adaptation](/20260507-20260605/2605.09315v1-do-self-evolving-agents-forget-capability-degradation-and-preservation-in-lifelong-llm-agent-adaptation)  
+   evidence：通过双向进化搜索实现语言模型自改进
+3. [Learning to Construct Practical Agentic Systems](/20260527-20260605/2606.00189v1-learning-to-construct-practical-agentic-systems)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：自进化智能体的能力退化与保留
-6. [Beyond Individual Intelligence: Surveying Collaboration, Failure Attribution, and Self-Evolution in LLM-based Multi-Agent Systems](/20260507-20260605/2605.14892v1-beyond-individual-intelligence-surveying-collaboration-failure-attribution-and-self-evolution-in-llm-based-multi-agent-systems)  
+   evidence：递归调用LLM作为伪工具构建模块化智能体
+4. [SkillRevise: Improving LLM-Authored Agent Skills via Trace-Conditioned Skill Revision](/20260527-20260605/2606.01139v1-skillrevise-improving-llm-authored-agent-skills-via-trace-conditioned-skill-revision)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：综述LLM多智能体系统的自演化与协作
-7. [Self-Evolving Multi-Agent Systems via Decentralized Memory](/20260507-20260605/2605.22721v1-self-evolving-multi-agent-systems-via-decentralized-memory)  
+   evidence：通过轨迹条件修正实现LLM智能体技能的自我进化
+5. [SkillSmith: Co-Evolving Skills and Tools for Self-Improving Agent Systems](/20260527-20260605/2606.01314v1-skillsmith-co-evolving-skills-and-tools-for-self-improving-agent-systems)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：具有去中心化双池记忆的自进化多智能体系统
-8. [MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems](/20260507-20260605/2605.22794v1-moss-self-evolution-through-source-level-rewriting-in-autonomous-agent-systems)  
+   evidence：技能与工具共同演化的自我改进智能体系统
+6. [MetaForge: A Self-Evolving Multimodal Agent that Retrieves, Adapts, and Forges Tools On Demand](/20260527-20260605/2606.01801v1-metaforge-a-self-evolving-multimodal-agent-that-retrieves-adapts-and-forges-tools-on-demand)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：通过源代码级重写实现自主智能体系统自进化
-9. [MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems](/20260507-20260605/2605.22794v2-moss-self-evolution-through-source-level-rewriting-in-autonomous-agent-systems)  
+   evidence：自进化智能体按需锻造工具
+7. [EvoDrive: Pareto Evolution for Safety-Critical Autonomous Driving via Self-Improving LLM Agents](/20260527-20260605/2606.03678v1-evodrive-pareto-evolution-for-safety-critical-autonomous-driving-via-self-improving-llm-agents)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：自主智能体系统中的源码级重写自我进化
-10. [Meta-Agent: From Task Descriptions to Verified Multi-Agent Systems](/20260507-20260605/2605.25233v1-meta-agent-from-task-descriptions-to-verified-multi-agent-systems)  
+   evidence：使用演员-评论家进化的自改进LLM智能体进行多目标场景生成
+8. [SkillPyramid: A Hierarchical Skill Consolidation Framework for Self-Evolving Agents](/20260527-20260605/2606.03692v1-skillpyramid-a-hierarchical-skill-consolidation-framework-for-self-evolving-agents)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：从任务描述自动构建多智能体系统
-11. [MUSE-Autoskill: Self-Evolving Agents via Skill Creation, Memory, Management, and Evaluation](/20260507-20260605/2605.27366v1-muse-autoskill-self-evolving-agents-via-skill-creation-memory-management-and-evaluation)  
+   evidence：自进化智能体与层次化技能整合
+9. [Tool-Aware Optimization with Entropy Guidance for Efficient Agentic Reinforcement Learning](/20260527-20260605/2606.03762v1-tool-aware-optimization-with-entropy-guidance-for-efficient-agentic-reinforcement-learning)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：通过技能创建、记忆、管理和评估实现自进化智能体
-12. [Automating Formal Verification with Reinforcement Learning and Recursive Inference](/20260507-20260605/2605.30914v1-automating-formal-verification-with-reinforcement-learning-and-recursive-inference)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：验证器引导的推理时搜索与递归推理用于形式验证
-13. [Agentic Transformers Provably Learn to Search via Reinforcement Learning](/20260507-20260605/2606.00183v1-agentic-transformers-provably-learn-to-search-via-reinforcement-learning)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：在树环境中通过RL可证明学会搜索，与验证器引导搜索相关
-14. [ReSkill: Reconciling Skill Creation with Policy Optimization in Agentic RL](/20260507-20260605/2606.01619v1-reskill-reconciling-skill-creation-with-policy-optimization-in-agentic-rl)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：在智能体强化学习中调和技能创建与策略优化
-15. [Scaling Self-Evolving Agents via Parametric Memory](/20260507-20260605/2606.04536v1-scaling-self-evolving-agents-via-parametric-memory)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：自进化参数记忆框架
+   evidence：面向LLM智能体的代理式强化学习
 
 ### 速读区论文标签
-1. [Knowledge-Graph Paths as Intermediate Supervision for Self-Evolving Search Agents](/20260507-20260605/2605.05702v1-knowledge-graph-paths-as-intermediate-supervision-for-self-evolving-search-agents)  
+1. [SKILLC: Learning Autonomous Skill Internalization in LLM Agents via Contrastive Credit Assignment](/20260527-20260605/2605.27899v1-skillc-learning-autonomous-skill-internalization-in-llm-agents-via-contrastive-credit-assignment)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：自进化搜索智能体，使用知识图谱路径作为中间监督
-2. [Skill1: Unified Evolution of Skill-Augmented Agents via Reinforcement Learning](/20260507-20260605/2605.06130v1-skill1-unified-evolution-of-skill-augmented-agents-via-reinforcement-learning)  
+   evidence：面向LLM智能体的智能强化学习与技能内化
+2. [You Live More Than Once: Towards Hierarchical Skill Meta-Evolving](/20260527-20260605/2605.28390v1-you-live-more-than-once-towards-hierarchical-skill-meta-evolving)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：基于强化学习的技能增强型智能体统一进化
-3. [SkillOS: Learning Skill Curation for Self-Evolving Agents](/20260507-20260605/2605.06614v1-skillos-learning-skill-curation-for-self-evolving-agents)  
+   evidence：层次化技能元进化用于智能体自我改进
+3. [Learning to Adapt: Self-Improving Web Agent via Cognitive-Aware Exploration](/20260527-20260605/2605.31365v1-learning-to-adapt-self-improving-web-agent-via-cognitive-aware-exploration)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：基于强化学习的技能策展训练用于自进化智能体
-4. [EvoMAS: Learning Execution-Time Workflows for Multi-Agent Systems](/20260507-20260605/2605.08769v1-evomas-learning-execution-time-workflows-for-multi-agent-systems)  
+   evidence：通过认知感知探索实现自我改进的网络智能体
+4. [SkillRevise: Improving LLM-Authored Agent Skills via Trace-Conditioned Skill Revision](/20260527-20260605/2606.01139v2-skillrevise-improving-llm-authored-agent-skills-via-trace-conditioned-skill-revision)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：面向复杂任务的执行时多智能体工作流构造
-5. [Dynamic Skill Lifecycle Management for Agentic Reinforcement Learning](/20260507-20260605/2605.10923v2-dynamic-skill-lifecycle-management-for-agentic-reinforcement-learning)  
+   evidence：通过累积轨迹迭代优化智能体技能的自进化方法
+5. [Plan Before Search: Search Agents Need Plan](/20260527-20260605/2605.28354v1-plan-before-search-search-agents-need-plan)  
    标签：评分：7.0/10、query:agent-papers
-   evidence：面向智能体强化学习的动态技能生命周期管理
-6. [SkillGraph: Skill-Augmented Reinforcement Learning for Agents via Evolving Skill Graphs](/20260507-20260605/2605.12039v1-skillgraph-skill-augmented-reinforcement-learning-for-agents-via-evolving-skill-graphs)  
+   evidence：强化学习用于搜索智能体规划
+6. [Roles with Rails: Contract-Preserving Role Evolution in Multi-Agent Structured Reasoning](/20260527-20260605/2605.28433v1-roles-with-rails-contract-preserving-role-evolution-in-multi-agent-structured-reasoning)  
    标签：评分：7.0/10、query:agent-papers
-   evidence：通过技能图谱演化实现RL自改进
-7. [Towards In-Depth Root Cause Localization for Microservices with Multi-Agent Recursion-of-Thought](/20260507-20260605/2605.14866v1-towards-in-depth-root-cause-localization-for-microservices-with-multi-agent-recursion-of-thought)  
+   evidence：多智能体系统中保持契约的角色进化
+7. [BenchTrace: A Benchmark for Testing Reflection Ability and Controlled Evolution in LLM Agents](/20260527-20260605/2605.29225v1-benchtrace-a-benchmark-for-testing-reflection-ability-and-controlled-evolution-in-llm-agents)  
    标签：评分：7.0/10、query:agent-papers
-   evidence：多智能体递归思维协作进行根因定位
-8. [Mem-$π$: Adaptive Memory through Learning When and What to Generate](/20260507-20260605/2605.21463v1-mem--adaptive-memory-through-learning-when-and-what-to-generate)  
+   evidence：LLM智能体自进化能力的基准测试
+8. [Meta-Cognitive Memory Policy Optimization for Long-Horizon LLM Agents](/20260527-20260605/2605.30159v1-meta-cognitive-memory-policy-optimization-for-long-horizon-llm-agents)  
    标签：评分：7.0/10、query:agent-papers
-   evidence：通过强化学习为LLM智能体提供自适应记忆以解决复杂任务
-9. [No Action Without a NOD: A Heterogeneous Multi-Agent Architecture for Reliable Service Agents](/20260507-20260605/2605.12240v1-no-action-without-a-nod-a-heterogeneous-multi-agent-architecture-for-reliable-service-agents)  
+   evidence：递归自我改进智能体用于复杂任务
+9. [Skill0.5: Joint Skill Internalization and Utilization for Out-of-Distribution Generalization in Agentic Reinforcement Learning](/20260527-20260605/2605.28424v1-skill05-joint-skill-internalization-and-utilization-for-out-of-distribution-generalization-in-agentic-reinforcement-learning)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：面向可靠长程服务任务的异构多智能体架构
-10. [Macro-Action Based Multi-Agent Instruction Following through Value Cancellation](/20260507-20260605/2605.12655v1-macro-action-based-multi-agent-instruction-following-through-value-cancellation)  
+   evidence：通过技能内化与RL实现自改进智能体
+10. [Dreaming Of Others: Latent Teammate Modeling In World Models For Multi-Agent Reinforcement Learning](/20260527-20260605/2605.31361v1-dreaming-of-others-latent-teammate-modeling-in-world-models-for-multi-agent-reinforcement-learning)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：基于值校正的MARL指令遵循，与基于RL的自我改进相关
-11. [Beyond Individual Intelligence: Surveying Collaboration, Failure Attribution, and Self-Evolution in LLM-based Multi-Agent Systems](/20260507-20260605/2605.14892v2-beyond-individual-intelligence-surveying-collaboration-failure-attribution-and-self-evolution-in-llm-based-multi-agent-systems)  
+   evidence：多智能体强化学习中的队友建模
+11. [Momento: Evaluating Persistent Memory and Reasoning with Multi-Session Agentic Conversations](/20260527-20260605/2606.00832v1-momento-evaluating-persistent-memory-and-reasoning-with-multi-session-agentic-conversations)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：多智能体协作与自进化的全面综述
+   evidence：多会话智能体对话用于长程推理
 
 
 <div class="dpr-home-promo-card">
