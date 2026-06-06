@@ -1,0 +1,294 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-06T20:45:22.427941+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 3,
+    "deep_cap": 6,
+    "deep_selected": 3,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2606.06114v1",
+      "source": "arxiv",
+      "title": "Towards Healthy Evolution: Exploring the Role and Mechanisms of Human-Agent Interaction in Self-Evolving Systems",
+      "abstract": "Self-evolving agents improve through continual self-play and self-generated learning signals, but autonomous evolution can also cause capability degradation and safety drift. Although human feedback has proven effective for static and post-trained agents, its role in self-evolving systems remains underexplored. We introduce Agent Norm Correction through Human-like Oversight and Review (ANCHOR), an LLM-based framework that simulates human supervision and delivers feedback at various phases of self-evolution. With ANCHOR, we evaluate two representative open-source self-evolving agent systems across coding, mathematical reasoning, and safety. Our results show that even limited supervision substantially mitigates safety degradation while preserving stable performance on core evolutionary objectives. Further analysis shows that supervision over the output verification phase is the most effective for intervention, whereas increasing supervision frequency yields diminishing returns. These findings provide empirical evidence and practical guidance for designing more stable, controllable, and human-aligned self-evolving agent systems.",
+      "authors": [
+        "Dianxing Shi",
+        "Junqi He",
+        "Junhao Chen",
+        "Bowen Wang",
+        "Yuta Nakashima"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-04T13:03:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.06114v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "studies self-evolving agent systems with human-agent interaction to mitigate degradation",
+      "llm_evidence_cn": "研究自进化智能体系统中的人机交互以缓解性能退化",
+      "llm_evidence": "研究自进化智能体系统中的人机交互以缓解性能退化",
+      "canonical_evidence": "研究自进化智能体系统中的人机交互以缓解性能退化",
+      "llm_tldr_en": "Self-evolving agents improve via self-play but risk degradation. ANCHOR simulates human oversight to correct norms, mitigating capability and safety drift. Limited supervision helps substantially.",
+      "llm_tldr_cn": "自进化智能体通过自我对弈和自我生成学习信号持续提升，但自主进化可能导致能力退化和安全漂移。本文提出ANCHOR框架，模拟人类在不同进化阶段提供反馈，在编码、数学推理和安全任务上评估两个开源自进化系统，结果表明即使有限的监督也能显著缓解退化。",
+      "llm_tldr": "自进化智能体通过自我对弈和自我生成学习信号持续提升，但自主进化可能导致能力退化和安全漂移。本文提出ANCHOR框架，模拟人类在不同进化阶段提供反馈，在编码、数学推理和安全任务上评估两个开源自进化系统，结果表明即使有限的监督也能显著缓解退化。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-evolving recursive agent",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.03143v1",
+      "source": "arxiv",
+      "title": "FederatedSkill: Federated Learning for Agentic Skill Evolution",
+      "abstract": "Modern LLM agents increasingly rely on skill libraries to handle complex tasks, making skill evolution a primary driver of self-improvement. However, isolated single-user task streams lack the diversity required to build comprehensive skills. While cross-user collaboration can overcome this data bottleneck, current trajectory-sharing approaches compromise user privacy and impose a uniform global library that fails to accommodate client heterogeneity. We introduce FederatedSkill, a privacy-preserving framework for collaborative agent evolution. Moving beyond raw trajectory sharing, FederatedSkill utilizes semantic skill diffs, structured patches over local libraries, as the fundamental unit of communication. On the server side, an evolution agent aggregates these patches to dynamically model client-specific capability boundaries, facilitating strictly personalized skill evolution rather than a suboptimal global average. Evaluated across 20 distinct agent task families, FederatedSkill demonstrates substantial gains over self-evolving baselines, achieving up to a 44.4% increase in success rate and a 37.5% reduction in computational cost.",
+      "authors": [
+        "Jingbo Yang",
+        "Guanyu Yao",
+        "Yang Zhang",
+        "Ramana Rao Kompella",
+        "Gaowen Liu",
+        "Shiyu Chang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-06-02T04:38:05+00:00",
+      "link": "https://arxiv.org/pdf/2606.03143v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "federated learning for collaborative agent skill evolution",
+      "llm_evidence_cn": "联邦学习用于协作智能体技能进化",
+      "llm_evidence": "联邦学习用于协作智能体技能进化",
+      "canonical_evidence": "联邦学习用于协作智能体技能进化",
+      "llm_tldr_en": "FederatedSkill enables privacy-preserving collaborative skill evolution across agents via semantic skill diffs, avoiding raw trajectory sharing.",
+      "llm_tldr_cn": "孤立单用户任务流缺乏多样性，限制技能进化所需数据。FederatedSkill提出隐私保护的联邦学习框架，以语义技能差异（结构化补丁）作为通信单元，聚合客户端局部库更新。服务器端进化智能体融合差异，分发回客户端。该方法支持分布式智能体自改进，但未涉及递归性。",
+      "llm_tldr": "孤立单用户任务流缺乏多样性，限制技能进化所需数据。FederatedSkill提出隐私保护的联邦学习框架，以语义技能差异（结构化补丁）作为通信单元，聚合客户端局部库更新。服务器端进化智能体融合差异，分发回客户端。该方法支持分布式智能体自改进，但未涉及递归性。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Search for recursive agents with self improvement mechanisms",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04484v1",
+      "source": "arxiv",
+      "title": "AgentJet: A Flexible Swarm Training Framework for Agentic Reinforcement Learning",
+      "abstract": "We present AgentJet, a distributed swarm training framework for large language model (LLM) agent reinforcement learning. Unlike centralized frameworks that tightly couple agent rollouts with model optimization, AgentJet adopts a decoupled multi-node architecture in which swarm server nodes host trainable models and run optimization on GPU clusters, whereas swarm client nodes execute arbitrary agents on arbitrary devices. This design provides capabilities that are difficult to support in centralized frameworks: (1) heterogeneous multi-model reinforcement learning, enabling the training of heterogeneous multi-agent teams with multiple LLM as brains; (2) multi-task cocktail training with isolated agent runtimes; (3) fault-tolerant execution that prevents external environment failures from interrupting the training process; and (4) live code iteration, which allows agents to be edited during training by replacing swarm client nodes. To support efficient RL in multi-model, multi-turn, and multi-agent settings, AgentJet introduces a context tracking module with timeline merging, which consolidates redundant context and achieves a 1.5-10x training speedup. Finally, AgentJet introduces an automated research system that takes a research topic as input and autonomously conducts long-horizon, multi-day RL studies on large-scale clusters. By leveraging the swarm architecture, this system reproduces key exploratory workflows of RL researchers without human intervention during execution.",
+      "authors": [
+        "Qingxu Fu",
+        "Boyin Liu",
+        "Shuchang Tao",
+        "Zhaoyang Liu",
+        "Bolin Ding"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-06-03T06:02:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.04484v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "distributed swarm training framework for agentic reinforcement learning",
+      "llm_evidence_cn": "面向智能体强化学习的分布式集群训练框架",
+      "llm_evidence": "面向智能体强化学习的分布式集群训练框架",
+      "canonical_evidence": "面向智能体强化学习的分布式集群训练框架",
+      "llm_tldr_en": "AgentJet provides a decoupled multi-node architecture for heterogeneous multi-model RL, multi-task cocktail training, and fault-tolerant agent execution.",
+      "llm_tldr_cn": "现有强化学习框架紧密耦合代理展开与模型优化，难以支持异构多智能体训练和多任务混合训练。AgentJet提出解耦的多节点架构，集群服务器节点托管可训练模型并执行优化，集群客户端节点执行任意代理。该设计支持异构多模型强化学习、多任务鸡尾酒训练和容错执行，显著提升了代理强化学习的灵活性和可扩展性。",
+      "llm_tldr": "现有强化学习框架紧密耦合代理展开与模型优化，难以支持异构多智能体训练和多任务混合训练。AgentJet提出解耦的多节点架构，集群服务器节点托管可训练模型并执行优化，集群客户端节点执行任意代理。该设计支持异构多模型强化学习、多任务鸡尾酒训练和容错执行，显著提升了代理强化学习的灵活性和可扩展性。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Agentic reinforcement learning for large language model agents with recursive self improvement",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.02994v1",
+      "source": "arxiv",
+      "title": "Inducing Reasoning Primitives from Agent Traces",
+      "abstract": "ReAct-style LLM agents often rediscover the same reasoning routines across problems, yet leave those routines trapped in transient scratchpads. We introduce Reasoning Primitive Induction, a single-pass method that mines successful ReAct traces, clusters recurrent reasoning moves, and converts the most frequent moves into a compact library of typed pseudo-tools. Each pseudo-tool is specified by a natural-language docstring interpreted by an LLM at invocation time, and a standard ReAct loop composes these primitives at test time. The central result is that induced libraries outperform the very agent that generated their traces: by +44pp on RuleArena NBA (30 -> 74), +30pp on MuSR team allocation (38 -> 68), and +22pp on NatPlan meeting planning (7 -> 29). Across five comparable subtasks spanning narrative deduction, rule application, and constraint-satisfaction planning, a single fixed configuration improves over zero-shot Chain-of-Thought on every subtask, matches or surpasses expert-authored decompositions, and outperforms AWM at lower average inference cost.",
+      "authors": [
+        "Zhihan Lei",
+        "Jiarui Yan",
+        "Joshua Momo",
+        "William W. Cohen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-02T01:11:15+00:00",
+      "link": "https://arxiv.org/pdf/2606.02994v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "induces reasoning primitives from agent traces for self-improvement",
+      "llm_evidence_cn": "从智能体轨迹中归纳推理基元实现自我改进",
+      "llm_evidence": "从智能体轨迹中归纳推理基元实现自我改进",
+      "canonical_evidence": "从智能体轨迹中归纳推理基元实现自我改进",
+      "llm_tldr_en": "ReAct agents repeat reasoning routines; this work mines traces to extract reusable pseudo-tools, boosting performance by up to 44pp, enabling self-improvement without extra training.",
+      "llm_tldr_cn": "ReAct风格智能体重复相同的推理模式但未被有效利用。本文提出推理基元归纳方法，从成功轨迹中挖掘高频推理步骤，转换为可复用的伪工具库。实验表明，诱导库在多个规划任务上提升显著，最高达44个百分点，使智能体能从自身经验学习自我改进。",
+      "llm_tldr": "ReAct风格智能体重复相同的推理模式但未被有效利用。本文提出推理基元归纳方法，从成功轨迹中挖掘高频推理步骤，转换为可复用的伪工具库。实验表明，诱导库在多个规划任务上提升显著，最高达44个百分点，使智能体能从自身经验学习自我改进。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Search for recursive agents with self improvement mechanisms",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.02132v2",
+      "source": "arxiv",
+      "title": "Learning When Not to Act: Mitigating Tool Abuse in Agentic Reinforcement Learning",
+      "abstract": "Agentic reinforcement learning can induce tool abuse, where models overuse external tools even for queries solvable by internal reasoning. Existing approaches mitigate this issue with uniform tool-use penalties or hard limits, which reduce tool frequency but may also suppress useful tool-assisted exploration. We propose EAPO, an Efficient Agentic Policy Optimization framework that learns selective tool use. EAPO introduces tool-free trajectories into each rollout group, applies difficulty-aware reward shaping to penalize redundant tool calls mainly on easier queries, and uses confidence-aware token reweighting to improve policy learning. Across nine mathematical and knowledge-intensive reasoning benchmarks, EAPO consistently improves the accuracy efficiency trade-off on Qwen2.5-3B, Qwen2.5-7B, and Llama3.1-8B. Compared with GRPO, EAPO improves average performance by 10.45%, 7.27%, and 9.69%, while reducing average tool calls by 18.33%, 18.33%, and 24.59%, respectively. These results show that agents can learn when not to use tools without compromising tool-integrated reasoning.",
+      "authors": [
+        "Liuji Chen",
+        "Dianxing Tang",
+        "Xing Shi",
+        "Dingshuo Chen",
+        "Qiang Liu",
+        "Shu Wu",
+        "Liang Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-01T11:58:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.02132v2",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "self-improving agents through RL with tool-use penalty",
+      "llm_evidence_cn": "通过强化学习自改进并惩罚工具滥用",
+      "llm_evidence": "通过强化学习自改进并惩罚工具滥用",
+      "canonical_evidence": "通过强化学习自改进并惩罚工具滥用",
+      "llm_tldr_en": "EAPO mitigates tool abuse in agentic RL by introducing tool-free trajectories and difficulty-aware reward shaping for selective tool use.",
+      "llm_tldr_cn": "智能体强化学习导致工具滥用，抑制内部推理。EAPO引入无工具轨迹和难度感知奖励塑造，学习何时不使用工具。在九个基准上显著提升准确率，同时减少冗余工具调用，实现了更高效的智能体策略。",
+      "llm_tldr": "智能体强化学习导致工具滥用，抑制内部推理。EAPO引入无工具轨迹和难度感知奖励塑造，学习何时不使用工具。在九个基准上显著提升准确率，同时减少冗余工具调用，实现了更高效的智能体策略。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-improving agents through reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.04202v1",
+      "source": "arxiv",
+      "title": "SMAC-Talk: A Natural Language Extension of the StarCraft Multi-Agent Challenge for Large Language Models",
+      "abstract": "As LLMs become more widely deployed, they are increasingly expected to work alongside other AI agents rather than operating in isolation. Effective coordination in these settings requires agents to communicate, share information and make decisions under uncertainty. We introduce SMAC-Talk, a natural language extension of the StarCraft Multi-Agent Challenge for evaluating LLM-based agents in cooperative multi-agent environments. The environment has several key features such as decentralized control, partial observability and long-horizon decision making. SMAC-Talk includes a natural language communication channel which is used to probe agent coordination and trust. We use this communication channel to construct different evaluation scenarios, including settings with an embedded deceptive communicator that tries to disrupt and deceive allies through communication alone. We provide three agents for benchmarking using 4 models from the Qwen3.5 family and study how reasoning structure, memory and model scale affect coordination between agents. We release SMAC-Talk as an open benchmark to support the research community in developing and evaluating LLM agents in cooperative multi-agent settings.",
+      "authors": [
+        "Joel Sol",
+        "Homayoun Najjaran"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-02T20:40:04+00:00",
+      "link": "https://arxiv.org/pdf/2606.04202v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multi-agent collaboration and long-horizon decision making",
+      "llm_evidence_cn": "多智能体协作与长程决策",
+      "llm_evidence": "多智能体协作与长程决策",
+      "canonical_evidence": "多智能体协作与长程决策",
+      "llm_tldr_en": "Introduces a natural language extension of SMAC for evaluating LLM-based agents in cooperative multi-agent settings with long-horizon reasoning and communication.",
+      "llm_tldr_cn": "现有的LLM智能体评估多局限于单智能体或简单交互。SMAC-Talk通过自然语言通信通道扩展了星际争霸多智能体挑战，支持分散控制、部分可观测和长程决策。该环境可用于评估多智能体协作、信任和通信能力，为研究复杂任务中的多智能体协调提供了重要基准。",
+      "llm_tldr": "现有的LLM智能体评估多局限于单智能体或简单交互。SMAC-Talk通过自然语言通信通道扩展了星际争霸多智能体挑战，支持分散控制、部分可观测和长程决策。该环境可用于评估多智能体协作、信任和通信能力，为研究复杂任务中的多智能体协调提供了重要基准。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05158v1",
+      "source": "arxiv",
+      "title": "Streaming Communication in Multi-Agent Reasoning",
+      "abstract": "Multi-agent reasoning systems adopt a \"generate-then-transfer\" paradigm that forces end-to-end latency to scale linearly with pipeline depth. We introduce StreamMA, a multi-agent reasoning system that streams each reasoning step to downstream agents as soon as it is generated, pipelining adjacent agents and thus reducing latency. Surprisingly, this pipelining also improves effectiveness: because multi-step reasoning quality is non-uniform and early steps are more reliable than later ones, working with these reliable early steps instead of the full chain prevents error-prone late steps from misleading downstream agents. We formalize both advantages with the first closed-form joint analysis of stream, serial, and single protocols, deriving the effectiveness ordering, speedup upper bound, and cost ratio. Across eight reasoning benchmarks spanning mathematics, science, and code, two frontier LLMs (Claude Opus 4.6 and GPT-5.4), and three topologies (Chain, Tree, Graph), StreamMA outperforms both baselines (avg. +7.3 pp, max +22.4 pp on HMMT 2026; Claude Opus 4.6-high). Beyond these contributions, we discover a \"step-level scaling law\": increasing per-agent steps consistently improves both effectiveness and efficiency, a new scaling dimension orthogonal to and composable with agent-count scaling.",
+      "authors": [
+        "Zhen Yang",
+        "Xiaogang Xu",
+        "Wen Wang",
+        "Cong Chen",
+        "Xander Xu",
+        "Ying-Cong Chen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-06-03T17:57:04+00:00",
+      "link": "https://arxiv.org/pdf/2606.05158v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "streaming communication in multi-agent reasoning reduces latency and improves effectiveness",
+      "llm_evidence_cn": "多智能体推理中的流式通信减少延迟并提高效果",
+      "llm_evidence": "多智能体推理中的流式通信减少延迟并提高效果",
+      "canonical_evidence": "多智能体推理中的流式通信减少延迟并提高效果",
+      "llm_tldr_en": "StreamMA pipelines reasoning steps in multi-agent systems via streaming, reducing latency and improving effectiveness by using more reliable early steps.",
+      "llm_tldr_cn": "多智能体推理采用生成-传输范式，端到端延迟与流水线深度线性增长。StreamMA通过将每个推理步骤生成后立即流式传输到下游智能体，实现流水线并行，降低延迟。更令人惊讶的是，由于多步推理质量非均匀且早期步骤更可靠，流式通信使下游智能体基于可靠早期步而非完整链条，从而提升效果。理论分析和实验验证了加速比和效果排序。",
+      "llm_tldr": "多智能体推理采用生成-传输范式，端到端延迟与流水线深度线性增长。StreamMA通过将每个推理步骤生成后立即流式传输到下游智能体，实现流水线并行，降低延迟。更令人惊讶的是，由于多步推理质量非均匀且早期步骤更可靠，流式通信使下游智能体基于可靠早期步而非完整链条，从而提升效果。理论分析和实验验证了加速比和效果排序。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
