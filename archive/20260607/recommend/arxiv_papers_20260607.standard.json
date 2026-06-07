@@ -1,0 +1,388 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-07T21:03:13.388854+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 5,
+    "deep_cap": 6,
+    "deep_selected": 5,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [
+    {
+      "id": "2606.03108v1",
+      "source": "arxiv",
+      "title": "EvoTrainer: Co-Evolving LLM Policies and Training Harnesses for Autonomous Agentic Reinforcement Learning",
+      "abstract": "Autonomous LLM training is often framed as recipe search, which leaves the training harness largely static. This limitation sharpens in agentic RL, where shifting bottlenecks and scalar rewards mask diverse failure modes. We introduce EvoTrainer, an autonomous training framework that co-evolves LLM policies and training-side harnesses through empirical feedback: it diagnoses rollout-level evidence, revises diagnostics, backtests interventions, and accumulates reusable skills. Evaluated on mathematical reasoning, competitive-programming code generation, and repository-level software engineering, EvoTrainer matches or exceeds the human-engineered RL references under the same data, codebase, and evaluation protocol, with the largest gain on long-horizon agentic SWE. Trajectory analyses show that retained strategies diverge across domains, evolving diagnostics prevent invalid high-scoring branches from being promoted, and reusable skills shape later search. Autonomous LLM RL should move beyond recipe search toward joint evolution of policies and the training harnesses that interpret them.",
+      "authors": [
+        "Guhong Chen",
+        "Yingcheng Shi",
+        "Yongbin Li",
+        "Binhua Li",
+        "Xander Xu",
+        "Hu Wei",
+        "Shiwen Ni",
+        "Min Yang",
+        "Jieping Ye"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-02T03:47:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.03108v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Co-evolves LLM policies and training harnesses for autonomous agentic RL, achieving self-improvement",
+      "llm_evidence_cn": "协同进化LLM策略和训练装备实现自主智能体强化学习，达成自我改进",
+      "llm_evidence": "协同进化LLM策略和训练装备实现自主智能体强化学习，达成自我改进",
+      "canonical_evidence": "协同进化LLM策略和训练装备实现自主智能体强化学习，达成自我改进",
+      "llm_tldr_en": "EvoTrainer co-evolves LLM policies and training harnesses via empirical feedback, enabling autonomous agentic RL that matches or exceeds human-engineered baselines in math, code, and software engineering.",
+      "llm_tldr_cn": "自主LLM训练常被框架化为配方搜索，训练装备保持静态，这在智能体强化学习中尤为局限。本文提出EvoTrainer，一种自主训练框架，通过经验反馈协同进化LLM策略和训练侧装备：诊断rollout证据、修订诊断、回测干预、积累可复用技能。在数学推理、竞赛编程和仓库级软件工程任务上，EvoTrainer在相同数据、代码和评估协议下匹配或超越人工设计的RL基线。该工作展示了通过协同进化实现递归自我改进的潜力，为智能体RL的自动化提供了新范式。",
+      "llm_tldr": "自主LLM训练常被框架化为配方搜索，训练装备保持静态，这在智能体强化学习中尤为局限。本文提出EvoTrainer，一种自主训练框架，通过经验反馈协同进化LLM策略和训练侧装备：诊断rollout证据、修订诊断、回测干预、积累可复用技能。在数学推理、竞赛编程和仓库级软件工程任务上，EvoTrainer在相同数据、代码和评估协议下匹配或超越人工设计的RL基线。该工作展示了通过协同进化实现递归自我改进的潜力，为智能体RL的自动化提供了新范式。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Agentic reinforcement learning for large language model agents with recursive self improvement",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04465v1",
+      "source": "arxiv",
+      "title": "SePO: Self-Evolving Prompt Agent for System Prompt Optimization",
+      "abstract": "System prompt optimization improves agent behavior without modifying the underlying model, yielding human-readable, model-agnostic instructions. Existing methods build a prompt agent that refines task agents' system prompts, yet leave the prompt agent's own system prompt hand-engineered and fixed. We propose Self-Evolving Prompt Optimization (SePO), which treats the prompt agent's own system prompt as an optimization target alongside task agents' system prompts. SePO adopts a self-referential design. A single prompt agent improves both task agents' system prompts and its own under an open-ended evolutionary search that maintains an archive of candidate prompts as stepping stones. Training proceeds in two stages: pre-training evolves the prompt agent on a multi-task pool, and fine-tuning then applies it to a target task. Across five benchmarks spanning math (AIME'25), abstract reasoning (ARC-AGI-1), graduate-level science (GPQA), code generation (MBPP), and logic puzzles (Sudoku), SePO consistently outperforms Manual-CoT, TextGrad, and MetaSPO, improving the average accuracy by 4.49 points compared to Manual-CoT. The prompt optimization skill from pre-training also generalizes to tasks beyond the pre-training mixture, rather than memorizing per-task prompts.",
+      "authors": [
+        "Wangcheng Tao",
+        "Han Wu",
+        "Weng-Fai Wong"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-06-03T05:20:30+00:00",
+      "link": "https://arxiv.org/pdf/2606.04465v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolving prompt agent using evolutionary search for system prompt optimization",
+      "llm_evidence_cn": "利用进化搜索实现自演化提示智能体用于系统提示优化",
+      "llm_evidence": "利用进化搜索实现自演化提示智能体用于系统提示优化",
+      "canonical_evidence": "利用进化搜索实现自演化提示智能体用于系统提示优化",
+      "llm_tldr_en": "SePO treats the prompt agent's own system prompt as an optimization target, enabling self-evolution through open-ended evolutionary search.",
+      "llm_tldr_cn": "现有提示优化方法固定了提示智能体自身的系统提示，本文提出SePO自演化提示优化，将提示智能体自身提示也作为优化目标，采用自参考设计和开放进化搜索。两阶段训练后，SePO显著提升了任务智能体的行为质量。",
+      "llm_tldr": "现有提示优化方法固定了提示智能体自身的系统提示，本文提出SePO自演化提示优化，将提示智能体自身提示也作为优化目标，采用自参考设计和开放进化搜索。两阶段训练后，SePO显著提升了任务智能体的行为质量。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-evolving recursive agent",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02282v1",
+      "source": "arxiv",
+      "title": "POIROT: Interrogating Agents for Failure Detection in Multi-Agent Systems",
+      "abstract": "Orchestrating Large Language Models into Multi-Agent Systems (LLM-MAS) has unlocked remarkable reasoning capabilities, yet emergent failures and hallucinations that resist characterisation block their deployment in safety-critical domains -- a gap made legally untenable by emerging AI regulation. Existing evaluation paradigms share a common flaw: centralised judgment creates single points of failure and demands domain-specific expertise. Here we present POIROT, a protocol that repurposes a system's own agents as its diagnostic layer, leveraging the epistemic diversity already present in the architecture. Across evaluated settings, POIROT outperforms single-LLM evaluator baselines, with gains that scale with problem complexity (OR = 1.60, $p = 0.008$), agent count, and fault dimensionality, persisting under compound fault conditions. These results demonstrate that safety oversight need not be externalised: the agents executing a role carry sufficient collective intelligence to audit it. We release POIROT as an open-source library alongside BLAME, a benchmark for fault attribution in safety-critical multi-agent systems.",
+      "authors": [
+        "Iñaki Dellibarda Varela",
+        "R. Sendra-Arranz",
+        "Pablo Romero-Sorozabal",
+        "J. M. Valverde-García",
+        "Annemarie F. Laudanski",
+        "Álvaro Gutiérrez",
+        "Eduardo Rocon",
+        "Manuel Cebrian"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-01T14:05:35+00:00",
+      "link": "https://arxiv.org/pdf/2606.02282v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent system failure detection protocol",
+      "llm_evidence_cn": "多智能体系统故障检测协议",
+      "llm_evidence": "多智能体系统故障检测协议",
+      "canonical_evidence": "多智能体系统故障检测协议",
+      "llm_tldr_en": "POIROT repurposes agents in a multi-agent system as diagnostic layers, outperforming single-LLM evaluators in detecting emergent failures.",
+      "llm_tldr_cn": "本文针对大语言模型多智能体系统中的突发故障和幻觉难以诊断的问题，提出POIROT协议。该方法利用系统内已有智能体的认知多样性，将其转化为诊断层，无需额外专业知识。实验表明，POIROT在多个场景中优于单LLM评估器，且检测效果随问题复杂度提升而增强（OR=1.60），为安全关键领域的多智能体部署提供了可行的自诊断方案。",
+      "llm_tldr": "本文针对大语言模型多智能体系统中的突发故障和幻觉难以诊断的问题，提出POIROT协议。该方法利用系统内已有智能体的认知多样性，将其转化为诊断层，无需额外专业知识。实验表明，POIROT在多个场景中优于单LLM评估器，且检测效果随问题复杂度提升而增强（OR=1.60），为安全关键领域的多智能体部署提供了可行的自诊断方案。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02372v1",
+      "source": "arxiv",
+      "title": "COMAP: Co-Evolving World Models and Agent Policies for LLM Agents",
+      "abstract": "Equipping language agents with world models enables them to anticipate environment dynamics and evaluate candidate actions before execution. However, existing textual world models are typically fixed after training, preventing them from adapting to the on-policy state-action distributions induced by an evolving agent. Meanwhile, agent-improvement methods often rely on external rewards or verifiers, limiting their applicability in realistic interactive environments. In this paper, we propose COMAP, a novel framework that co-evolves textual world models and agent policies through closed-loop interaction. At each decision step, the world model predicts future state feedback for candidate actions, and the agent performs future-aware reflection by estimating the reliability of this feedback and refining its action accordingly. The resulting on-policy trajectories are then used to update the world model via self-distillation, allowing it to better match the agent's evolving interaction distribution. Across embodied task planning, Web navigation, and tool-use benchmarks, COMAP consistently outperforms competitive baselines, e.g., +16.75% relative improvement with Qwen3-4B. Further analyses show that the co-evolutionary loop improves the world model's prediction accuracy over time and leads to more effective long-horizon decision-making. Our code is available at: https://github.com/loyiv/CoMAP.",
+      "authors": [
+        "Youwei Liu",
+        "Jian Wang",
+        "Hanlin Wang",
+        "Wenjie Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-01T15:21:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.02372v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "co-evolving world models and policies for LLM agents",
+      "llm_evidence_cn": "世界模型与策略的协同进化",
+      "llm_evidence": "世界模型与策略的协同进化",
+      "canonical_evidence": "世界模型与策略的协同进化",
+      "llm_tldr_en": "COMAP proposes a framework that co-evolves textual world models and agent policies through closed-loop interaction, enabling the agent to anticipate dynamics and improve decisions without external rewards.",
+      "llm_tldr_cn": "现有世界模型固定不变，无法适应进化中的智能体分布；智能体改进方法依赖外部奖励。本文提出COMAP，通过闭环交互使世界模型和策略共同进化。在每个决策步，世界模型预测候选动作的未来反馈，智能体进行未来感知反思。该方法在复杂交互任务中提升了决策质量，为无外部奖励下的自改进提供了新思路。",
+      "llm_tldr": "现有世界模型固定不变，无法适应进化中的智能体分布；智能体改进方法依赖外部奖励。本文提出COMAP，通过闭环交互使世界模型和策略共同进化。在每个决策步，世界模型预测候选动作的未来反馈，智能体进行未来感知反思。该方法在复杂交互任务中提升了决策质量，为无外部奖励下的自改进提供了新思路。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Search for recursive agents with self improvement mechanisms",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02388v1",
+      "source": "arxiv",
+      "title": "Policy and World Modeling Co-Training for Language Agents",
+      "abstract": "Reinforcement learning (RL) improves large language model (LLM) agents by teaching them which actions lead to high rewards, but provides little supervision on what those actions do to the environment. World modeling (WM) can fill this gap, yet existing approaches often require separate simulators, extra training stages, or additional inference-time computation. We observe that on-policy RL rollouts already contain the needed signal: each transition pairs an action with its resulting next observation. Based on this observation, we propose PaW, a Policy and World modeling co-training framework that adds auxiliary WM supervision to the same policy during RL, without changing the inference paradigm. To make auxiliary WM supervision informative and stable, PaW introduces three components: action-entropy-based WM data selection, noise-tolerant WM loss, and reward-adaptive loss balancing. Experiments on three agentic task benchmarks show consistent improvements over strong RL baselines across models and RL algorithms. These results suggest that standard RL rollouts are a practical source of WM supervision for language-agent training.",
+      "authors": [
+        "Ning Lu",
+        "Baijiong Lin",
+        "Shengcai Liu",
+        "Jiahao Wu",
+        "Haoze Lv",
+        "Yanbin Wei",
+        "Lingting Zhu",
+        "Shengju Qian",
+        "Xin Wang",
+        "Ying-Cong Chen",
+        "Qi Wang",
+        "Ke Tang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-01T15:35:40+00:00",
+      "link": "https://arxiv.org/pdf/2606.02388v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "uses RL to improve LLM agents with world model co-training",
+      "llm_evidence_cn": "使用强化学习和世界模型协同训练改进智能体",
+      "llm_evidence": "使用强化学习和世界模型协同训练改进智能体",
+      "canonical_evidence": "使用强化学习和世界模型协同训练改进智能体",
+      "llm_tldr_en": "PaW co-trains policy and world model during RL without extra inference cost, improving sample efficiency and environment understanding for language agents.",
+      "llm_tldr_cn": "本文针对强化学习训练语言智能体时缺乏环境反馈监督的问题，提出Policy and World Modeling共训练框架PaW。该方法在策略梯度更新期间，从在线轨迹中提取世界模型监督信号，无需额外模拟器或推理开销。实验表明，PaW显著提升了智能体在复杂交互任务中的样本效率和最终性能，为利用RL改进智能体开辟了更高效的路径。",
+      "llm_tldr": "本文针对强化学习训练语言智能体时缺乏环境反馈监督的问题，提出Policy and World Modeling共训练框架PaW。该方法在策略梯度更新期间，从在线轨迹中提取世界模型监督信号，无需额外模拟器或推理开销。实验表明，PaW显著提升了智能体在复杂交互任务中的样本效率和最终性能，为利用RL改进智能体开辟了更高效的路径。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-improving agents through reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.05021v1",
+      "source": "arxiv",
+      "title": "Enhancing the MADDPG Algorithm for Multi-Agent Learning via Action Inference and Importance Sampling",
+      "abstract": "We investigate multi-agent deep reinforcement learning and propose two enhancements to the Multi-Agent Deep Deterministic Policy Gradient (MADDPG) algorithm. First, we introduce a novel Action Inference mechanism that enables each agent to predict other agents' intended actions, thereby improving the accuracy and stability of its own policy. Second, we apply an importance sampling strategy, using geometric distribution, in the replay buffer to prioritize more recent and informative experiences, which helps mitigate the non-stationarity inherent in multi-agent environments. We evaluate both modifications on the discrete-action Predator-Prey task provided by the PettingZoo library, a flexible Python interface for general multi-agent reinforcement learning benchmarks. Our results indicate that Action Inference is effective in improving learning stability and inter-agent cooperation and that importance sampling using geometric distribution can lead to significant improvements in exploration efficiency over standard MADDPG. Code available at https://github.com/shaashwathsivakumar/MARL_Proj",
+      "authors": [
+        "Marc Walden",
+        "Jason Liu",
+        "Shaashwath Sivakumar",
+        "Ryan Liu",
+        "Hamza Khan"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-03T15:44:56+00:00",
+      "link": "https://arxiv.org/pdf/2606.05021v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "enhancements to multi-agent RL algorithm for collaboration",
+      "llm_evidence_cn": "对多智能体强化学习算法的改进以促进协作",
+      "llm_evidence": "对多智能体强化学习算法的改进以促进协作",
+      "canonical_evidence": "对多智能体强化学习算法的改进以促进协作",
+      "llm_tldr_en": "This paper improves MADDPG with action inference and importance sampling for better multi-agent coordination in the Predator-Prey task.",
+      "llm_tldr_cn": "该论文针对多智能体深度强化学习算法MADDPG提出两项增强：动作推理机制使智能体能预测其他智能体的意图，重要性采样策略优先处理近期经验以缓解非平稳性。在捕食者-猎物任务上验证了改进效果，有助于多智能体协作和长期任务求解。",
+      "llm_tldr": "该论文针对多智能体深度强化学习算法MADDPG提出两项增强：动作推理机制使智能体能预测其他智能体的意图，重要性采样策略优先处理近期经验以缓解非平稳性。在捕食者-猎物任务上验证了改进效果，有助于多智能体协作和长期任务求解。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.01311v1",
+      "source": "arxiv",
+      "title": "SkillAdaptor: Self-Adapting Skills for LLM Agents from Trajectories",
+      "abstract": "Large language model (LLM) agents increasingly rely on reusable external skills to solve long-horizon interactive tasks. Existing training-free skill adaptation pipelines usually update skills from full trajectories or session-level feedback, which makes failure attribution coarse and often produces unstable or overly broad revisions. We propose SkillAdaptor, a training-free step-level skill adaptation framework with explicit failure attribution, and it can plug into OpenClaw-class agent harnesses. Given a failed trajectory, SkillAdaptor identifies a first actionable fault step, links responsibility to candidate skills, and applies targeted updates under explicit acceptance checks while keeping the backbone frozen. We evaluate on WebShop, PinchBench, and Claw-Eval with Kimi-K2.5, GLM-5, and GPT-5.2. SkillAdaptor improves over no-skill and skill-adaptation baselines on all three suites, with the largest single-metric improvements of +1.5 points on PinchBench Avg Score%, +1.8 on Claw-Eval Avg Score, and +1.7 on WebShop success rate. These results indicate that step-level attribution supports more stable and auditable training-free skill maintenance\\footnote{The code will be released at https://github.com/zjunlp/SkillAdaptor.}.",
+      "authors": [
+        "Zhuoyun Yu",
+        "Xin Xie",
+        "Wuguannan Yao",
+        "Chenxi Wang",
+        "Lei Liang",
+        "Xiang Qi",
+        "Shumin Deng"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-05-31T16:00:10+00:00",
+      "link": "https://arxiv.org/pdf/2606.01311v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "skill adaptation from failed trajectories for self-improving agents",
+      "llm_evidence_cn": "从失败轨迹自适应技能以实现智能体自我改进",
+      "llm_evidence": "从失败轨迹自适应技能以实现智能体自我改进",
+      "canonical_evidence": "从失败轨迹自适应技能以实现智能体自我改进",
+      "llm_tldr_en": "SkillAdaptor introduces step-level skill adaptation with explicit failure attribution, enabling LLM agents to self-improve skills from trajectories without training.",
+      "llm_tldr_cn": "针对LLM智能体在长程任务中技能适应不精确的问题，本文提出SkillAdaptor，一种无需训练的步级技能自适应框架，通过显式失败归因将失败轨迹链接到候选技能并进行针对性更新。在WebShop等基准上验证了其有效性，为智能体自我改进提供了高效途径。",
+      "llm_tldr": "针对LLM智能体在长程任务中技能适应不精确的问题，本文提出SkillAdaptor，一种无需训练的步级技能自适应框架，通过显式失败归因将失败轨迹链接到候选技能并进行针对性更新。在WebShop等基准上验证了其有效性，为智能体自我改进提供了高效途径。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Search for recursive agents with self improvement mechanisms",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.02461v1",
+      "source": "arxiv",
+      "title": "AGENTCL: Toward Rigorous Evaluation of Continual Learning in Language Agents",
+      "abstract": "Language agents spend substantial inference time solving individual tasks, yet the experience acquired in one episode is often underutilized in future episodes. Continual learning expects an agent to accumulate reusable experience across a stream of tasks, improve over time, and avoid interference from irrelevant experiences. Unfortunately, existing benchmarks struggle to evaluate continual learning in language agents rigorously. Most efforts focus on retrieval and reasoning over long-context conversations or documents, while recent lifelong-adaptation benchmarks often rely on naive task streams with limited analysis of cross-task relationships, making it difficult to understand what an agent learns and reuses over time. This paper presents an evaluation framework AgentCL for continual learning in agents, centered on controlled task streams and metrics for transfer gains. AGENTCL constructs compositional streams where earlier sub-solutions, evidence, or workflows are intentionally reusable in later tasks, and contrasts them with naive streams where such reusability is not guaranteed. We use the benchmark to evaluate non-parametric memory designs for continual learning. To diagnose how memory design choices affect continual learning, we develop MemProbe, a probing method that stores interactions, insights, and skills, while filtering unreliable experiences during consolidation. Empirical analysis across coding, deep research, and language understanding/reasoning tasks shows that naive streams offer limited ability to distinguish memory designs, whereas controlled streams more clearly distinguish their plasticity. Meanwhile, naive and held-out settings often yield limited gains and can expose memory-induced degradation. These results highlight the need for stronger memory designs that balance plasticity and stable reuse.",
+      "authors": [
+        "Yiheng Shu",
+        "Bernal Jiménez Gutiérrez",
+        "Saisri Padmaja Jonnalagedda",
+        "Yuguang Yao",
+        "Huan Sun",
+        "Yu Su"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-01T16:32:59+00:00",
+      "link": "https://arxiv.org/pdf/2606.02461v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Evaluates continual learning in language agents, a key aspect of self-improvement over time",
+      "llm_evidence_cn": "评估语言智能体的持续学习能力，是随时间自我改进的关键方面",
+      "llm_evidence": "评估语言智能体的持续学习能力，是随时间自我改进的关键方面",
+      "canonical_evidence": "评估语言智能体的持续学习能力，是随时间自我改进的关键方面",
+      "llm_tldr_en": "AGENTCL provides a rigorous benchmark for continual learning in language agents, analyzing cross-task relationships and experience reuse, highlighting limitations of existing benchmarks.",
+      "llm_tldr_cn": "语言智能体在单次任务中积累的经验常被浪费。AGENTCL提出了一个严谨的持续学习评测基准，分析了跨任务关系，揭示了现有基准的缺陷，为研究智能体如何随时间积累和复用经验提供了标准测试场景。",
+      "llm_tldr": "语言智能体在单次任务中积累的经验常被浪费。AGENTCL提出了一个严谨的持续学习评测基准，分析了跨任务关系，揭示了现有基准的缺陷，为研究智能体如何随时间积累和复用经验提供了标准测试场景。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.03965v1",
+      "source": "arxiv",
+      "title": "Agentic Chain-of-Thought Steering for Efficient and Controllable LLM Reasoning",
+      "abstract": "Large language models improve final-answer accuracy through extended chain-of-thought reasoning, but often spend tokens inefficiently and offer little inference-time control. Existing efficient reasoning methods control thinking length by shortening, early-stopping, or compressing traces, leaving how the model thinks implicit. In this paper, we propose Agentic Chain-of-Thought Steering (ACTS), which formulates reasoning steering as a Markov decision process where a controller agent adaptively steers a frozen reasoner during inference. At each step, the controller observes the reasoning trace and remaining thinking budget, then issues a steering action consisting of a reasoning strategy and a steering phrase that initiates the next reasoner step. This enables budget-aware strategy control for efficient reasoning while preserving the reasoner's generation continuity. We initialize the controller agent from our constructed synthetic steering trajectories with multi-budget augmentation, and further optimize it via reinforcement learning with budget-conditioned reward shaping. Experiments across multiple benchmarks show that ACTS matches full-thinking performance with substantial token savings, and enables controllable accuracy-efficiency trade-offs across different reasoners and tasks. The code is available at https://github.com/Andree-9/ACTS.",
+      "authors": [
+        "Yu Xia",
+        "Zhouhang Xie",
+        "Xin Xu",
+        "Byungkyu Kang",
+        "Prarit Lamba",
+        "Xiang Gao",
+        "Julian McAuley"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-06-02T17:51:30+00:00",
+      "link": "https://arxiv.org/pdf/2606.03965v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "agentic steering of reasoning for efficient multi-step tasks",
+      "llm_evidence_cn": "智能体引导推理，实现高效多步骤任务",
+      "llm_evidence": "智能体引导推理，实现高效多步骤任务",
+      "canonical_evidence": "智能体引导推理，实现高效多步骤任务",
+      "llm_tldr_en": "ACTS uses a controller agent to adaptively steer a frozen reasoner, improving token efficiency and controllability in chain-of-thought reasoning.",
+      "llm_tldr_cn": "本文针对大语言模型链式推理中令牌效率低且缺乏控制的问题，提出Agentic Chain-of-Thought Steering（ACTS）框架。该方法将推理引导建模为马尔可夫决策过程，由控制器智能体根据推理轨迹和剩余预算，自适应地选择推理策略并生成引导短语。实验表明，ACTS在保持推理准确性的同时显著减少推理步骤，为复杂多步推理任务提供了一种高效可控的解决方案。",
+      "llm_tldr": "本文针对大语言模型链式推理中令牌效率低且缺乏控制的问题，提出Agentic Chain-of-Thought Steering（ACTS）框架。该方法将推理引导建模为马尔可夫决策过程，由控制器智能体根据推理轨迹和剩余预算，自适应地选择推理策略并生成引导短语。实验表明，ACTS在保持推理准确性的同时显著减少推理步骤，为复杂多步推理任务提供了一种高效可控的解决方案。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
