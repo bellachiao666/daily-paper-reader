@@ -1,0 +1,481 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-08T21:32:58.251422+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 4,
+    "deep_cap": 6,
+    "deep_selected": 4,
+    "quick_candidates": 7,
+    "quick_skim_target": 11,
+    "quick_selected": 7
+  },
+  "deep_dive": [
+    {
+      "id": "2606.06741v1",
+      "source": "arxiv",
+      "title": "OpenSkill: Open-World Self-Evolution for LLM Agents",
+      "abstract": "Self-evolving agents requires adaptation after deployment, but existing approaches assume a usable learning loop, such as curated skills, successful trajectories, or verifier signals. Real open-world deployments may provide none of these, offering only a task prompt. In this work, we study open-world self-evolution, where an agent must build both its skills and its own verification signals from scratch, using open-world resources but no target-task supervision. We propose OpenSkill, a framework that bootstraps this loop: it acquires grounded knowledge and verification anchors from documentation, repositories, and the web, synthesizes them into transferable skills, and refines those skills against self-built virtual tasks grounded in the anchors rather than in target answers. The open world thus supplies both the knowledge to be learned and a supervision-independent practice environment, with target-task supervision reserved for final evaluation. Across three benchmarks and two target agents, OpenSkill attains the best automated pass rate while satisfying the no-supervision constraint. Analysis shows its skills transfer across models without model-specific adaptation, and its self-built verifier aligns with ground-truth outcomes despite never accessing them.",
+      "authors": [
+        "Zhiling Yan",
+        "Dingjie Song",
+        "Hanrong Zhang",
+        "Wei Liang",
+        "Yuxuan Zhang",
+        "Yutong Dai",
+        "Lifang He",
+        "Philip S. Yu",
+        "Ran Xu",
+        "Xiang Li",
+        "Lichao Sun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-06-04T21:55:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.06741v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolution from scratch without supervision",
+      "llm_evidence_cn": "从零开始无监督的自进化",
+      "llm_evidence": "从零开始无监督的自进化",
+      "canonical_evidence": "从零开始无监督的自进化",
+      "llm_tldr_en": "OpenSkill enables LLM agents to self-evolve by building skills and verification signals from open-world resources without any task-specific supervision.",
+      "llm_tldr_cn": "针对现有自进化智能体依赖预设学习回路的问题，OpenSkill 提出了一个从零开始的框架，让智能体从文档、代码库和网络中获取知识并构建验证锚点，进而合成可迁移的技能并基于自建虚拟任务进行优化。实验表明该方法在无需目标任务监督的情况下实现了有效的技能演化。",
+      "llm_tldr": "针对现有自进化智能体依赖预设学习回路的问题，OpenSkill 提出了一个从零开始的框架，让智能体从文档、代码库和网络中获取知识并构建验证锚点，进而合成可迁移的技能并基于自建虚拟任务进行优化。实验表明该方法在无需目标任务监督的情况下实现了有效的技能演化。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "recursive self-improving agents for complex tasks",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.07367v1",
+      "source": "arxiv",
+      "title": "Self-evolving LLM agents with in-distribution Optimization",
+      "abstract": "Large Language Models (LLMs) have recently emerged as powerful controllers for interactive agents in complex environments, yet training them to perform reliable long-horizon decision making remains a fundamental challenge. A key difficulty lies in credit assignment: agents often receive delayed rewards only at the end of episodes. In this paper, we propose Q-Evolve, a self-evolving framework for LLM agents that unifies automatic process-reward labeling and policy learning within a principled in-distribution reinforcement learning paradigm. In each evolving iteration, our method learns an in-distribution critic from a hybrid off-policy dataset that combines expert demonstrations with agent-generated trajectories, stabilizing Bellman backups in sparse-reward settings via a weighted Implicit Q-Learning objective. The learned value function is then used to derive step-wise process rewards through advantage estimation, enabling dense and reliable supervision without environment backtracking or human annotation. Leveraging these signals, we perform behavior-proximal policy optimization that evolves the agent over the data used for process reward labeling, allowing iterative self-improvement without exacerbating distribution shift. We evaluate our method on AlfWorld, WebShop, and ScienceWorld, showing Q-Evolve outperforms strong baselines in sample efficiency, robustness, and overall task performance. Our results demonstrate that stable agent self-evolution is achievable through the co-evolution of process-level supervision and policy, both grounded within a shared in-distribution learning loop.",
+      "authors": [
+        "Yudi Zhang",
+        "Meng Fang",
+        "Zhenfang Chen",
+        "Mykola Pechenizkiy"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-05T15:09:52+00:00",
+      "link": "https://arxiv.org/pdf/2606.07367v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolving LLM agents with in-distribution RL",
+      "llm_evidence_cn": "自进化LLM智能体，结合分布内强化学习",
+      "llm_evidence": "自进化LLM智能体，结合分布内强化学习",
+      "canonical_evidence": "自进化LLM智能体，结合分布内强化学习",
+      "llm_tldr_en": "Proposes Q-Evolve, a self-evolving framework for LLM agents unifying automatic process-reward labeling and policy learning via in-distribution RL.",
+      "llm_tldr_cn": "本文提出Q-Evolve，一个自进化LLM智能体框架，通过分布内强化学习统一自动过程奖励标注和策略学习。在每次迭代中，利用混合离策略数据集（专家演示和智能体生成轨迹）学习分布内评论家，稳定稀疏奖励下的贝尔曼更新。实验表明Q-Evolve在复杂长程任务上显著优于现有方法，实现了真正的自我进化。",
+      "llm_tldr": "本文提出Q-Evolve，一个自进化LLM智能体框架，通过分布内强化学习统一自动过程奖励标注和策略学习。在每次迭代中，利用混合离策略数据集（专家演示和智能体生成轨迹）学习分布内评论家，稳定稀疏奖励下的贝尔曼更新。实验表明Q-Evolve在复杂长程任务上显著优于现有方法，实现了真正的自我进化。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-evolving recursive agent",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.06960v1",
+      "source": "arxiv",
+      "title": "Tree-of-Experience: A Structured Experience-Management Solution for Self-Evolving Agents under Low-Repetition and Implicit-Reward Environments",
+      "abstract": "Experience-based self-evolution is crucial for LLM agents, but existing benchmarks often assume explicit goals, stable task patterns, and clear feedback. We study a more challenging setting: low-repetition tasks with implicit rewards, where past experience is difficult to reuse and feedback is delayed, noisy, and outcome-level. We introduce \\textsc{FinEvolveBench}, a temporally controlled benchmark for financial sentiment prediction that links daily news-driven predictions to future excess returns. We further propose Tree-of-Experience (ToE), a structured experience-management method that organizes, retrieves, validates, and updates agent experience. Experiments show that general-purpose experience mechanisms do not consistently outperform no-experience baselines, while ToE achieves stronger overall performance. These results highlight the importance of structured experience management for self-evolving agents in implicit-reward environments.",
+      "authors": [
+        "Zihao Deng",
+        "Yining Zhu",
+        "Leiming Wang",
+        "Jingfei Lu",
+        "Junbo Wang",
+        "Chuncheng Ran",
+        "Yu Yang",
+        "Dixuan Yang",
+        "Jikun Shen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-05T06:39:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.06960v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-evolving agents under low-repetition implicit-reward environments",
+      "llm_evidence_cn": "低重复隐式奖励环境下的自进化智能体",
+      "llm_evidence": "低重复隐式奖励环境下的自进化智能体",
+      "canonical_evidence": "低重复隐式奖励环境下的自进化智能体",
+      "llm_tldr_en": "Proposes Tree-of-Experience (ToE) for self-evolving agents in low-repetition tasks with implicit rewards, using structured experience management to organize and update agent experiences.",
+      "llm_tldr_cn": "现有自进化基准假设明确目标和稳定反馈，但现实任务常具有低重复性和隐式奖励。本文提出Tree-of-Experience（ToE）方法，对智能体经验进行结构化组织、检索、验证和更新，并在金融情绪预测基准FinEvolveBench上验证。结果显示ToE显著提升了在复杂环境中的自进化效果。",
+      "llm_tldr": "现有自进化基准假设明确目标和稳定反馈，但现实任务常具有低重复性和隐式奖励。本文提出Tree-of-Experience（ToE）方法，对智能体经验进行结构化组织、检索、验证和更新，并在金融情绪预测基准FinEvolveBench上验证。结果显示ToE显著提升了在复杂环境中的自进化效果。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-evolving recursive agent",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.07412v1",
+      "source": "arxiv",
+      "title": "Socratic-SWE: Self-Evolving Coding Agents via Trace-Derived Agent Skills",
+      "abstract": "LLM-driven software engineering agents have become a central testbed for real-world language-model capability, yet their training remains limited by the availability of high-quality SWE tasks. Existing synthetic data methods typically create tasks through fixed mutation or bug-injection procedures, making the resulting distributions largely independent of the agent's own weaknesses and training progress. We introduce Socratic-SWE, a closed-loop self-evolution framework that reuses the agent's historical solving traces as a source of training signal. Rather than treating traces only as evidence for reward computation, Socratic-SWE distills them into structured agent skills that summarize recurring failures and effective repair patterns. These skills then guide the generation of targeted repair tasks in real repositories. Candidate tasks are checked through execution-based validation and scored with a solver-gradient alignment reward, so that the retained tasks are both verifiable and useful for improving the Solver. The updated Solver produces new traces, enabling the task curriculum to adapt over successive rounds. Across SWE-bench Verified, SWE-bench Lite, SWE-bench Pro, and Terminal-Bench 2.0, Socratic-SWE consistently improves over self-evolving baselines under the same compute budget, reaching 50.40% on SWE-bench Verified after three iterations. These results suggest that solving traces can serve as a scalable substrate for self-evolving SWE agents.",
+      "authors": [
+        "Chuan Xiao",
+        "Zhengbo Jiao",
+        "Shaobo Wang",
+        "Wei Wang",
+        "Bing Zhao",
+        "Hu Wei",
+        "Linfeng Zhang",
+        "Lin Qu"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "published": "2026-06-05T16:00:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.07412v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "self-evolving coding agents using historical traces",
+      "llm_evidence_cn": "利用历史轨迹自演化的编码智能体",
+      "llm_evidence": "利用历史轨迹自演化的编码智能体",
+      "canonical_evidence": "利用历史轨迹自演化的编码智能体",
+      "llm_tldr_en": "Socratic-SWE reuses solving traces to extract structured agent skills, forming a closed-loop self-evolution framework for software engineering agents.",
+      "llm_tldr_cn": "针对高质量软件工程任务稀缺的问题，Socratic-SWE 提出闭环自演化框架，通过将历史求解轨迹蒸馏为结构化的智能体技能来驱动技能积累。这些技能总结了重复失败和有效修复模式，引导后续轨迹生成，实现了无需人工标注的持续改进。",
+      "llm_tldr": "针对高质量软件工程任务稀缺的问题，Socratic-SWE 提出闭环自演化框架，通过将历史求解轨迹蒸馏为结构化的智能体技能来驱动技能积累。这些技能总结了重复失败和有效修复模式，引导后续轨迹生成，实现了无需人工标注的持续改进。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-evolving recursive agent",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.02461v1",
+      "source": "arxiv",
+      "title": "AGENTCL: Toward Rigorous Evaluation of Continual Learning in Language Agents",
+      "abstract": "Language agents spend substantial inference time solving individual tasks, yet the experience acquired in one episode is often underutilized in future episodes. Continual learning expects an agent to accumulate reusable experience across a stream of tasks, improve over time, and avoid interference from irrelevant experiences. Unfortunately, existing benchmarks struggle to evaluate continual learning in language agents rigorously. Most efforts focus on retrieval and reasoning over long-context conversations or documents, while recent lifelong-adaptation benchmarks often rely on naive task streams with limited analysis of cross-task relationships, making it difficult to understand what an agent learns and reuses over time. This paper presents an evaluation framework AgentCL for continual learning in agents, centered on controlled task streams and metrics for transfer gains. AGENTCL constructs compositional streams where earlier sub-solutions, evidence, or workflows are intentionally reusable in later tasks, and contrasts them with naive streams where such reusability is not guaranteed. We use the benchmark to evaluate non-parametric memory designs for continual learning. To diagnose how memory design choices affect continual learning, we develop MemProbe, a probing method that stores interactions, insights, and skills, while filtering unreliable experiences during consolidation. Empirical analysis across coding, deep research, and language understanding/reasoning tasks shows that naive streams offer limited ability to distinguish memory designs, whereas controlled streams more clearly distinguish their plasticity. Meanwhile, naive and held-out settings often yield limited gains and can expose memory-induced degradation. These results highlight the need for stronger memory designs that balance plasticity and stable reuse.",
+      "authors": [
+        "Yiheng Shu",
+        "Bernal Jiménez Gutiérrez",
+        "Saisri Padmaja Jonnalagedda",
+        "Yuguang Yao",
+        "Huan Sun",
+        "Yu Su"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-01T16:32:59+00:00",
+      "link": "https://arxiv.org/pdf/2606.02461v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "continual learning for agent self-improvement",
+      "llm_evidence_cn": "持续学习使智能体持续改进",
+      "llm_evidence": "持续学习使智能体持续改进",
+      "canonical_evidence": "持续学习使智能体持续改进",
+      "llm_tldr_en": "Presents AGENTCL, a benchmark for rigorous evaluation of continual learning in language agents, assessing experience accumulation and reuse.",
+      "llm_tldr_cn": "本文提出AGENTCL基准，用于严格评估语言智能体的持续学习能力，包括经验积累、跨任务迁移和干扰避免。现有基准在任务间关系分析上不足，AGENTCL通过设计可控任务序列和度量指标，揭示了现有模型在可重用性和抗干扰方面的缺陷。",
+      "llm_tldr": "本文提出AGENTCL基准，用于严格评估语言智能体的持续学习能力，包括经验积累、跨任务迁移和干扰避免。现有基准在任务间关系分析上不足，AGENTCL通过设计可控任务序列和度量指标，揭示了现有模型在可重用性和抗干扰方面的缺陷。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-improving agents through reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05622v1",
+      "source": "arxiv",
+      "title": "AdaPlanBench: Evaluating Adaptive Planning in Large Language Model Agents under World and User Constraints",
+      "abstract": "Planning for real-world problems by language models often involves both world and user constraints, which may not be fully specified upfront and are progressively disclosed through interaction. However, existing benchmarks still underexplore adaptive planning under such progressively revealed dual constraints. To address this gap, we introduce AdaPlanBench, a dynamic interactive benchmark for evaluating whether Large Language Model (LLM) agents can adaptively plan and re-plan under progressively revealed world and user constraints. AdaPlanBench is built on 307 household tasks, with a scalable constraint construction pipeline that augments each task with dual constraints. At runtime, agents interact with the environment in a multi-turn protocol where hidden constraints are revealed only when the agent proposes a plan that violates them, requiring iterative plan revision under accumulating feedback. This makes planning challenging, as agents must infer and track constraints from feedback while re-planning effectively. Experiments on ten leading LLMs show that adaptive planning under dual constraints remains challenging, with the best model reaching only 67.75% accuracy. We further observe that performance degrades as more constraints accumulate, with user constraints posing a particularly large challenge and failures often stemming from weaker physical grounding and reduced effectiveness. These results establish AdaPlanBench as a testbed for dual-constrained interactive planning and highlight the challenge of reliable adaptation to dynamically revealed constraints in LLM agents.",
+      "authors": [
+        "Jiayu Liu",
+        "Cheng Qian",
+        "Zhenhailong Wang",
+        "Bingxuan Li",
+        "Jiateng Liu",
+        "Heng Wang",
+        "Jeonghwan Kim",
+        "Yumeng Wang",
+        "Xiusi Chen",
+        "Yi R. Fung",
+        "Heng Ji"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-04T02:47:29+00:00",
+      "link": "https://arxiv.org/pdf/2606.05622v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "adaptive planning under progressively revealed constraints",
+      "llm_evidence_cn": "渐进揭示约束下的自适应规划",
+      "llm_evidence": "渐进揭示约束下的自适应规划",
+      "canonical_evidence": "渐进揭示约束下的自适应规划",
+      "llm_tldr_en": "Introduces AdaPlanBench, a dynamic benchmark for evaluating LLM agents' adaptive planning under progressively revealed world and user constraints, built on 307 household tasks.",
+      "llm_tldr_cn": "现实规划问题中世界和用户约束常在交互中逐步披露，但现有基准缺乏对这种自适应规划的评估。本文提出AdaPlanBench，包含307个家庭任务和可扩展约束构建流程，在运行时渐进揭露双约束。实验表明当前LLM智能体在自适应重规划方面仍有显著不足。",
+      "llm_tldr": "现实规划问题中世界和用户约束常在交互中逐步披露，但现有基准缺乏对这种自适应规划的评估。本文提出AdaPlanBench，包含307个家庭任务和可扩展约束构建流程，在运行时渐进揭露双约束。实验表明当前LLM智能体在自适应重规划方面仍有显著不足。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.07074v1",
+      "source": "arxiv",
+      "title": "SlimSearcher: Training Efficiency-Aware Web Agents via Adaptive Reward Gating",
+      "abstract": "Deep research agents have demonstrated remarkable capabilities in complex information-seeking tasks, yet this power comes at a steep computational cost. Driven by accuracy-focused training paradigms, current models adopt brute-force strategies characterized by blind tool dependency and performative reasoning-generating long, redundant trajectories that are far from necessary for resolving these tasks, leading to wasteful tool calls and excessive token consumption. To overcome this efficiency trap, we propose SlimSearcher, a principled framework that pushes the Pareto frontier between accuracy and computational cost across both Supervised Fine-Tuning (SFT) and Reinforcement Learning (RL). In the SFT stage, SlimSearcher employs Pareto-efficient filtration to distill trajectories that are both successful and economical, guiding the model toward inherently efficiency-aware search behaviors. During RL, we introduce Adaptive Reward Gating, a dynamic reward-shaping mechanism that evaluates relative tool and token efficiency within a sampled cohort. By cascading these adaptive efficiency metrics with a strict correctness gate, our approach effectively avoids the brevity bias associated with absolute penalties and mitigates reward hacking. Extensive experiments on long-horizon benchmarks, including GAIA, BrowseComp, and XBenchDeepSearch, demonstrate that SlimSearcher reduces average tool-call rounds by 17%-58% while maintaining or improving accuracy.",
+      "authors": [
+        "Zequn Xie",
+        "Junjie Wang",
+        "Dan Yang",
+        "Jie Feng",
+        "Yue Shen",
+        "Jian Wang",
+        "Jinjie Gu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-05T09:10:50+00:00",
+      "link": "https://arxiv.org/pdf/2606.07074v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses reinforcement learning with adaptive reward gating to train efficient web agents, enabling self-improvement through RL",
+      "llm_evidence_cn": "通过自适应奖励门控的强化学习训练高效网络智能体，实现基于强化学习的自我改进",
+      "llm_evidence": "通过自适应奖励门控的强化学习训练高效网络智能体，实现基于强化学习的自我改进",
+      "canonical_evidence": "通过自适应奖励门控的强化学习训练高效网络智能体，实现基于强化学习的自我改进",
+      "llm_tldr_en": "SlimSearcher uses adaptive reward gating in both SFT and RL to train efficiency-aware web agents, pushing the Pareto frontier between accuracy and cost.",
+      "llm_tldr_cn": "深度研究智能体因追求准确而采用暴力策略导致高计算成本。SlimSearcher提出在监督微调和强化学习阶段均使用自适应奖励门控来推动准确率和计算成本的帕累托前沿。该方法在保持准确性的同时显著降低了token消耗。",
+      "llm_tldr": "深度研究智能体因追求准确而采用暴力策略导致高计算成本。SlimSearcher提出在监督微调和强化学习阶段均使用自适应奖励门控来推动准确率和计算成本的帕累托前沿。该方法在保持准确性的同时显著降低了token消耗。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "self-improving agents through reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2606.05761v1",
+      "source": "arxiv",
+      "title": "SubtleMemory: A Benchmark for Fine-Grained Relational Memory Discrimination in Long-Horizon AI Agents",
+      "abstract": "Persistent AI assistants, such as OpenClaw, accumulate large collections of related memories over long-term interactions. As these memories grow, they may reinforce one another, diverge across contexts, or directly conflict, making correct assistance depend on memory relations rather than isolated recall. Existing long-term memory benchmarks rarely probe how agents preserve and utilize such relations during downstream tasks. To address this gap, we introduce SubtleMemory, a benchmark for fine-grained relational memory discrimination in long-running AI agents. SubtleMemory constructs relation-controlled latent semantic artifacts whose variants instantiate complementary, nuanced, or contradictory relations, and embeds them into realistic user-agent histories, requiring agents to recover distributed relational structures during later queries and instructions. The benchmark contains 1,522 evaluation instances over 10 long histories, grounded in 1,090 relation-controlled memory-variant sets and spanning user-related and non-user-related queries. Evaluating six standalone memory systems, two Claw-style agents with native memory modules, and three Claw-style agents with plugin memory modules, we find that current systems remain weak on fine-grained relational memory discrimination. We further introduce diagnostic protocols that reveal distinct capability profiles across memory preservation, retrieval, and downstream reasoning stages.",
+      "authors": [
+        "Wenxuan Wang",
+        "Haoyu Sun",
+        "Fukuan Hou",
+        "Mingyang Song",
+        "Weinan Zhang",
+        "Yu Cheng",
+        "Yang Yang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-04T06:43:11+00:00",
+      "link": "https://arxiv.org/pdf/2606.05761v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "benchmark for long-horizon AI agents memory discrimination",
+      "llm_evidence_cn": "面向长时AI智能体的细粒度关系记忆辨别基准",
+      "llm_evidence": "面向长时AI智能体的细粒度关系记忆辨别基准",
+      "canonical_evidence": "面向长时AI智能体的细粒度关系记忆辨别基准",
+      "llm_tldr_en": "SubtleMemory benchmarks fine-grained relational memory discrimination in long-running AI agents, probing how agents preserve and utilize memory relations.",
+      "llm_tldr_cn": "现有长期记忆基准很少关注智能体如何保留和利用记忆关系。SubtleMemory 通过构造关系控制的潜在语义伪影来评估智能体在长时任务中对微妙关系的辨别能力。实验揭示了现有智能体在关系记忆上的不足，为改进长期记忆机制提供了方向。",
+      "llm_tldr": "现有长期记忆基准很少关注智能体如何保留和利用记忆关系。SubtleMemory 通过构造关系控制的潜在语义伪影来评估智能体在长时任务中对微妙关系的辨别能力。实验揭示了现有智能体在关系记忆上的不足，为改进长期记忆机制提供了方向。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.06787v1",
+      "source": "arxiv",
+      "title": "AdMem: Advanced Memory for Task-solving Agents",
+      "abstract": "Large Language Models (LLMs) show promise as tool-using agents but remain limited in long-horizon tasks that require remembering, organizing, and reusing knowledge. Prior memory approaches aim to resolve the situation, but mainly focus on storing factual information. Recent work on procedural memory improves task reuse, yet often reduces to replaying past successes without addressing failure cases or online scalability. We introduce a unified and automatic memory framework that integrates semantic, episodic, and procedural memory in a bi-level design combining short-term and long-term stores. A multi-agent architecture with actor, memory, and critic agents enables automatic memory generation, reward annotation, and adaptive retrieval. Long-term memory is managed through reward-based evaluation, merging, and pruning, ensuring scalability and continual improvement. Experiments across various environments show that our approach improves robustness and success on long multi-turn tasks compared to existing baselines. This work highlights the importance of comprehensive, adaptive memory for advancing LLM-based agents.",
+      "authors": [
+        "Runzhe Wang",
+        "Huilin Lu",
+        "Shengjie Liu",
+        "Li Dong",
+        "Jason Zhu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-05T00:11:57+00:00",
+      "link": "https://arxiv.org/pdf/2606.06787v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unified memory framework with multi-agent architecture for long-horizon tasks",
+      "llm_evidence_cn": "统一记忆框架配合多智能体架构，用于长周期任务",
+      "llm_evidence": "统一记忆框架配合多智能体架构，用于长周期任务",
+      "canonical_evidence": "统一记忆框架配合多智能体架构，用于长周期任务",
+      "llm_tldr_en": "AdMem introduces a unified memory framework integrating semantic, episodic, and procedural memory in a bi-level design, with a multi-agent architecture for automatic memory generation, reward annotation, and adaptive retrieval, enhancing long-horizon task solving.",
+      "llm_tldr_cn": "针对LLM智能体在长周期任务中记忆组织困难的问题，AdMem提出统一自动记忆框架，融合语义、情景和程序记忆，采用双层长短时存储设计。多智能体架构实现记忆自动生成、奖励标注和自适应检索，长期记忆通过奖励管理。实验证明，该框架显著提升了复杂任务中的知识重用和问题解决能力。",
+      "llm_tldr": "针对LLM智能体在长周期任务中记忆组织困难的问题，AdMem提出统一自动记忆框架，融合语义、情景和程序记忆，采用双层长短时存储设计。多智能体架构实现记忆自动生成、奖励标注和自适应检索，长期记忆通过奖励管理。实验证明，该框架显著提升了复杂任务中的知识重用和问题解决能力。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.07200v1",
+      "source": "arxiv",
+      "title": "Learning Multi-Agent Communication Protocol: Study on Information Entropy Efficiency in MARL",
+      "abstract": "Multi-Agent Systems (MAS) have emerged as a fundamental paradigm for distributed problem-solving, where autonomous agents collaborate to achieve complex objectives. Within this framework, Multi-Agent Reinforcement Learning (MARL) with communication has demonstrated remarkable success in cooperative tasks. However, existing approaches predominantly pursue performance gains through increasingly complex architectures and expanding communication overhead, lacking principled metrics to evaluate the efficiency of information exchange. In this paper, we focus on enabling agents to learn efficient multi-agent communication protocols that balance performance and information compactness. We propose the Information Entropy Efficiency Index (IEI), a novel metric that quantifies the ratio between message entropy and task performance in learned communication protocols. A lower IEI indicates more compact and efficient message representations. By incorporating IEI into training loss functions, we encourage agents to develop communication protocols that achieve high performance with improved communication efficiency. Extensive experiments across diverse MARL algorithms demonstrate that our approach achieves equivalent or superior task performance compared to baseline methods while improving communication efficiency. These findings challenge the prevailing assumption that performance improvements require complex architectures or increased communication overhead and highlight the potential of improving both task success and communication efficiency to enable scalable MAS.",
+      "authors": [
+        "Xinren Zhang",
+        "Zixin Zhong",
+        "Jiadong Yu"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA"
+      ],
+      "published": "2026-06-05T12:08:37+00:00",
+      "link": "https://arxiv.org/pdf/2606.07200v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-agent communication in MARL for collaboration",
+      "llm_evidence_cn": "多智能体通信协议，提升协作效率",
+      "llm_evidence": "多智能体通信协议，提升协作效率",
+      "canonical_evidence": "多智能体通信协议，提升协作效率",
+      "llm_tldr_en": "Proposes an Information Entropy Efficiency Index for multi-agent communication protocols in MARL, balancing performance and information compactness.",
+      "llm_tldr_cn": "本文提出信息熵效率指数，用于衡量多智能体强化学习（MARL）中通信协议的性能与信息紧凑性的平衡。现有方法追求性能而忽视通信开销，该指标提供原则性度量，帮助智能体学习高效协作的通信策略。实验表明该方法在保证任务成功率的同时显著降低通信开销。",
+      "llm_tldr": "本文提出信息熵效率指数，用于衡量多智能体强化学习（MARL）中通信协议的性能与信息紧凑性的平衡。现有方法追求性能而忽视通信开销，该指标提供原则性度量，帮助智能体学习高效协作的通信策略。实验表明该方法在保证任务成功率的同时显著降低通信开销。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Multi agent collaboration and long horizon reasoning in complex task solving",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2606.07299v1",
+      "source": "arxiv",
+      "title": "DuMate-DeepResearch: An Auditable Multi-Agent System with Recursive Search and Rubric-Grounded Reasoning",
+      "abstract": "Deep Research (DR) has emerged as a new agentic paradigm to tackle complex, open-ended research tasks, demanding systems that can iteratively frame problems, acquire evidence, verify sources, and synthesize long-form reports. In practice, however, current DR systems are constrained by four interrelated limitations: long-horizon planning over an underspecified scope, the bottleneck of decomposing and scheduling such tasks within a single agent, hallucination risk in long-form synthesis, and limited process auditability. This technical report presents DuMate-DeepResearch, a multi-agent DR framework built on the Qianfan Agent Foundry. The framework decouples the Agent Core, which handles task understanding, planning, and scheduling, from an extensible Tool Ecosystem for retrieval, evidence acquisition, and report rendering, making every intermediate decision and tool invocation explicitly traceable. Building on this infrastructure, DuMate-DeepResearch further introduces three mechanisms: (i) a graph-based dynamic planning strategy expands the research roadmap coarse-to-fine and continuously revises it through reflection, re-planning, backtracking, and parallel branching; (ii) a recursive two-level execution design delegates each complex search sub-task to an inner Search Agent that runs its own planning loop, isolating noisy retrieval and stabilizing long-horizon execution; (iii) a rubric-based test-time optimization mechanism dynamically generates task-specific quality criteria and uses them as live reasoning scaffolds for evidence-grounded synthesis and adaptive stopping. Across two deep research benchmarks, DuMate-DeepResearch establishes new state-of-the-art results: the best overall score (58.03%) on DeepResearch Bench, and the best overall score (61.95%) on DeepResearch Bench II while ranking first in information recall and analysis.",
+      "authors": [
+        "Lingyong Yan",
+        "Can Xu",
+        "Yukun Zhao",
+        "Wenxuan Li",
+        "Qingyang Chen",
+        "Jiulong Wu",
+        "Wenli Song",
+        "Xiangnan Li",
+        "Weixian Shi",
+        "Yiqun Chen",
+        "Xuchen Ma",
+        "Yuchen Li",
+        "Jiashu Zhao",
+        "Shuaiqiang Wang",
+        "Jianmin Wu",
+        "Dawei Yin"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-05T14:10:48+00:00",
+      "link": "https://arxiv.org/pdf/2606.07299v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "query:Agent-Papers"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-agent deep research with recursive search and rubric-grounded reasoning",
+      "llm_evidence_cn": "多智能体深度研究系统，包含递归搜索与基于规则推理",
+      "llm_evidence": "多智能体深度研究系统，包含递归搜索与基于规则推理",
+      "canonical_evidence": "多智能体深度研究系统，包含递归搜索与基于规则推理",
+      "llm_tldr_en": "DuMate-DeepResearch presents a multi-agent deep research framework with recursive search and rubric-grounded reasoning, decoupling agent core into planning, search, and synthesis components, addressing long-horizon planning and hallucination risks.",
+      "llm_tldr_cn": "针对深度研究任务中长周期规划困难、单智能体调度瓶颈、幻觉风险等问题，提出DuMate-DeepResearch多智能体框架。它将智能体核心解耦为任务理解、规划、搜索和合成模块，采用递归搜索和基于规则的推理。该框架增强了可审计性，并通过多智能体协作降低了长期综合报告中的幻觉风险。",
+      "llm_tldr": "针对深度研究任务中长周期规划困难、单智能体调度瓶颈、幻觉风险等问题，提出DuMate-DeepResearch多智能体框架。它将智能体核心解耦为任务理解、规划、搜索和合成模块，采用递归搜索和基于规则的推理。该框架增强了可审计性，并通过多智能体协作降低了长期综合报告中的幻觉风险。",
+      "llm_tags": [
+        "query:agent-papers"
+      ],
+      "matched_query_tag": "query:agent-papers",
+      "matched_query_text": "Search for recursive agents with self improvement mechanisms",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

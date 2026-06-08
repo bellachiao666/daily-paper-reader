@@ -6,51 +6,53 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-07
-- 运行时间：2026-06-07 21:09:33 UTC
+- 最新运行日期：2026-06-08
+- 运行时间：2026-06-08 21:41:31 UTC
 - 运行状态：成功
-- 本次总论文数：9
-- 精读区：5
-- 速读区：4
+- 本次总论文数：11
+- 精读区：4
+- 速读区：7
 
 ### 今日简报（AI）
-今日聚焦LLM智能体的协同进化与提示优化，精读两篇高分论文：EvoTrainer实现智能体策略与训练工具的共同进化，SePO提出系统提示的自我进化方法。
-
-最值得关注的方向是自主强化学习与提示自优化，它们显著提升LLM智能体的适应性与效率。
-
-建议普通读者优先精读这两篇9.0分论文，并跟进速读中MADDPG的多智能体学习增强方法，以把握前沿趋势。
-- 详情：[/202606/07/README](/202606/07/README)
+今日精读聚焦LLM Agent自主进化，两篇9.0高分论文《Open-World Self-Evolution》与《In-Distribution Optimization》揭示了自我提升新范式；速读则覆盖Agent持续学习评估（AGENTCL 7.0）与效率感知搜索（SlimSearcher 7.0）。值得优先关注Agent在开放环境中自主进化的机制，以及如何系统性评估其持续学习能力。建议下一步探索将自我进化与效率优化结合的实用框架。
+- 详情：[/202606/08/README](/202606/08/README)
 
 ### 精读区论文标签
-1. [EvoTrainer: Co-Evolving LLM Policies and Training Harnesses for Autonomous Agentic Reinforcement Learning](/202606/07/2606.03108v1-evotrainer-co-evolving-llm-policies-and-training-harnesses-for-autonomous-agentic-reinforcement-learning)  
+1. [OpenSkill: Open-World Self-Evolution for LLM Agents](/202606/08/2606.06741v1-openskill-open-world-self-evolution-for-llm-agents)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：协同进化LLM策略和训练装备实现自主智能体强化学习，达成自我改进
-2. [SePO: Self-Evolving Prompt Agent for System Prompt Optimization](/202606/07/2606.04465v1-sepo-self-evolving-prompt-agent-for-system-prompt-optimization)  
+   evidence：从零开始无监督的自进化
+2. [Self-evolving LLM agents with in-distribution Optimization](/202606/08/2606.07367v1-self-evolving-llm-agents-with-in-distribution-optimization)  
    标签：评分：9.0/10、query:agent-papers
-   evidence：利用进化搜索实现自演化提示智能体用于系统提示优化
-3. [POIROT: Interrogating Agents for Failure Detection in Multi-Agent Systems](/202606/07/2606.02282v1-poirot-interrogating-agents-for-failure-detection-in-multi-agent-systems)  
+   evidence：自进化LLM智能体，结合分布内强化学习
+3. [Tree-of-Experience: A Structured Experience-Management Solution for Self-Evolving Agents under Low-Repetition and Implicit-Reward Environments](/202606/08/2606.06960v1-tree-of-experience-a-structured-experience-management-solution-for-self-evolving-agents-under-low-repetition-and-implicit-reward-environments)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：多智能体系统故障检测协议
-4. [COMAP: Co-Evolving World Models and Agent Policies for LLM Agents](/202606/07/2606.02372v1-comap-co-evolving-world-models-and-agent-policies-for-llm-agents)  
+   evidence：低重复隐式奖励环境下的自进化智能体
+4. [Socratic-SWE: Self-Evolving Coding Agents via Trace-Derived Agent Skills](/202606/08/2606.07412v1-socratic-swe-self-evolving-coding-agents-via-trace-derived-agent-skills)  
    标签：评分：8.0/10、query:agent-papers
-   evidence：世界模型与策略的协同进化
-5. [Policy and World Modeling Co-Training for Language Agents](/202606/07/2606.02388v1-policy-and-world-modeling-co-training-for-language-agents)  
-   标签：评分：8.0/10、query:agent-papers
-   evidence：使用强化学习和世界模型协同训练改进智能体
+   evidence：利用历史轨迹自演化的编码智能体
 
 ### 速读区论文标签
-1. [Enhancing the MADDPG Algorithm for Multi-Agent Learning via Action Inference and Importance Sampling](/202606/07/2606.05021v1-enhancing-the-maddpg-algorithm-for-multi-agent-learning-via-action-inference-and-importance-sampling)  
+1. [AGENTCL: Toward Rigorous Evaluation of Continual Learning in Language Agents](/202606/08/2606.02461v1-agentcl-toward-rigorous-evaluation-of-continual-learning-in-language-agents)  
    标签：评分：7.0/10、query:agent-papers
-   evidence：对多智能体强化学习算法的改进以促进协作
-2. [SkillAdaptor: Self-Adapting Skills for LLM Agents from Trajectories](/202606/07/2606.01311v1-skilladaptor-self-adapting-skills-for-llm-agents-from-trajectories)  
+   evidence：持续学习使智能体持续改进
+2. [SlimSearcher: Training Efficiency-Aware Web Agents via Adaptive Reward Gating](/202606/08/2606.07074v1-slimsearcher-training-efficiency-aware-web-agents-via-adaptive-reward-gating)  
+   标签：评分：7.0/10、query:agent-papers
+   evidence：通过自适应奖励门控的强化学习训练高效网络智能体，实现基于强化学习的自我改进
+3. [AdaPlanBench: Evaluating Adaptive Planning in Large Language Model Agents under World and User Constraints](/202606/08/2606.05622v1-adaplanbench-evaluating-adaptive-planning-in-large-language-model-agents-under-world-and-user-constraints)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：从失败轨迹自适应技能以实现智能体自我改进
-3. [AGENTCL: Toward Rigorous Evaluation of Continual Learning in Language Agents](/202606/07/2606.02461v1-agentcl-toward-rigorous-evaluation-of-continual-learning-in-language-agents)  
+   evidence：渐进揭示约束下的自适应规划
+4. [SubtleMemory: A Benchmark for Fine-Grained Relational Memory Discrimination in Long-Horizon AI Agents](/202606/08/2606.05761v1-subtlememory-a-benchmark-for-fine-grained-relational-memory-discrimination-in-long-horizon-ai-agents)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：评估语言智能体的持续学习能力，是随时间自我改进的关键方面
-4. [Agentic Chain-of-Thought Steering for Efficient and Controllable LLM Reasoning](/202606/07/2606.03965v1-agentic-chain-of-thought-steering-for-efficient-and-controllable-llm-reasoning)  
+   evidence：面向长时AI智能体的细粒度关系记忆辨别基准
+5. [AdMem: Advanced Memory for Task-solving Agents](/202606/08/2606.06787v1-admem-advanced-memory-for-task-solving-agents)  
    标签：评分：6.0/10、query:agent-papers
-   evidence：智能体引导推理，实现高效多步骤任务
+   evidence：统一记忆框架配合多智能体架构，用于长周期任务
+6. [Learning Multi-Agent Communication Protocol: Study on Information Entropy Efficiency in MARL](/202606/08/2606.07200v1-learning-multi-agent-communication-protocol-study-on-information-entropy-efficiency-in-marl)  
+   标签：评分：6.0/10、query:agent-papers
+   evidence：多智能体通信协议，提升协作效率
+7. [DuMate-DeepResearch: An Auditable Multi-Agent System with Recursive Search and Rubric-Grounded Reasoning](/202606/08/2606.07299v1-dumate-deepresearch-an-auditable-multi-agent-system-with-recursive-search-and-rubric-grounded-reasoning)  
+   标签：评分：6.0/10、query:agent-papers
+   evidence：多智能体深度研究系统，包含递归搜索与基于规则推理
 
 
 <div class="dpr-home-promo-card">
