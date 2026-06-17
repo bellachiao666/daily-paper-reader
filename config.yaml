@@ -114,6 +114,44 @@ subscriptions:
             updated_at: '2026-06-05T07:22:59.702958+00:00'
       updated_at: '2026-06-05T07:53:21.509Z'
       paused: true
+    - tag: masrl
+      description: 多智能体强化学习与LLM Agent
+      enabled: true
+      paper_sources:
+        - arxiv
+        - biorxiv
+      keywords:
+        - keyword: multi-agent reinforcement learning
+          keyword_cn: 多智能体强化学习
+          query: multi-agent reinforcement learning
+        - keyword: multi-agent cooperation
+          keyword_cn: 多智能体协作
+          query: multi-agent cooperation
+        - keyword: multi-agent communication
+          keyword_cn: 多智能体通信
+          query: multi-agent communication
+        - keyword: credit assignment
+          keyword_cn: 信用分配
+          query: credit assignment in multi-agent RL
+        - keyword: training paradigm
+          keyword_cn: 训练范式
+          query: training paradigm for multi-agent RL
+        - keyword: open source code
+          keyword_cn: 开源代码
+          query: open source multi-agent RL code
+      intent_queries:
+        - query: multi agent RL with LLM agents cooperation and communication
+          query_cn: 基于LLM智能体的多智能体协作与通信
+          enabled: true
+          source: manual
+          note: ''
+        - query: credit assignment methods and open source implementations in multi agent reinforcement learning
+          query_cn: 多智能体强化学习中的信用分配方法与开源实现
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-06-17T02:39:05.189Z'
+      paused: true
 source_backends:
   arxiv:
     papers_table: arxiv_papers
