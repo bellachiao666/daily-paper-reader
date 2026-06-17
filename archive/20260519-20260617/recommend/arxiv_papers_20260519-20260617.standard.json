@@ -1,0 +1,1432 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-17T02:47:58.954286+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 41,
+    "deep_cap": 6,
+    "deep_selected": 25,
+    "quick_candidates": 25,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2606.04202v1",
+      "source": "arxiv",
+      "title": "SMAC-Talk: A Natural Language Extension of the StarCraft Multi-Agent Challenge for Large Language Models",
+      "abstract": "As LLMs become more widely deployed, they are increasingly expected to work alongside other AI agents rather than operating in isolation. Effective coordination in these settings requires agents to communicate, share information and make decisions under uncertainty. We introduce SMAC-Talk, a natural language extension of the StarCraft Multi-Agent Challenge for evaluating LLM-based agents in cooperative multi-agent environments. The environment has several key features such as decentralized control, partial observability and long-horizon decision making. SMAC-Talk includes a natural language communication channel which is used to probe agent coordination and trust. We use this communication channel to construct different evaluation scenarios, including settings with an embedded deceptive communicator that tries to disrupt and deceive allies through communication alone. We provide three agents for benchmarking using 4 models from the Qwen3.5 family and study how reasoning structure, memory and model scale affect coordination between agents. We release SMAC-Talk as an open benchmark to support the research community in developing and evaluating LLM agents in cooperative multi-agent settings.",
+      "authors": [
+        "Joel Sol",
+        "Homayoun Najjaran"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-02T20:40:04+00:00",
+      "link": "https://arxiv.org/pdf/2606.04202v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "LLM-based multi-agent cooperation with natural language communication in SMAC",
+      "llm_evidence_cn": "基于LLM的多智能体合作，在SMAC环境中使用自然语言通信",
+      "llm_evidence": "基于LLM的多智能体合作，在SMAC环境中使用自然语言通信",
+      "canonical_evidence": "基于LLM的多智能体合作，在SMAC环境中使用自然语言通信",
+      "llm_tldr_en": "Introduces SMAC-Talk, a natural language extension of StarCraft Multi-Agent Challenge for evaluating LLM agents in cooperative multi-agent tasks with communication.",
+      "llm_tldr_cn": "随着大语言模型的普及，它们常需要与其他AI代理协作。但缺乏评估LLM代理在合作多智能体环境中通信与协调能力的平台。SMAC-Talk将经典的星际争霸多智能体挑战扩展为自然语言环境，支持去中心化控制、部分可观测性和长时域决策。通过自然语言通信通道，研究者可探测代理的协调与信任机制。该环境为LLM多智能体合作研究提供了标准化评估基准。",
+      "llm_tldr": "随着大语言模型的普及，它们常需要与其他AI代理协作。但缺乏评估LLM代理在合作多智能体环境中通信与协调能力的平台。SMAC-Talk将经典的星际争霸多智能体挑战扩展为自然语言环境，支持去中心化控制、部分可观测性和长时域决策。通过自然语言通信通道，研究者可探测代理的协调与信任机制。该环境为LLM多智能体合作研究提供了标准化评估基准。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi agent RL with LLM agents cooperation and communication",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.20548v1",
+      "source": "arxiv",
+      "title": "What Do Agents Communicate? Characterizing Information Exchange in Multi-Agent Systems",
+      "abstract": "Large Language Models (LLMs) have enabled collaborative Multi-Agent (MA) systems, where interacting agents improve performance through diverse reasoning and iterative refinement. However, these systems remain vulnerable to error propagation, where early-stage information degrades downstream reasoning. To address this, we conduct a systematic analysis of inter-agent communication to identify which information drives MA performance. We find that the absence of reasoning and verification in inter-agent communication significantly degrades performance. Based on these insights, we propose Category-Aware Recovery Augmentation (technique), which enforces the presence of critical information during communication. recovers up to 86.2% of failed cases. Our results highlight the key role of information quality in effective MA collaboration. Our code is available at https://anonymous.4open.science/r/cara_mas",
+      "authors": [
+        "Yong Jin Chun",
+        "Iftekhar Ahmed"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA"
+      ],
+      "published": "2026-05-19T22:51:52+00:00",
+      "link": "https://arxiv.org/pdf/2605.20548v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "analysis of inter-agent communication in LLM multi-agent systems",
+      "llm_evidence_cn": "LLM多智能体系统中智能体间通信分析",
+      "llm_evidence": "LLM多智能体系统中智能体间通信分析",
+      "canonical_evidence": "LLM多智能体系统中智能体间通信分析",
+      "llm_tldr_en": "Systematic analysis of inter-agent communication reveals that missing reasoning and verification degrades performance; proposed Category-Aware Recovery Augmentation recovers 86.2% failures.",
+      "llm_tldr_cn": "基于LLM的多智能体系统依赖通信协作，但存在错误传播问题。本文系统分析了智能体间信息交换，发现缺乏推理和验证信息显著降低性能。据此提出类别感知恢复增强技术，强制在通信中包含关键信息，在多个任务上恢复高达86.2%的失败案例。",
+      "llm_tldr": "基于LLM的多智能体系统依赖通信协作，但存在错误传播问题。本文系统分析了智能体间信息交换，发现缺乏推理和验证信息显著降低性能。据此提出类别感知恢复增强技术，强制在通信中包含关键信息，在多个任务上恢复高达86.2%的失败案例。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.21085v1",
+      "source": "arxiv",
+      "title": "Decoupling Communication from Policy: Robust MARL under Bandwidth Constraints",
+      "abstract": "Communication enables coordination in multi-agent reinforcement learning (MARL), but many real-world applications, e.g., search-and-rescue with drone swarms, operate under severe bandwidth constraints. Many communication architectures still expose a coupled bottleneck in which a shared latent representation is used for both policy execution and inter-agent communication. Consequently, reducing message size directly limits the policy's latent space, often leading to significant performance degradation. We address this with two contributions. First, we introduce $β$, a normalised per-agent bandwidth budget that unifies sparsity, rounds, and message dimension into a single comparable constraint. Second, we provide SLIM, a minimal architecture that decouples the communication pathway from the policy's latent representation, allowing us to isolate the effect of bandwidth from the effect of policy capacity while benefiting from in-step communication. We evaluate our method on several partially-observable MARL benchmarks, where communication is essential. Our approach achieves state-of-the-art performance and exhibits scalability and robustness under limited communication, with only marginal degradation as bandwidth is reduced.",
+      "authors": [
+        "Alexi Canesse",
+        "Benoît Goupil",
+        "Jesse Read",
+        "Sonia Vanier"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-05-20T12:21:08+00:00",
+      "link": "https://arxiv.org/pdf/2605.21085v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "robust MARL under bandwidth constraints with decoupled communication and policy",
+      "llm_evidence_cn": "在带宽约束下解耦通信与策略的鲁棒多智能体强化学习",
+      "llm_evidence": "在带宽约束下解耦通信与策略的鲁棒多智能体强化学习",
+      "canonical_evidence": "在带宽约束下解耦通信与策略的鲁棒多智能体强化学习",
+      "llm_tldr_en": "Proposes SLIM architecture that decouples communication from policy execution in MARL, enabling robust performance under severe bandwidth constraints.",
+      "llm_tldr_cn": "在现实多智能体强化学习应用中（如无人机搜救），带宽严重受限。现有通信架构常将策略执行与通信耦合在共享潜在表示中，减小消息尺寸会直接损害策略性能。本文提出SLIM最小架构，将通信与策略解码，并引入归一化带宽预算β。实验表明SLIM在极低带宽下仍能保持有效协作，为实际部署提供了关键方法。",
+      "llm_tldr": "在现实多智能体强化学习应用中（如无人机搜救），带宽严重受限。现有通信架构常将策略执行与通信耦合在共享潜在表示中，减小消息尺寸会直接损害策略性能。本文提出SLIM最小架构，将通信与策略解码，并引入归一化带宽预算β。实验表明SLIM在极低带宽下仍能保持有效协作，为实际部署提供了关键方法。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.22721v1",
+      "source": "arxiv",
+      "title": "Self-Evolving Multi-Agent Systems via Decentralized Memory",
+      "abstract": "Self-evolving multi-agent systems (MAS) have emerged as a promising route to LLM agents that continually improve from experience, with persistent memory at their foundation. However, existing designs almost exclusively adopt a centralized repository shared across agents, incurring communication and coordination overhead, raising privacy concerns, and collapsing agent diversity. We propose DecentMem, a decentralized memory framework in which each agent maintains its own dual-pool memory -- an exploitation pool of consolidated past trajectories and an exploration pool of LLM-generated candidates for unseen contexts. The two pools are reweighted online based on stage-wise feedback from an LLM-as-a-judge. Theoretically, we prove that this design guarantees global reachability of the solution space and achieves $O(\\log T)$ cumulative regret, matching the stochastic bandit lower bound up to constants. In practice, across three MAS frameworks (AutoGen, DyLAN, AgentNet), three Qwen3 backbones (4B/8B/14B), two Gemma4 backbones (E2B/E4B) and five benchmarks spanning math, code, QA, and embodied tasks, DecentMem improves average accuracy by up to 23.8% over the strongest centralized memory baseline and by up to 52.5% over the no-memory baseline, while reducing token usage by up to 49%.",
+      "authors": [
+        "Guangya Hao",
+        "Yunbo Long",
+        "Zhuokai Zhao"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA"
+      ],
+      "published": "2026-05-21T16:55:40+00:00",
+      "link": "https://arxiv.org/pdf/2605.22721v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-evolving multi-agent systems with decentralized memory",
+      "llm_evidence_cn": "基于去中心化记忆的自进化多智能体系统",
+      "llm_evidence": "基于去中心化记忆的自进化多智能体系统",
+      "canonical_evidence": "基于去中心化记忆的自进化多智能体系统",
+      "llm_tldr_en": "DecentMem provides decentralized dual-pool memory for self-evolving LLM multi-agent systems, with theoretical guarantees on global reachability.",
+      "llm_tldr_cn": "现有自进化多智能体系统采用中心化记忆库，带来通信开销和多样性丧失。本文提出DecentMem，每个智能体维护双池记忆：利用池存储过去轨迹，探索池存储LLM生成的候选方案，并基于LLM评判在线调整权重。理论上证明该设计保证全局可达性，实验表明在多种任务中优于中心化方案。",
+      "llm_tldr": "现有自进化多智能体系统采用中心化记忆库，带来通信开销和多样性丧失。本文提出DecentMem，每个智能体维护双池记忆：利用池存储过去轨迹，探索池存储LLM生成的候选方案，并基于LLM评判在线调整权重。理论上证明该设计保证全局可达性，实验表明在多种任务中优于中心化方案。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.25421v1",
+      "source": "arxiv",
+      "title": "HyLaT: Efficient Multi-Agent Communication via Hybrid Latent-Text Protocol",
+      "abstract": "Communication protocol design is a central challenge in large language model-based multi-agent systems. Existing single-channel approaches face an inherent communication trilemma: text-based methods are interpretable but verbose, while latent-space methods are efficient but opaque and limited to unidirectional workflows. Inspired by multi-channel communication theory, we propose HyLaT, a hybrid latent-text communication protocol that transmits elaborate cognitive signals through a latent channel for efficiency, while expressing concise critical signals in natural language to preserve interpretability and precision. We introduce a two-stage training framework combining single-agent hybrid generation learning and multi-agent interactive co-training, enabling agents to generate and interpret hybrid messages across multiple rounds of interaction. Experiments demonstrate that HyLaT reduces communication overhead significantly while maintaining competitive task performance, with strong generalization and robustness across diverse settings.",
+      "authors": [
+        "Xinyi Mou",
+        "Siyuan Wang",
+        "Zejun Li",
+        "Yulan He",
+        "Zhongyu Wei"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-05-25T04:50:15+00:00",
+      "link": "https://arxiv.org/pdf/2605.25421v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "hybrid latent-text communication protocol for LLM-based multi-agent systems",
+      "llm_evidence_cn": "混合潜在-文本通信协议用于基于LLM的多智能体系统",
+      "llm_evidence": "混合潜在-文本通信协议用于基于LLM的多智能体系统",
+      "canonical_evidence": "混合潜在-文本通信协议用于基于LLM的多智能体系统",
+      "llm_tldr_en": "Introduces HyLaT, a hybrid communication protocol combining latent channel for efficiency and text for interpretability, with two-stage training.",
+      "llm_tldr_cn": "针对现有基于大语言模型的多智能体系统中通信协议面临的可解释性、效率与双向性不可兼得的三难问题，提出混合潜在-文本通信协议HyLaT，通过潜在通道传输复杂认知信号保持效率，同时用自然语言表达关键信号确保可解释性。设计了两阶段训练框架，包括单智能体混合生成学习和多智能体交互协同训练。实验表明HyLaT在多种协作任务上提升了通信效率与任务成功率。",
+      "llm_tldr": "针对现有基于大语言模型的多智能体系统中通信协议面临的可解释性、效率与双向性不可兼得的三难问题，提出混合潜在-文本通信协议HyLaT，通过潜在通道传输复杂认知信号保持效率，同时用自然语言表达关键信号确保可解释性。设计了两阶段训练框架，包括单智能体混合生成学习和多智能体交互协同训练。实验表明HyLaT在多种协作任务上提升了通信效率与任务成功率。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26178v1",
+      "source": "arxiv",
+      "title": "ATOM: Instantiating Budget-Controllable Multi-Agent Collaboration via Nucleus-Electron Hierarchy",
+      "abstract": "Large Language Model (LLM)-based multi-agent systems rely on optimized collaboration topologies to balance performance and communication costs. However, current methods struggle with the inherent stability-extensibility trade-off and often misalign computational budgets with query difficulty. We propose \\textsc{ATOM}, an adaptive framework that generates budget-controllable collaboration graphs via a novel task-driven reinforcement learning paradigm. Inspired by atomic structures, \\textsc{ATOM} employs a nucleus-electron hierarchy: it maintains a stable, offline-learned collaboration backbone (the nucleus) while dynamically activating query-conditioned agents (electrons) during inference. Crucially, a complexity-aware budgeting strategy aligns resource consumption with task demands by estimating query difficulty to strictly regulate electron instantiation. Extensive experiments across six diverse benchmarks demonstrate that \\textsc{ATOM} achieves state-of-the-art performance while improving token efficiency by up to $30\\%$ compared to strong baselines.",
+      "authors": [
+        "Xinkui Zhao",
+        "Sai Liu",
+        "Yifan Zhang",
+        "Qingyu Ma",
+        "Zewen Lin",
+        "Naibo Wang",
+        "Guanjie Cheng",
+        "Chang Liu",
+        "Yueshen Xu"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.LG"
+      ],
+      "published": "2026-05-25T06:41:11+00:00",
+      "link": "https://arxiv.org/pdf/2605.26178v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "budget-controllable LLM multi-agent collaboration via task-driven RL",
+      "llm_evidence_cn": "通过任务驱动强化学习实现预算可控的LLM多智能体协作",
+      "llm_evidence": "通过任务驱动强化学习实现预算可控的LLM多智能体协作",
+      "canonical_evidence": "通过任务驱动强化学习实现预算可控的LLM多智能体协作",
+      "llm_tldr_en": "Proposes ATOM, an adaptive framework using task-driven RL to generate budget-controllable collaboration graphs for LLM-based multi-agent systems.",
+      "llm_tldr_cn": "现有LLM多智能体系统在平衡性能与通信成本时面临稳定-扩展性权衡，且计算预算与查询难度不匹配。ATOM提出核-电子层次结构：离线学习稳定的协作骨干（核）并在推理时动态激活条件代理（电子）。通过任务驱动强化学习生成预算可控的协作图，并引入复杂度感知预算模块。实验表明ATOM在保持性能的同时有效控制通信成本，适应不同难度查询。",
+      "llm_tldr": "现有LLM多智能体系统在平衡性能与通信成本时面临稳定-扩展性权衡，且计算预算与查询难度不匹配。ATOM提出核-电子层次结构：离线学习稳定的协作骨干（核）并在推理时动态激活条件代理（电子）。通过任务驱动强化学习生成预算可控的协作图，并引入复杂度感知预算模块。实验表明ATOM在保持性能的同时有效控制通信成本，适应不同难度查询。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi agent RL with LLM agents cooperation and communication",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26278v1",
+      "source": "arxiv",
+      "title": "Coalition Free Energy and Adaptive Precision in Multi-Agent Cooperation",
+      "abstract": "Cooperative multi-agent systems require robust mechanisms for credit assignment under uncertainty. Here we introduce a variational framework, termed the Game-Theoretic Free Energy Principle (GT-FEP), that models coalition formation through a Gibbs distribution over interacting agents. Within this framework, we derive a precision-dependent formulation of cooperative credit assignment and show that an agent's Shapley value exhibits a non-monotonic relationship with sensory precision beta, reflecting a trade-off between noisy inference and overconfident local estimation. Motivated by this observation, we propose Adaptive Precision Control (APC), an online adaptation algorithm that dynamically adjusts observation precision using local estimates of cooperative contribution. We evaluate APC on real-world Swiss roundabout trajectory datasets and on a multi-agent control task derived from the same trajectories. Across both settings, APC adapts to changing noise conditions online and achieves performance comparable to the best fixed precision without prior tuning. Our results connect variational inference, cooperative game theory, and adaptive multi-agent coordination, and suggest that precision adaptation can improve robust cooperation under uncertainty.",
+      "authors": [
+        "Djamel Bouchaffra",
+        "Faycal Ykhlef",
+        "Mustapha Lebbah",
+        "Hanane Azzag"
+      ],
+      "primary_category": "cs.GT",
+      "categories": [
+        "cs.GT"
+      ],
+      "published": "2026-05-25T19:04:30+00:00",
+      "link": "https://arxiv.org/pdf/2605.26278v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Variational credit assignment with Shapley value and adaptive precision in multi-agent cooperation",
+      "llm_evidence_cn": "多智能体协作中基于变分法的信用分配（含Shapley值和自适应精度）",
+      "llm_evidence": "多智能体协作中基于变分法的信用分配（含Shapley值和自适应精度）",
+      "canonical_evidence": "多智能体协作中基于变分法的信用分配（含Shapley值和自适应精度）",
+      "llm_tldr_en": "This paper introduces GT-FEP, a variational framework for cooperative credit assignment in multi-agent systems, deriving precision-dependent Shapley value and proposing APC for online adaptation.",
+      "llm_tldr_cn": "合作多智能体系统中信用分配面临不确定性挑战。本文提出博弈论自由能原理（GT-FEP），通过吉布斯分布建模联盟，导出精度依赖的Shapley值，并基于此设计自适应精度控制（APC）算法。实验验证了方法的有效性，为多智能体信用分配提供了新理论视角。",
+      "llm_tldr": "合作多智能体系统中信用分配面临不确定性挑战。本文提出博弈论自由能原理（GT-FEP），通过吉布斯分布建模联盟，导出精度依赖的Shapley值，并基于此设计自适应精度控制（APC）算法。实验验证了方法的有效性，为多智能体信用分配提供了新理论视角。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26646v1",
+      "source": "arxiv",
+      "title": "UnityMAS-O: A General RL Optimization Framework for LLM-Based Multi-Agent Systems",
+      "abstract": "LLM-based multi-agent systems decompose complex tasks into interacting roles, but most remain manually orchestrated by prompts, tools, and control rules, while agents are rarely optimized through a unified reinforcement learning interface. Existing RL post-training frameworks mainly target single-policy optimization and lack abstractions for user-defined multi-agent workflows, structured interaction, role-specific credit assignment, and configurable parameter sharing.   We present UnityMAS-O, a general RL optimization framework for LLM-based multi-agent systems. UnityMAS-O treats the complete workflow as the optimization unit, rather than a single response or policy trajectory. It represents workflows through four first-class objects: logical agent roles, graph trajectories, user-defined rewards, and agent--model mappings. This decouples logical agents from physical model parameters, supporting full sharing, full separation, and partial sharing, with rewards assigned at role, turn, and trajectory levels.   UnityMAS-O extends verl with a Ray-based star-topology runtime. A central controller executes workflows, invokes tools, records structured trajectories, and assembles rewards; model-local worker groups handle rollout, buffering, advantage computation, and distributed PPO-style updates. Users can define agents, workflows, model mappings, and rewards without rewriting the optimization infrastructure.   We instantiate UnityMAS-O on retrieval-augmented QA, iterative agentic search, and reflective code generation. Across Natural Questions, HotpotQA, and held-out code tasks, multi-agent RL improves manually specified workflows after optimization, with especially large gains for smaller models and strict code all-passed metrics. These results show that UnityMAS-O can serve as a reusable substrate for converting diverse LLM-based multi-agent workflows into trainable multi-agent RL systems.",
+      "authors": [
+        "Yiqun Chen",
+        "Wei Yang",
+        "Erhan Zhang",
+        "Shijie Wang",
+        "Qi Liu",
+        "Zechun Niu",
+        "Bin Zhang",
+        "Haitao Li",
+        "Rui Li",
+        "Lingyong Yan",
+        "Jinyuan Feng",
+        "Biqing Qi",
+        "Xiaochi Wei",
+        "Yan Gao",
+        "Yi Wu",
+        "Yao Hu",
+        "Jiaxin Mao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-05-26T07:30:03+00:00",
+      "link": "https://arxiv.org/pdf/2605.26646v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "general RL optimization framework for LLM-based multi-agent systems",
+      "llm_evidence_cn": "针对基于LLM的多智能体系统的通用RL优化框架",
+      "llm_evidence": "针对基于LLM的多智能体系统的通用RL优化框架",
+      "canonical_evidence": "针对基于LLM的多智能体系统的通用RL优化框架",
+      "llm_tldr_en": "Presents UnityMAS-O, a general RL optimization framework treating complete workflow as optimization unit, enabling role-specific credit assignment and parameter sharing.",
+      "llm_tldr_cn": "当前基于大语言模型的多智能体系统大多依赖人工编排，缺乏统一的强化学习优化接口。为此提出UnityMAS-O，一个通用RL优化框架，将完整工作流而非单一响应作为优化单元，支持用户自定义的多智能体工作流、结构化交互、角色特定信用分配和可配置参数共享。实验表明该框架有效提升了LLM多智能体系统的协作效率，并提供了可扩展的优化范式。",
+      "llm_tldr": "当前基于大语言模型的多智能体系统大多依赖人工编排，缺乏统一的强化学习优化接口。为此提出UnityMAS-O，一个通用RL优化框架，将完整工作流而非单一响应作为优化单元，支持用户自定义的多智能体工作流、结构化交互、角色特定信用分配和可配置参数共享。实验表明该框架有效提升了LLM多智能体系统的协作效率，并提供了可扩展的优化范式。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "training paradigm for multi-agent RL",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26684v1",
+      "source": "arxiv",
+      "title": "Beyond Trajectory-Level Attribution: Graph-Based Credit Assignment for Agentic Reinforcement Learning",
+      "abstract": "Group-based reinforcement learning (RL) methods have achieved remarkable success in improving the performance of large language models (LLMs) and have been rapidly extended to agentic tasks. However, their credit assignment relies heavily on coarse-grained trajectory-level attribution according to final outcomes, making it difficult to capture the contribution of individual steps, such as valuable steps obscured within failed trajectories. To uncover latent information and enable more faithful step-level credit assignment, we propose Graph-based Group Policy Optimization (GraphGPO), which first aggregates all rollout trajectories into a unified state-transition graph and then estimates the distance from each state to the task goal using the global information encoded in the graph. Finally, GraphGPO assigns credit to each edge by estimating a graph-based advantage, based on how much the transition reduces the distance to the task goal. In this way, GraphGPO significantly improves training efficiency and achieves state-of-the-art performance across a range of challenging benchmarks.",
+      "authors": [
+        "Xin Cheng",
+        "Shuo He",
+        "Lang Feng",
+        "HaiYang Xu",
+        "Ming Yan",
+        "Lei Feng",
+        "Bo An"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-26T08:23:34+00:00",
+      "link": "https://arxiv.org/pdf/2605.26684v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "graph-based credit assignment for agentic RL",
+      "llm_evidence_cn": "基于图的智能体强化学习信用分配",
+      "llm_evidence": "基于图的智能体强化学习信用分配",
+      "canonical_evidence": "基于图的智能体强化学习信用分配",
+      "llm_tldr_en": "GraphGPO aggregates trajectories into a state-transition graph for step-level credit assignment in agentic RL, overcoming trajectory-level limitations.",
+      "llm_tldr_cn": "基于组的强化学习方法在智能体任务中依赖粗糙的轨迹级信用分配，难以捕捉失败轨迹中的有效步骤。本文提出GraphGPO，将所有回滚轨迹聚合为统一状态转移图，通过估计状态到最终结果的距离实现步级信用分配。实验证明该方法能够揭示隐藏信息，实现更忠诚的步级信用分配。",
+      "llm_tldr": "基于组的强化学习方法在智能体任务中依赖粗糙的轨迹级信用分配，难以捕捉失败轨迹中的有效步骤。本文提出GraphGPO，将所有回滚轨迹聚合为统一状态转移图，通过估计状态到最终结果的距离实现步级信用分配。实验证明该方法能够揭示隐藏信息，实现更忠诚的步级信用分配。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.27466v1",
+      "source": "arxiv",
+      "title": "AgensFlow: A Coordination-Policy Substrate for Multi-Agent Systems",
+      "abstract": "Multi-agent systems built on large language models (LLMs) require many coordination choices that are difficult to fix a priori: which skill protocol to invoke, which agent role should perform a subtask, which model to bind to each role, how roles should interact, when to use retrieval or verification, and when to omit a step entirely. These choices interact with task regime and operational constraints, so static pipelines and one-off model comparisons provide only a limited view of the design space. This paper introduces AgensFlow, an open-source framework that treats multi-agent coordination as an online policy-learning problem under partial observability. The framework makes coordination decisions observable and learnable from repeated trajectories, rather than treating skill, role, model, topology, and evaluation choices as fixed pipeline design.   AgensFlow is evaluated on two corpora: distributed-systems incident tasks and security-advisory tasks. The evaluation shows three main results: learned routing reaches a higher-quality operating point than a fixed pipeline baseline on coordination-heavy classes; skip:X isolates topology compression as a meaningful part of the substrate; and warm-started policy graphs can reduce exploration cost while preserving plateau quality. Overall, the results support that learned, auditable routing can improve coordination-heavy multi-agent workflows over static wiring.",
+      "authors": [
+        "Nicole Koenigstein"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI",
+        "cs.LG",
+        "stat.ML"
+      ],
+      "published": "2026-05-26T08:10:52+00:00",
+      "link": "https://arxiv.org/pdf/2605.27466v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "open-source framework for learning coordination policies in multi-agent systems",
+      "llm_evidence_cn": "用于多智能体系统协调策略学习的开源框架",
+      "llm_evidence": "用于多智能体系统协调策略学习的开源框架",
+      "canonical_evidence": "用于多智能体系统协调策略学习的开源框架",
+      "llm_tldr_en": "AgensFlow treats multi-agent coordination as an online policy-learning problem, providing an open-source framework that learns coordination decisions from repeated trajectories.",
+      "llm_tldr_cn": "多智能体LLM系统面临众多协调选择，静态流程难以适应。本文提出AgensFlow，一个开源框架，将多智能体协调视为在线策略学习问题，通过重复轨迹学习协调决策。该框架使协调决策可观察、可学习，提供了比静态管线更灵活的自适应协调方案。实验表明其在多种任务上优于固定协调策略。",
+      "llm_tldr": "多智能体LLM系统面临众多协调选择，静态流程难以适应。本文提出AgensFlow，一个开源框架，将多智能体协调视为在线策略学习问题，通过重复轨迹学习协调决策。该框架使协调决策可观察、可学习，提供了比静态管线更灵活的自适应协调方案。实验表明其在多种任务上优于固定协调策略。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.27532v1",
+      "source": "arxiv",
+      "title": "SCALE-COMM: Shared, Contrastively-Aligned Latent Embeddings for MARL Communication",
+      "abstract": "Emergent communication enables partially observant Autonomous Mobile Robots (AMRs) to coordinate effectively in decentralized multi-agent reinforcement learning (MARL) settings. However, existing approaches often struggle with unstable communication protocols, ungrounded message semantics, and interference between communication learning and policy optimization, leading to degraded coordination over time. We propose SCALE-COMM (Shared, Contrastively-Aligned Latent Embeddings for COMMunication), a self-supervised framework for learning compact, stable, and policy-relevant communication representations. SCALE-COMM decouples communication learning from policy optimization by training low-dimensional latent messages that capture task-relevant planning and traffic information, while enforcing consistency across agents and time. Across standard MARL benchmarks and a realistic warehouse coordination task, SCALE-COMM consistently outperforms existing communication frameworks in both representation quality and task performance. The learned communication space yields improved stability, sample efficiency, and throughput under policy fine-tuning, demonstrating the effectiveness of representation-driven communication for scalable multi-agent coordination.",
+      "authors": [
+        "Mahmoud Abouelyazid",
+        "Eman Hammad"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-26T18:06:19+00:00",
+      "link": "https://arxiv.org/pdf/2605.27532v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "self-supervised communication representation learning for decentralized MARL",
+      "llm_evidence_cn": "用于去中心化MARL的自监督通信表示学习",
+      "llm_evidence": "用于去中心化MARL的自监督通信表示学习",
+      "canonical_evidence": "用于去中心化MARL的自监督通信表示学习",
+      "llm_tldr_en": "Proposes SCALE-COMM, a self-supervised framework for learning compact, stable communication representations in decentralized MARL, decoupling communication from policy optimization.",
+      "llm_tldr_cn": "去中心化多智能体强化学习中的涌现通信面临协议不稳定、语义无根基等问题。SCALE-COMM提出自监督框架，学习紧凑、稳定且与策略相关的通信表示。通过对比学习对齐潜在嵌入，将通信学习与策略优化解耦，减少干扰。在标准MARL测试场景中，SCALE-COMM实现了更稳定的通信协议和更好的协调性能，为MARL中的通信提供了有效方法。",
+      "llm_tldr": "去中心化多智能体强化学习中的涌现通信面临协议不稳定、语义无根基等问题。SCALE-COMM提出自监督框架，学习紧凑、稳定且与策略相关的通信表示。通过对比学习对齐潜在嵌入，将通信学习与策略优化解耦，减少干扰。在标准MARL测试场景中，SCALE-COMM实现了更稳定的通信协议和更好的协调性能，为MARL中的通信提供了有效方法。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.27586v1",
+      "source": "arxiv",
+      "title": "You Only Align Once: Propagating Cooperative Behaviors in Multi-Agent Systems through Seed Agents",
+      "abstract": "Ensuring agent behaviors in distributed open multi-agent systems remains challenging, especially as populations grow and unaligned agents may exist. We show that a single aligned agent can propagate cooperative behaviors to untrained agents purely through natural language interaction, a phenomenon we term Alignment Propagation. We study this in the Red-Black Game, a team-based iterated Prisoner's Dilemma in which teammates deliberate and vote to determine their team's collective action. By distilling the cooperative reasoning and persuasive dialogues of a teacher model into a Qwen-3-14B, we obtain a seed agent that, when placed among four untrained teammates, doubles the cooperation rate from 24.8% to 62.2%, outperforming the teacher model and a vanilla Gemini-3.1-Pro. Remarkably, a seed trained exclusively on the RedBlack Game transfers zero-shot to Sugarscape, a spatially grounded survival simulation with pairwise trading, achieving a 91.5% trade success rate versus a 21.6% baseline. Our results reframe multi-agent alignment from an exhaustive per-agent training problem to a scalable social capability that can be engineered through strategic seed placement.",
+      "authors": [
+        "Nicole Hsing",
+        "Asuka Yuxi Zheng",
+        "Yi Zhao",
+        "Haoqin Tu",
+        "Jen-Tse Huang"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.CL"
+      ],
+      "published": "2026-05-26T18:56:02+00:00",
+      "link": "https://arxiv.org/pdf/2605.27586v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "propagating cooperative behaviors via seed agents in multi-agent systems",
+      "llm_evidence_cn": "通过种子智能体在多智能体系统中传播合作行为",
+      "llm_evidence": "通过种子智能体在多智能体系统中传播合作行为",
+      "canonical_evidence": "通过种子智能体在多智能体系统中传播合作行为",
+      "llm_tldr_en": "Shows a single aligned LLM agent can propagate cooperative behavior to untrained agents via natural language, dramatically improving cooperation rates.",
+      "llm_tldr_cn": "本文发现一个单一对齐的种子智能体可通过自然语言交互将合作行为传播给未训练智能体，称为对齐传播。在红黑博弈中，种子智能体将团队合作率从24.8%提升至62.2%，证明了语言驱动合作传播的有效性，为开放多智能体系统行为控制提供新思路。",
+      "llm_tldr": "本文发现一个单一对齐的种子智能体可通过自然语言交互将合作行为传播给未训练智能体，称为对齐传播。在红黑博弈中，种子智能体将团队合作率从24.8%提升至62.2%，证明了语言驱动合作传播的有效性，为开放多智能体系统行为控制提供新思路。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.28699v1",
+      "source": "arxiv",
+      "title": "TRACER: Turn-level Regret Matching with Inner Reinforcement Credit for Cooperative Multi-LLM Reasoning",
+      "abstract": "Large language models increasingly rely on either reinforcement learning or multi-agent prompting to improve reasoning, yet these two paradigms remain difficult to combine. Directly applying single-agent reinforcement learning to multi-turn multi-agent systems faces following dilemmas: i) Sparse rewards, role-level free-riding and excessive training overhead. ii) Agents only imitate to collaborate. iii) Fixed collaboration protocol falls into oscillating local optimum. We introduce TRACER, a turn-level reinforcement framework for cooperative multi-LLM reasoning. TRACER separates collaborative decision making into a controller-regret layer, where controllers learn whether the agents should speak or skip the current round through regret matching, and a generation-credit layer, which optimizes proposer and reviewer utterances with role-specific GSPO rewards. This design i) assigns credit at the level of both action modes and generated utterances, thus avoiding free-riding and sparse rewards. We only expand the choices made by the controllers, thus greatly reducing computational cost of training. Moreover, ii) agents acquire collaborative capability as they learn when to utter and what to speak. Finally, iii) by designing binary actions ingeniously, we extend classical game theory established for finite action spaces to deep learning, thus achieving mathematically rigorous convergence. We train all local RL-style methods on the GSM8K training split and evaluate on held-out GSM8K, MATH500, and GPQA-Diamond to measure in-domain accuracy, cross-benchmark generalization, inference cost, and correction-preservation behavior. The resulting framework provides a compact and reproducible testbed for studying learned collaboration policies beyond fixed debate, voting, or aggregation protocols. Code is available at https://github.com/Shark-Forest/TRACER.",
+      "authors": [
+        "Chusen Li",
+        "Zhou Liu",
+        "Shuigeng Zhou",
+        "Wentao Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-05-27T16:25:21+00:00",
+      "link": "https://arxiv.org/pdf/2605.28699v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Reinforcement framework for cooperative multi-LLM reasoning with inner credit",
+      "llm_evidence_cn": "用于协作多LLM推理的强化框架，包含内部信用分配",
+      "llm_evidence": "用于协作多LLM推理的强化框架，包含内部信用分配",
+      "canonical_evidence": "用于协作多LLM推理的强化框架，包含内部信用分配",
+      "llm_tldr_en": "TRACER introduces a turn-level reinforcement framework for cooperative multi-LLM reasoning, using regret matching and inner reinforcement credit to address sparse rewards and free-riding.",
+      "llm_tldr_cn": "针对多轮多LLM协作中奖励稀疏、搭便车和训练开销大的问题，本文提出TRACER，一个轮次级强化推理框架。它将协作决策分离为控制器-遗憾层，让控制器学习智能体是否该发言。实验表明TRACER有效提升协作推理性能，为多LLM协作与强化学习的结合提供了新范式。",
+      "llm_tldr": "针对多轮多LLM协作中奖励稀疏、搭便车和训练开销大的问题，本文提出TRACER，一个轮次级强化推理框架。它将协作决策分离为控制器-遗憾层，让控制器学习智能体是否该发言。实验表明TRACER有效提升协作推理性能，为多LLM协作与强化学习的结合提供了新范式。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi agent RL with LLM agents cooperation and communication",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30136v1",
+      "source": "arxiv",
+      "title": "Enhancing Multi-Agent Communication through Attention Steering with Context Relevance",
+      "abstract": "LLM-based multi-agent systems have demonstrated remarkable performance on complex tasks through collaborative reasoning. However, these systems tend to rapidly accumulate extremely long conversation histories during interaction. As conversations lengthen, relevant information is increasingly diluted by irrelevant context, leading to degraded performance. In this work, we present Agent-Radar, a training-free context management method that dynamically steers each agent's attention toward relevant context with a novel temporal and spatial decay mechanism. Our experiments demonstrate that Agent-Radar outperforms state-of-the-art methods across five different benchmarks, yielding gains of up to 7.64 absolute points. Furthermore, our analysis shows that Agent-Radar remains effective and robust as the number of agents and interaction rounds increases. Finally, the ablation study shows that core components in Agent-Radar are crucial to performance and generalizable in different settings.",
+      "authors": [
+        "Hongxiang Zhang",
+        "Yuan Tian",
+        "Tianyi Zhang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-05-28T16:02:52+00:00",
+      "link": "https://arxiv.org/pdf/2605.30136v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Attention steering for multi-agent communication context management",
+      "llm_evidence_cn": "面向多智能体通信的注意力引导上下文管理",
+      "llm_evidence": "面向多智能体通信的注意力引导上下文管理",
+      "canonical_evidence": "面向多智能体通信的注意力引导上下文管理",
+      "llm_tldr_en": "Agent-Radar proposes a training-free context management method for LLM-based multi-agent systems, using temporal and spatial decay to steer attention to relevant context and improve communication.",
+      "llm_tldr_cn": "LLM多智能体系统长对话导致相关信息被稀释。本文提出Agent-Radar，一种无训练上下文管理方法，利用新颖的时空衰减机制动态引导每个智能体关注相关上下文。在五个基准上平均提升7.64个绝对点，有效增强多智能体通信效率。",
+      "llm_tldr": "LLM多智能体系统长对话导致相关信息被稀释。本文提出Agent-Radar，一种无训练上下文管理方法，利用新颖的时空衰减机制动态引导每个智能体关注相关上下文。在五个基准上平均提升7.64个绝对点，有效增强多智能体通信效率。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30227v1",
+      "source": "arxiv",
+      "title": "Unifying Temporal and Structural Credit Assignment in LLM-Based Multi-Agent Prompt Optimization",
+      "abstract": "While Multi-Agent Systems (MAS) empower Large Language Models to tackle complex reasoning tasks through collaborative interaction, optimizing their dynamics remains a formidable challenge due to the discrete, non-differentiable nature of the computation graph and the sparsity of global supervisory signals. Existing black-box optimizers struggle to attribute trajectory-level failure to specific local components, resulting in inefficient, high-variance exploration. We argue that tractable MAS optimization needs structural inductive biases to disentangle error signals. We propose temporal and structural credit assignment, which decomposes the objective along two axes: (i) temporal credit, using state-space bottlenecks to identify critical rounds, and (ii) structural credit, using stationary role policies to isolate agent contributions. Leveraging these decomposed signals, we introduce a discrete, verbalized block coordinate descent algorithm for iterative refinement. Rather than indiscriminate global updates, it alternates between optimizing role prompts and aggregation protocols, using LLM-generated \"proxy gradients\" to target only the identified weak links. Across diverse reasoning benchmarks, our approach substantially reduces query complexity while improving performance, providing a principled and interpretable path toward self-improving MAS.",
+      "authors": [
+        "Wenwu Li",
+        "Yuran Song",
+        "Mingze Zhao",
+        "Bo Jin",
+        "Wenhao Li"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "published": "2026-05-28T16:57:57+00:00",
+      "link": "https://arxiv.org/pdf/2605.30227v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "unifies temporal and structural credit assignment for LLM-based multi-agent systems",
+      "llm_evidence_cn": "统一了基于LLM的多智能体系统中的时序和结构信用分配",
+      "llm_evidence": "统一了基于LLM的多智能体系统中的时序和结构信用分配",
+      "canonical_evidence": "统一了基于LLM的多智能体系统中的时序和结构信用分配",
+      "llm_tldr_en": "Proposes temporal and structural credit assignment for optimizing LLM-based multi-agent systems, decomposing objective along two axes to improve optimization efficiency.",
+      "llm_tldr_cn": "针对基于大语言模型的多智能体系统优化中信用分配稀疏且难以追踪的问题，提出时序和结构信用分配方法，将目标沿时间轴（通过状态空间瓶颈）和结构轴（组件级归因）分解，从而有效解耦错误信号，提升优化效率。实验证明该方法优于现有黑盒优化器，为多智能体协作学习提供了新的范式。",
+      "llm_tldr": "针对基于大语言模型的多智能体系统优化中信用分配稀疏且难以追踪的问题，提出时序和结构信用分配方法，将目标沿时间轴（通过状态空间瓶颈）和结构轴（组件级归因）分解，从而有效解耦错误信号，提升优化效率。实验证明该方法优于现有黑盒优化器，为多智能体协作学习提供了新的范式。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30461v1",
+      "source": "arxiv",
+      "title": "Scalable Constrained Multi-Agent Reinforcement Learning via State Augmentation and Consensus for Separable Dynamics",
+      "abstract": "We present a distributed approach for constrained Multi-Agent Reinforcement Learning (MARL) that combines state-augmented policy learning with distributed consensus over dual variables. Our method targets systems where agents have separable dynamics but must coordinate to satisfy global resource constraints, a setting in which, as we demonstrate empirically, independent learning fails to produce feasible solutions because agents cannot determine appropriate individual contributions toward collective constraint satisfaction. The key technical contribution is showing that lightweight neighbor-to-neighbor consensus over Lagrange multipliers suffices for globally coordinated constraint enforcement while preserving the scalability of independent training. Each agent learns a single augmented policy offline, conditioned on both its local state and a dual variable encoding constraint feedback. During execution, agents reach agreement on this dual variable through local communication alone. We prove that under mild connectivity assumptions, the consensus error among agents' multipliers is bounded, and show that this translates to a bounded constraint violation that decreases with graph connectivity and the number of consensus rounds. Unlike centralized training with decentralized execution (CTDE) approaches, whose complexity grows at least quadratically with agent count, our method scales linearly in both training and execution. Experiments on smart grid demand response demonstrate that consensus coordination is \\emph{essential for feasibility}: without it, agents satisfy grid capacity constraints only by indefinitely postponing demand, a degenerate non-solution. With consensus, agents converge to a shared dual variable and satisfy both grid constraints and demand fulfillment, scaling to thousands of agents while CTDE baselines are limited to dozens.",
+      "authors": [
+        "Santiago Amaya-Corredor",
+        "Miguel Calvo-Fullana",
+        "Anders Jonsson"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-28T18:37:16+00:00",
+      "link": "https://arxiv.org/pdf/2605.30461v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "constrained multi-agent RL with state augmentation and consensus",
+      "llm_evidence_cn": "带约束的多智能体强化学习，结合状态增强与共识",
+      "llm_evidence": "带约束的多智能体强化学习，结合状态增强与共识",
+      "canonical_evidence": "带约束的多智能体强化学习，结合状态增强与共识",
+      "llm_tldr_en": "Proposes distributed constrained MARL using state augmentation and neighbor consensus for separable dynamics, ensuring coordination under global constraints.",
+      "llm_tldr_cn": "本文针对可分离动力学系统中智能体需满足全局资源约束的问题，提出一种分布式多智能体强化学习方法。通过状态增强策略学习与拉格朗日乘子邻域共识相结合，实现了全局约束的协调满足。实验表明该方法在可行性与效率上优于独立学习，为分布式多智能体约束优化提供了新范式。",
+      "llm_tldr": "本文针对可分离动力学系统中智能体需满足全局资源约束的问题，提出一种分布式多智能体强化学习方法。通过状态增强策略学习与拉格朗日乘子邻域共识相结合，实现了全局约束的协调满足。实验表明该方法在可行性与效率上优于独立学习，为分布式多智能体约束优化提供了新范式。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.01828v1",
+      "source": "arxiv",
+      "title": "Dynamic Trust-Aware Sparse Communication Topology for LLM-Based Multi-Agent Consensus",
+      "abstract": "Large language model-driven multi-agent systems enhance the reliability of complex reasoning tasks through multi-round deliberation, role specialization, and cross-validation. However, existing multi-agent debate and collaboration frameworks typically adopt fully connected communication, causing the number of messages, token costs, and end-to-end latency to grow approximately quadratically with the number of agents; although fixed sparse topologies reduce overhead, they cannot adapt communication relationships to different task instances or intermediate reasoning states, making them prone either to preserving low-value interactions or to losing critical error-correction information. To address this problem, this paper proposes DySCo (Dynamic Sparse Consensus), a dynamic trust-aware sparse consensus mechanism. In each round of reasoning, DySCo estimates the value of communication edges based on agent reliability, answer divergence, and task relevance, and selects a small number of high-value edges for message exchange under budget constraints; it then aggregates the answers of different agents through dynamic trust weights and terminates the discussion early once consensus stabilizes. This mechanism replaces universal broadcasting with on-demand communication, thereby reducing communication overhead while preserving essential cross-validation information. We further present analyses of communication complexity and consensus stability, and evaluate the performance of DySCo on mathematical reasoning, logical reasoning, and factual question-answering tasks.",
+      "authors": [
+        "Wanshuang Gou",
+        "Zihan Liu"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "published": "2026-06-01T07:42:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.01828v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Dynamic trust-aware sparse communication topology for LLM multi-agent consensus",
+      "llm_evidence_cn": "面向LLM多智能体共识的动态信任感知稀疏通信拓扑",
+      "llm_evidence": "面向LLM多智能体共识的动态信任感知稀疏通信拓扑",
+      "canonical_evidence": "面向LLM多智能体共识的动态信任感知稀疏通信拓扑",
+      "llm_tldr_en": "DySCo proposes a dynamic trust-aware sparse communication topology for LLM-based multi-agent systems, reducing token costs while maintaining consensus quality.",
+      "llm_tldr_cn": "现有LLM多智能体系统全连通通信导致消息数和延迟二次增长，固定稀疏拓扑缺乏适应性。本文提出DySCo，动态调整通信拓扑，基于信任感知选择重要连接。实验表明在减少开销的同时保持甚至提升共识质量，有效优化多智能体通信。",
+      "llm_tldr": "现有LLM多智能体系统全连通通信导致消息数和延迟二次增长，固定稀疏拓扑缺乏适应性。本文提出DySCo，动态调整通信拓扑，基于信任感知选择重要连接。实验表明在减少开销的同时保持甚至提升共识质量，有效优化多智能体通信。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02337v1",
+      "source": "arxiv",
+      "title": "Coordination Graphs for Constrained Multi-Agent Reinforcement Learning",
+      "abstract": "Constrained Multi-agent reinforcement learning (CMARL) faces two intertwined challenges: the joint action space grows exponentially with the number of agents, and additional requirements couple agents in ways that reward structure alone does not capture. We introduce Coordination Graphs for Constrained Multi-Agent Reinforcement Learning (CG-CMARL), a framework that addresses both challenges by combining coordination graphs with Lagrangian duality. The system decomposes the joint problem into pairwise regions, each served by a set of shared Q-functions, one for the primary objective and one for each of the constraints, so that the number of learned models is independent of the number of agents. At execution time, Max-Sum message passing coordinates actions across the factor graph, while a Lagrangian multiplier controls the objective--constraint tradeoff, allowing a single trained model to trace a Pareto front without retraining. We provide convergence guarantees under mild conditions, together with a compositional error bound that decomposes into separate interpretable sources, each traceable to a specific design choice and independently controllable. Experiments on cooperative navigation tasks (where teams of up to 10 agents must coordinate to reach target positions while satisfying pairwise constraints) show that our method produces Pareto fronts dominating established baselines trained at fixed reward-shaping ratios, while scaling to team sizes where centralized approaches become intractable.",
+      "authors": [
+        "Santiago Amaya-Corredor",
+        "Miguel Calvo-Fullana",
+        "Anders Jonsson"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-01T14:46:16+00:00",
+      "link": "https://arxiv.org/pdf/2606.02337v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "coordination graphs with Lagrangian duality for constrained MARL",
+      "llm_evidence_cn": "协调图与拉格朗日对偶结合的约束MARL训练框架",
+      "llm_evidence": "协调图与拉格朗日对偶结合的约束MARL训练框架",
+      "canonical_evidence": "协调图与拉格朗日对偶结合的约束MARL训练框架",
+      "llm_tldr_en": "Introduces CG-CMARL, combining coordination graphs with Lagrangian duality to address exponential action space and constraints in constrained MARL.",
+      "llm_tldr_cn": "约束多智能体强化学习面临联合动作空间指数增长和额外约束耦合的挑战。CG-CMARL通过协调图将联合问题分解为成对区域，为每个区域学习共享的Q函数（一个主目标，多个约束）。执行时通过Max-Sum消息传递协调动作。该框架使学习模型数量与智能体数量无关，有效解决了扩展性问题。实验表明在约束下仍能保持高效协调，为CMARL提供了通用框架。",
+      "llm_tldr": "约束多智能体强化学习面临联合动作空间指数增长和额外约束耦合的挑战。CG-CMARL通过协调图将联合问题分解为成对区域，为每个区域学习共享的Q函数（一个主目标，多个约束）。执行时通过Max-Sum消息传递协调动作。该框架使学习模型数量与智能体数量无关，有效解决了扩展性问题。实验表明在约束下仍能保持高效协调，为CMARL提供了通用框架。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "training paradigm for multi-agent RL",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04359v1",
+      "source": "arxiv",
+      "title": "Learning to cooperate with emergent reputation via multi-agent reinforcement learning",
+      "abstract": "Reputation, the aggregation of peer assessments diffused through social networks, is a pivotal mechanism for promoting cooperation in social dilemmas ubiquitous to distributed multi-agent systems comprising agents with limited perception and cognitive capabilities. Exploring efficient reputation systems, comprising reputation assessment rules and reputation-based policies, is a long-standing challenge. Previous work assumes predefined reputation assessment rules or models reputation as an intrinsic reward to learn policies, compromising the methods' ability for generalization and adaptation. To address this, we propose a distributed multi-agent reinforcement learning method $\\textbf{COOPER}$ ($\\textbf{COOP}$eration with $\\textbf{E}$mergent $\\textbf{R}$eputation), which jointly learns reputation assessment rules and reputation-based policies entirely from environment rewards. Notably, leveraging the underlying mechanisms of reputation, we deliberately design the constituent modules of $\\textbf{COOPER}$ and the data flows among them, overcoming the latency and noise in the feedback signal, caused by the deep entanglement between reputation and policy. Experiments on the donation game and the coin game in grid world environments demonstrate that $\\textbf{COOPER}$ effectively adapts to various existing reputation systems and co-players. Furthermore, we observe the co-emergence of reputation norms and cooperation in self-play settings. These results hold robustly across diverse social network topologies, underscoring the generalizability and efficacy of our approach.",
+      "authors": [
+        "Xinwei Song",
+        "Yizhe Huang",
+        "Dengji Zhao",
+        "Xue Feng"
+      ],
+      "primary_category": "cs.GT",
+      "categories": [
+        "cs.GT"
+      ],
+      "published": "2026-06-03T02:20:02+00:00",
+      "link": "https://arxiv.org/pdf/2606.04359v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "emergent reputation promotes cooperation in distributed MARL",
+      "llm_evidence_cn": "通过涌现声誉促进分布式多智能体强化学习中的合作",
+      "llm_evidence": "通过涌现声誉促进分布式多智能体强化学习中的合作",
+      "canonical_evidence": "通过涌现声誉促进分布式多智能体强化学习中的合作",
+      "llm_tldr_en": "Proposes COOPER, a distributed MARL method that learns reputation assessment rules and policies end-to-end to promote cooperation without predefined rules.",
+      "llm_tldr_cn": "声誉是促进多智能体系统合作的重要机制，但以往工作依赖预定义评估规则或将声誉作为内在奖励。COOPER提出分布式多智能体强化学习方法，端到端学习声誉评估规则和基于声誉的策略，无需预定义规则。该方法提高了泛化与适应能力，在多种社会困境中促进合作，展示了涌现声誉的潜力。",
+      "llm_tldr": "声誉是促进多智能体系统合作的重要机制，但以往工作依赖预定义评估规则或将声誉作为内在奖励。COOPER提出分布式多智能体强化学习方法，端到端学习声誉评估规则和基于声誉的策略，无需预定义规则。该方法提高了泛化与适应能力，在多种社会困境中促进合作，展示了涌现声誉的潜力。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.06011v1",
+      "source": "arxiv",
+      "title": "Merging model-based control with multi-agent reinforcement learning for multi-agent cooperative teaming strategies",
+      "abstract": "In this work, we propose a framework that combines multi-agent reinforcement learning (MARL) with model-based control to achieve safe, dynamically feasible actions in cooperative multi-agent tasks. Multi-agent reinforcement learning provides the advantage of learning cooperative policies for multi-agent teams from discrete non-differentiable rewards in a long planning horizon. Model-predictive control is robust and offers safe, dynamically feasible actions in a fast replanning framework for short horizons. We propose an algorithm that extends actor-critic model predictive control for MARL which we refer to as multi-agent actor-critic model predictive control (MA-AC-MPC). We demonstrate the capabilities of this algorithm by applying it to a multi-agent pursuit-evasion scenario. Specifically, we compare the evader team's strategy using the MA-AC-MPC model and a multi-layer perceptron model (MA-AC-MLP). The pursuer team uses augmented proportional navigation as it is accepted as an advanced adversarial control law. We also provide an example with a heterogeneous environment where a drone and omni-wheeled rover cooperate to achieve repeatable and successful landing with 100% success rate in hardware for MA-AC-MPC compared to 60% for MA-AC-MLP. We demonstrate the robustness of the proposed MA-AC-MPC algorithm in hardware for both environments.",
+      "authors": [
+        "Christian Llanes",
+        "Spencer W. Jensen",
+        "Samuel Coogan"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-06-04T11:01:00+00:00",
+      "link": "https://arxiv.org/pdf/2606.06011v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "combines MARL with model-predictive control for cooperative multi-agent tasks",
+      "llm_evidence_cn": "融合多智能体强化学习与模型预测控制用于合作任务",
+      "llm_evidence": "融合多智能体强化学习与模型预测控制用于合作任务",
+      "canonical_evidence": "融合多智能体强化学习与模型预测控制用于合作任务",
+      "llm_tldr_en": "Proposes MA-AC-MPC algorithm merging model-based control with MARL to achieve safe, dynamically feasible cooperative actions in multi-agent teams.",
+      "llm_tldr_cn": "多智能体强化学习在长周期合作中有效但缺乏安全性保证，模型预测控制提供安全快速重规划。本文提出多智能体演员-评论家模型预测控制（MA-AC-MPC）算法，融合两者优势，在保持学习合作策略的同时确保动态可行性和安全性。仿真实验验证了该方法在多种合作编队任务中的有效性和鲁棒性。",
+      "llm_tldr": "多智能体强化学习在长周期合作中有效但缺乏安全性保证，模型预测控制提供安全快速重规划。本文提出多智能体演员-评论家模型预测控制（MA-AC-MPC）算法，融合两者优势，在保持学习合作策略的同时确保动态可行性和安全性。仿真实验验证了该方法在多种合作编队任务中的有效性和鲁棒性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.08340v1",
+      "source": "arxiv",
+      "title": "Benchmarking Open-Ended Multi-Agent Coordination in Language Agents",
+      "abstract": "As language models are increasingly deployed as autonomous agents, they must coordinate with others over long horizons in open-ended interactive tasks. Yet existing evaluations rarely test these demands together, instead emphasising single-agent tasks, short interactions, or highly structured multi-agent settings. We introduce $alem$, a JAX-based benchmark for open-ended multi-agent coordination built on Craftax-like dynamics. Alem embeds procedurally generated coordination tasks, soft specialisation, communication, and controllable coordination difficulty into a long-horizon survival world with exploration, crafting, trading, and combat. We evaluate $13$ modern LLMs zero-shot within homogeneous teams, with trained MARL agents as reference points. Current LLM agents remain far from solving alem, averaging only ~6% normalised return, but their failures are not uniform. On the hardest coordination setting, zero-shot Gemini-3.1-Pro-High approaches MARL agents trained for one billion steps, while GPT-5.4-High achieves strong base-task reward but much lower coordination reward. This contrast shows that individual task competence does not imply coordination competence. Ablations show that communication is the largest contributor to coordination, while memory and reasoning help when used to maintain multi-step plans. Overall, our results identify coordination as a distinct bottleneck for frontier LLM agents, separate from single-agent capabilities. Alem makes this bottleneck measurable and provides a controlled testbed for developing agents that communicate, allocate roles, and execute shared plans. Code is available at https://github.com/alem-world/alem-env.",
+      "authors": [
+        "Kale-ab Abebe Tessera",
+        "Andras Szecsenyi",
+        "Cameron Barker",
+        "Alexander Rutherford",
+        "Davide Paglieri",
+        "Aidan Scannell",
+        "Henry Gouk",
+        "Elliot J. Crowley",
+        "Tim Rocktäschel",
+        "Amos Storkey"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-06-06T21:13:43+00:00",
+      "link": "https://arxiv.org/pdf/2606.08340v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Open-ended multi-agent coordination benchmark with communication and MARL reference",
+      "llm_evidence_cn": "开放式多智能体协调基准，包含通信和MARL参考",
+      "llm_evidence": "开放式多智能体协调基准，包含通信和MARL参考",
+      "canonical_evidence": "开放式多智能体协调基准，包含通信和MARL参考",
+      "llm_tldr_en": "Alem introduces a JAX-based benchmark for open-ended multi-agent coordination in language agents, with procedurally generated tasks and communication, comparing LLMs to MARL baselines.",
+      "llm_tldr_cn": "现有评估很少同时测试语言智能体的长期开放多智能体协作。本文提出Alem，基于JAX的开放式多智能体协调基准，包含程序化生成的协作任务、软专业化、通信和可控难度。评估了13个现代LLM，以训练好的MARL智能体为参考，揭示当前LLM在协调上的不足。",
+      "llm_tldr": "现有评估很少同时测试语言智能体的长期开放多智能体协作。本文提出Alem，基于JAX的开放式多智能体协调基准，包含程序化生成的协作任务、软专业化、通信和可控难度。评估了13个现代LLM，以训练好的MARL智能体为参考，揭示当前LLM在协调上的不足。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.09348v1",
+      "source": "arxiv",
+      "title": "PBSD: Privileged Bayesian Self-Distillation for Long-Horizon Credit Assignment",
+      "abstract": "Long-horizon agentic tasks pose a fundamental credit assignment challenge for outcome-base reinforcement learning: trajectory-level rewards verify final correctness but provide limited guidance on which intermediate reasoning steps or tool interactions contribute to the outcome. The difficulty is especially pronounced in multi-turn search agents, where successful trajectories may contain misleading actions and failed trajectories may contain valuable evidence-gathering steps. We propose PBSD (Privileged Bayesian Self-Distillation), a Bayes-calibrated self-distillation method for fine-grained credit assignment under sparse final rewards. PBSD measures trajectory quality through the posterior-to-prior probability ratio of the verified answer and applies Bayes' rule to convert this hard-to-estimate answer-side ratio into a tractable likelihood ratio between a standard student model and a privileged answer-conditioned teacher model. Autoregressive decomposition of this Bayesian evidence score yields turn-level signals that identify whether each intermediate turn supports or undermines the verified outcome. Consequently, PBSD provides a principled and elegant reweighting scheme that transforms sparse outcome supervision into Bayes-calibrated turn-level credit signals, while remaining fully compatible with standard policy optimization. Experiments demonstrate that PBSD consistently enhances performance across both in-domain and out-of-domain settings, and effectively transfers knowledge from short-context training to long-context inference, suggesting that its fine-grained credit assignment mechanism facilitates more effective policy learning and yields improved generalization.",
+      "authors": [
+        "Yang Tian",
+        "Rui Wang",
+        "Xumeng Wen",
+        "Junjie Li",
+        "Shizhao Sun",
+        "Lei Song",
+        "Jiang Bian",
+        "Bo Zhao"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-06-08T11:20:58+00:00",
+      "link": "https://arxiv.org/pdf/2606.09348v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "fine-grained credit assignment for long-horizon tasks",
+      "llm_evidence_cn": "长期任务中的细粒度信用分配",
+      "llm_evidence": "长期任务中的细粒度信用分配",
+      "canonical_evidence": "长期任务中的细粒度信用分配",
+      "llm_tldr_en": "PBSD uses Bayes-calibrated self-distillation for fine-grained credit assignment under sparse rewards in multi-turn agentic tasks.",
+      "llm_tldr_cn": "长期智能体任务中，轨迹级奖励无法提供中间步骤的信用分配。本文提出PBSD，一种贝叶斯校准的自蒸馏方法，通过后验与先验概率比衡量轨迹质量，实现细粒度信用分配。在多轮搜索智能体任务中，PBSD能有效识别成功轨迹中的误导动作和失败轨迹中的有价值步骤，提升训练效率。",
+      "llm_tldr": "长期智能体任务中，轨迹级奖励无法提供中间步骤的信用分配。本文提出PBSD，一种贝叶斯校准的自蒸馏方法，通过后验与先验概率比衡量轨迹质量，实现细粒度信用分配。在多轮搜索智能体任务中，PBSD能有效识别成功轨迹中的误导动作和失败轨迹中的有价值步骤，提升训练效率。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.13076v1",
+      "source": "arxiv",
+      "title": "$α$-fair heterogeneous agent reinforcement learning",
+      "abstract": "Cooperation in multi-agent systems is typically optimized through utilitarian objectives that maximize overall efficiency but fail to account for reward distribution, often resulting in inequitable \"leader-follower\" dynamics. While fairness-based approaches encourage pro-social behaviors where every agent benefits from cooperation, many current algorithms - including those utilizing reward shaping - break the stationarity of Markov Games or lack rigorous theoretical guarantees. This creates a critical gap between fair objective methods and theoretically safe learning frameworks. We propose a novel framework that bridges $α$-fairness with Heterogeneous-Agent Trust Region Learning (HATRL), ensuring monotonic improvement and convergence toward Nash Equilibria. Our approach leverages a fair advantage function that dynamically weights agent utilities based on their expected returns, allowing the global objective to transition from purely utilitarian efficiency to $α$-fairness welfare based on the parameter $α$. We introduce two practical algorithms, $α$-fair HATRPO and $α$-fair HAPPO, and demonstrate through experiments in sequential social dilemmas like CleanUp and CommonHarvest that they perform better than HATRL's algorithms from a utilitarian point of view while achieving socially higher outcomes.",
+      "authors": [
+        "Yao-hua Franck Xu",
+        "Tayeb Lemlouma",
+        "Jean-Marie Bonnin",
+        "Arnaud Braud"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.GT",
+        "cs.LG"
+      ],
+      "published": "2026-06-11T08:59:41+00:00",
+      "link": "https://arxiv.org/pdf/2606.13076v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "alpha-fair cooperative MARL with theoretical guarantees",
+      "llm_evidence_cn": "基于α-公平的多智能体合作强化学习，具有理论保证",
+      "llm_evidence": "基于α-公平的多智能体合作强化学习，具有理论保证",
+      "canonical_evidence": "基于α-公平的多智能体合作强化学习，具有理论保证",
+      "llm_tldr_en": "Bridges alpha-fairness with Heterogeneous-Agent Trust Region Learning to ensure fair cooperation and provable convergence in multi-agent systems.",
+      "llm_tldr_cn": "多智能体系统中的合作通常只优化总体效率，导致不公平的领导者-追随者动态。本文提出将α-公平性与异构智能体信任区域学习（HATRL）相结合，在保证单调改进和收敛到纳什均衡的同时促进公平合作。该方法提供了理论安全性，解决了现有公平方法破坏马尔可夫博弈平稳性的问题。实验验证了该框架在异构多智能体环境中的有效性。",
+      "llm_tldr": "多智能体系统中的合作通常只优化总体效率，导致不公平的领导者-追随者动态。本文提出将α-公平性与异构智能体信任区域学习（HATRL）相结合，在保证单调改进和收敛到纳什均衡的同时促进公平合作。该方法提供了理论安全性，解决了现有公平方法破坏马尔可夫博弈平稳性的问题。实验验证了该框架在异构多智能体环境中的有效性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.14130v1",
+      "source": "arxiv",
+      "title": "Contract-Based Compositional Shielding for Safe Multi-Agent Reinforcement Learning",
+      "abstract": "Safe coordination problems surface in multi-agent reinforcement learning when global safety cannot be enforced by any agent unilaterally: the admissibility of one agent's action may depend on the dynamics of other agents. Decentralised shields can enforce safety at runtime, but purely factorised permissions often exclude optimal team behaviour that is safe only through coordination. We study deterministic safety guarantees for agents trained and deployed under decentralised execution, recovering team-optimal safe behaviour without centralised runtime control. Agents have a shared global specification $φ$ in the safety fragment of Linear Temporal Logic ($\\mathsf{LTL}_{\\mathsf{safe}}$ ), and select among tuples of local $\\mathsf{LTL}_{\\mathsf{safe}}$ obligations whose conjunction implies the global specification $φ$. Each agent may rely on the other agents' local obligations as assumptions because the whole contract tuple is certified simultaneously and allows projection into local action masks. At learning time, a non-stationary multi-armed bandit chooses among a library of local $\\mathsf{LTL}_{\\mathsf{safe}}$ obligations to select the tuple that optimises team reward, all without forgoing end-to-end safety. We evaluate the approach across 6 environments and 15 algorithmic variants.",
+      "authors": [
+        "Omar Adalat",
+        "Edwin Hamel-De le Court",
+        "Francesco Belardinelli"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-06-12T05:30:53+00:00",
+      "link": "https://arxiv.org/pdf/2606.14130v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "safe coordination in multi-agent RL",
+      "llm_evidence_cn": "多智能体强化学习中的安全协调",
+      "llm_evidence": "多智能体强化学习中的安全协调",
+      "canonical_evidence": "多智能体强化学习中的安全协调",
+      "llm_tldr_en": "Contract-based compositional shielding provides deterministic safety guarantees for decentralized multi-agent RL while recovering team-optimal behavior.",
+      "llm_tldr_cn": "多智能体强化学习中，全局安全无法由单个智能体保障，而分散式盾牌可能排除需要协调的最优安全行为。本文提出基于合约的组合屏蔽方法，将全局安全规范分解为局部LTL约束，在分散执行下保障确定性安全并恢复团队最优行为。理论证明该方法在不牺牲安全性的前提下实现协调最优。",
+      "llm_tldr": "多智能体强化学习中，全局安全无法由单个智能体保障，而分散式盾牌可能排除需要协调的最优安全行为。本文提出基于合约的组合屏蔽方法，将全局安全规范分解为局部LTL约束，在分散执行下保障确定性安全并恢复团队最优行为。理论证明该方法在不牺牲安全性的前提下实现协调最优。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.14693v1",
+      "source": "arxiv",
+      "title": "Learning Coordinated Preference for Multi-Objective Multi-Agent Reinforcement Learning",
+      "abstract": "Cooperative multi-objective multi-agent reinforcement learning (MOMARL) models team decision making under multiple, potentially conflicting objectives. In this setting, conflicts arise not only across objectives but also across agents with different observations, roles, and contributions. We propose Preference Coordinated Multi-agent Policy Optimization (PCMA), which learns coordinated agent-specific preferences to enable complementary trade-offs among agents. Theoretically, we formulate cooperative MOMARL as a team-optimal game and show that, under suitable conditions, preference diversity can induce team improvement through a first-order improvement decomposition. Experiments on multiple cooperative MOMA environments and a practical traffic-control scenario show that PCMA improves both performance and trade-off coordination.",
+      "authors": [
+        "Pengxin Wang",
+        "Lihao Guo",
+        "Yi Xie",
+        "Bo Liu",
+        "Siyang Cao",
+        "Jingdi Chen"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "published": "2026-06-12T17:55:28+00:00",
+      "link": "https://arxiv.org/pdf/2606.14693v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multi-objective cooperative multi-agent RL with coordinated preferences",
+      "llm_evidence_cn": "多目标协作多智能体强化学习与协调偏好",
+      "llm_evidence": "多目标协作多智能体强化学习与协调偏好",
+      "canonical_evidence": "多目标协作多智能体强化学习与协调偏好",
+      "llm_tldr_en": "Proposes PCMA for cooperative multi-objective MARL, learning coordinated agent preferences to enable complementary trade-offs across objectives and agents.",
+      "llm_tldr_cn": "本文针对多目标多智能体强化学习中目标冲突与智能体角色差异问题，提出偏好协调多智能体策略优化（PCMA）。该方法学习智能体特定偏好并使其协同，通过一阶改进分解保证团队提升。实验表明在多目标协作环境中PCMA优于现有方法，为多目标MARL提供了新框架。",
+      "llm_tldr": "本文针对多目标多智能体强化学习中目标冲突与智能体角色差异问题，提出偏好协调多智能体策略优化（PCMA）。该方法学习智能体特定偏好并使其协同，通过一阶改进分解保证团队提升。实验表明在多目标协作环境中PCMA优于现有方法，为多目标MARL提供了新框架。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2605.23562v1",
+      "source": "arxiv",
+      "title": "ARMS: Automatic Reward Shaping for Sparse-Reward Multi-Agent Reinforcement Learning",
+      "abstract": "Sparse rewards are a major bottleneck in multi-agent reinforcement learning (MARL), where simultaneous learning induces non-stationarity and makes reward design especially delicate. Reward shaping can accelerate learning, but in the multi-agent setting it must preserve the strategic structure of the problem rather than merely improve short-term optimization. We propose Automatic Reward-shaping in Multi-agent Systems (ARMS), a self-supervised reward shaping framework for MARL that learns dense shaping signals from sparse environmental rewards through trajectory ranking. Since single-agent trajectory-ranking guarantees do not directly transfer to MARL, we reformulate policy invariance through conditional best-response reasoning, and show that if certain conditions hold, then using shaping rewards preserves each agent's best-response set under fixed opponent policies, and consequently preserve the set of Nash equilibria. Guided by this perspective, ARMS alternates between policy learning and reward learning while sharing shaping parameters across agents for efficiency. Experiments in a partially observable multi-agent pathfinding domain show that ARMS improves sampling efficiency under increasing reward sparsity and agent count, generalizes to unseen environments, and reveals a MARL-specific failure mode in which limited exploration and coupled policy--reward dynamics induce oscillatory behavior. Increasing exploration mitigates this effect and stabilizes learning. To the best of our knowledge, ARMS is the first automatic reward shaping framework for MARL whose design is motivated by a game-theoretic equilibrium-preservation result.",
+      "authors": [
+        "Elie Abboud",
+        "Oren Gal"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "published": "2026-05-22T12:29:29+00:00",
+      "link": "https://arxiv.org/pdf/2605.23562v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "automatic reward shaping for sparse-reward MARL",
+      "llm_evidence_cn": "稀疏奖励多智能体强化学习的自动奖励塑形",
+      "llm_evidence": "稀疏奖励多智能体强化学习的自动奖励塑形",
+      "canonical_evidence": "稀疏奖励多智能体强化学习的自动奖励塑形",
+      "llm_tldr_en": "Proposes ARMS, a self-supervised reward shaping framework for MARL that learns dense signals from sparse rewards via trajectory ranking, preserving strategic structure.",
+      "llm_tldr_cn": "本文针对稀疏奖励导致的多智能体强化学习瓶颈，提出自动奖励塑形框架ARMS。通过轨迹排名自监督学习稠密塑形信号，并重新定义条件最优反应下的策略不变性，确保奖励塑形保留博弈结构。实验证明ARMS显著加速多智能体学习，有效解决了稀疏奖励下的信用分配问题。",
+      "llm_tldr": "本文针对稀疏奖励导致的多智能体强化学习瓶颈，提出自动奖励塑形框架ARMS。通过轨迹排名自监督学习稠密塑形信号，并重新定义条件最优反应下的策略不变性，确保奖励塑形保留博弈结构。实验证明ARMS显著加速多智能体学习，有效解决了稀疏奖励下的信用分配问题。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2605.19418v1",
+      "source": "arxiv",
+      "title": "Conflict-Resilient Multi-Agent Reasoning via Signed Graph Modeling",
+      "abstract": "LLM-based multi-agent systems (MAS) have demonstrated strong reasoning and decision-making capabilities that consistently surpass those of single LLM agents. However, their performance often suffers from naive aggregation mechanisms that assume uniformly cooperative interactions. Upon close inspection, we observe that existing graph-based MAS frameworks (1) propagate errors when conflicting signals arise without control, and (2) lack explicit modeling of conflicting inter-agent relations as well as structural awareness, failing to identify reliable interaction patterns. To bridge this gap, we introduce SIGMA, a novel SIgned Graph-informed Multi-Agent reasoning framework that explicitly captures trust, conflict, and neutral relations among agents via a signed relational graph. Specifically, given a query, SIGMA first selects a set of relevant and diverse agents, then constructs a structured signed interaction graph with confidence-weighted edges. Reasoning proceeds through conflict-aware signed message passing, which reinforces information from trustworthy agents while suppressing conflicting signals, and terminates with a structure- and conflict-aware weighted aggregation to yield globally consistent and conflict-resilient predictions. Extensive experiments on six benchmark datasets, across multiple LLM backbones and diverse multi-agent configurations, demonstrate that SIGMA consistently outperforms state-of-the-art baselines, achieving notable gains in both accuracy and conflict-resilient performance.",
+      "authors": [
+        "Longgang He",
+        "Longzhu He",
+        "Daojing He",
+        "Chaozhuo Li"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-05-19T06:11:11+00:00",
+      "link": "https://arxiv.org/pdf/2605.19418v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "conflict-resilient multi-agent reasoning with signed graphs",
+      "llm_evidence_cn": "基于符号图的冲突鲁棒多智能体推理",
+      "llm_evidence": "基于符号图的冲突鲁棒多智能体推理",
+      "canonical_evidence": "基于符号图的冲突鲁棒多智能体推理",
+      "llm_tldr_en": "Introduces SIGMA, a signed graph-informed multi-agent reasoning framework that explicitly models trust/conflict relations to improve LLM-based MAS robustness.",
+      "llm_tldr_cn": "本文针对LLM多智能体系统中冲突信号传播问题，提出SIGMA框架，通过符号图显式建模信任、冲突与中立关系，避免错误累积。实验表明该方法在复杂推理任务中显著优于简单聚合机制，提升了多智能体协作的鲁棒性。",
+      "llm_tldr": "本文针对LLM多智能体系统中冲突信号传播问题，提出SIGMA框架，通过符号图显式建模信任、冲突与中立关系，避免错误累积。实验表明该方法在复杂推理任务中显著优于简单聚合机制，提升了多智能体协作的鲁棒性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi agent RL with LLM agents cooperation and communication",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.22786v1",
+      "source": "arxiv",
+      "title": "LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems",
+      "abstract": "Large language model (LLM)-based multi-agent systems increasingly rely on intermediate communication to coordinate complex tasks. While most existing systems communicate through natural language, recent work shows that latent communication, particularly through transformer key-value (KV) caches, can improve efficiency and preserve richer task-relevant information. However, KV caches also encode contextual inputs, intermediate reasoning states, and agent-specific information, creating an opaque channel through which sensitive content may propagate across agents without explicit textual disclosure. To address this, we introduce \\textbf{LCGuard} (Latent Communication Guard), a framework for safe KV-based latent communication in multi-agent LLM systems. LCGuard treats shared KV caches as latent working memory and learns representation-level transformations before cache artifacts are transmitted across agents. We formalize representation-level sensitive information leakage operationally through reconstruction: a shared cache artifact is unsafe if an adversarial decoder can recover agent-specific sensitive inputs from it. This leads to an adversarial training formulation in which the adversary learns to reconstruct sensitive inputs, while LCGuard learns transformations that preserve task-relevant semantics and reduce reconstructable information. Empirical evaluations across multiple model families and multi-agent benchmarks show that LCGuard consistently reduces reconstruction-based leakage and attack success rates while maintaining competitive task performance compared to standard KV-sharing baselines.",
+      "authors": [
+        "Sadia Asif",
+        "Mohammad Mohammadi Amiri",
+        "Momin Abbas",
+        "Prasanna Sattigeri",
+        "Karthikeyan Natesan Ramamurthy"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.ET",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-05-21T17:42:12+00:00",
+      "link": "https://arxiv.org/pdf/2605.22786v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "safe latent communication in multi-agent LLM systems",
+      "llm_evidence_cn": "多智能体LLM系统中的安全潜在通信",
+      "llm_evidence": "多智能体LLM系统中的安全潜在通信",
+      "canonical_evidence": "多智能体LLM系统中的安全潜在通信",
+      "llm_tldr_en": "Proposes LCGuard for safe KV-cache-based latent communication in multi-agent LLM systems, preventing sensitive information leakage.",
+      "llm_tldr_cn": "本文关注多智能体LLM系统中潜在通信（KV缓存）的安全风险，提出LCGuard框架。该框架在不牺牲效率的前提下，防止敏感信息通过隐性通道传播，保障通信隐私。实验表明LCGuard有效阻止信息泄露，同时保持任务性能，推动了多智能体通信安全性研究。",
+      "llm_tldr": "本文关注多智能体LLM系统中潜在通信（KV缓存）的安全风险，提出LCGuard框架。该框架在不牺牲效率的前提下，防止敏感信息通过隐性通道传播，保障通信隐私。实验表明LCGuard有效阻止信息泄露，同时保持任务性能，推动了多智能体通信安全性研究。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.24202v1",
+      "source": "arxiv",
+      "title": "When Does Multi-Agent RL Improve LLM Workflows? Workflow, Scale, and Policy-Sharing Tradeoffs",
+      "abstract": "Multi-agent LLM workflows route inference through specialized roles to lift end-task accuracy, but jointly training those roles with reinforcement learning is unstable in ways that are poorly understood. We study when end-to-end RL training of multi-agent LLM workflows improves over their base models, comparing Shared-Policy training, where all roles update one policy, with Isolated-Policy training, where each role has its own parameters. Our experimental matrix spans Eval-Opt, Voting, and Orch-Workers workflows, math and code tasks, and three model scales (0.6B, 1.7B, 4B). We find that multi-agent RL usually improves over base models, but gains depend jointly on workflow, task, and scale, not on policy sharing alone. Isolated-Policy tends to reach higher peak accuracy yet more often falls off a terminal accuracy cliff, while Shared-Policy training does not eliminate failure; it redistributes failure into qualitatively different patterns. We then explain the strongest of these patterns through role-level gradient dynamics induced by workflow topology and policy routing: under Isolated-Policy, parallel same-role agents on shared prompts amplify per-role gradients and drive terminal degradation in Voting and Orch-Workers workflows; under Shared-Policy, asymmetric per-step gradient mass causes the shared policy to be captured by the dominant role, producing different failure signatures by task and workflow. Together, the empirical map and its underlying mechanisms show that policy sharing routes training pressure through different channels rather than offering uniform stability, making it a design choice with workflow- and task-conditional tradeoffs.",
+      "authors": [
+        "Yifan Zeng",
+        "Yiran Wu",
+        "Yaolun Zhang",
+        "Wentian Zhao",
+        "Kun Wan",
+        "Qingyun Wu",
+        "Huazheng Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-05-22T20:43:30+00:00",
+      "link": "https://arxiv.org/pdf/2605.24202v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "training paradigm for multi-agent RL in LLM workflows",
+      "llm_evidence_cn": "多智能体强化学习在LLM工作流中的训练范式",
+      "llm_evidence": "多智能体强化学习在LLM工作流中的训练范式",
+      "canonical_evidence": "多智能体强化学习在LLM工作流中的训练范式",
+      "llm_tldr_en": "Systematic study of end-to-end multi-agent RL for LLM workflows comparing shared vs isolated policy training across tasks and scales.",
+      "llm_tldr_cn": "多智能体LLM工作流中端到端强化学习的训练不稳定问题尚未明确。本文系统比较了共享策略与隔离策略训练，涵盖评估、投票、编排等工作流、数学编程任务及三种模型规模。发现多智能体RL通常能提升基模型，但增益取决于工作流、任务和规模的组合，而非仅策略共享方式。",
+      "llm_tldr": "多智能体LLM工作流中端到端强化学习的训练不稳定问题尚未明确。本文系统比较了共享策略与隔离策略训练，涵盖评估、投票、编排等工作流、数学编程任务及三种模型规模。发现多智能体RL通常能提升基模型，但增益取决于工作流、任务和规模的组合，而非仅策略共享方式。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "training paradigm for multi-agent RL",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2605.21768v1",
+      "source": "arxiv",
+      "title": "Memory-R2: Fair Credit Assignment for Long-Horizon Memory-Augmented LLM Agents",
+      "abstract": "Memory-augmented LLM agents enable interactions that extend beyond finite context windows by storing, updating, and reusing information across sessions. However, training such agents with reinforcement learning in multi-session environments is challenging because memory turns the agent's past actions into part of its future environment. Once different rollouts write, update, or delete different memories, they no longer share the same intermediate memory state, making trajectory-level comparisons fundamentally unfair. This violates a key assumption behind group-relative methods such as GRPO, where rollouts are compared as if they were sampled from the same effective environment. Consequently, trajectory-level rewards provide noisy or biased credit signals for long-horizon memory operations. To address this challenge, we introduce Memory-R2, a training framework for long-horizon memory-augmented LLM agents. Its core algorithm, LoGo-GRPO, combines local and global group-relative optimization. The global objective preserves end-to-end learning from long-horizon trajectory-level rewards, while local rerollouts compare different memory-operation outcomes from the same intermediate memory state, yielding fairer group comparisons and more precise supervision for memory construction. Beyond credit assignment, Memory-R2 jointly optimizes memory formation and memory evolution with a shared-parameter co-learning design, where a fact extractor and a memory manager are instantiated from the same LLM backbone through role-specific prompts. To stabilize multi-step RL over long memory horizons, we adopt a progressive curriculum that increases the training horizon from 8 to 16 to 32 sessions. Together, these components provide an effective training paradigm for memory-augmented LLM agents in long-horizon multi-session settings.",
+      "authors": [
+        "Sikuan Yan",
+        "Ahmed Bahloul",
+        "Ercong Nie",
+        "Susanna Schwarzmann",
+        "Riccardo Trivisonno",
+        "Volker Tresp",
+        "Yunpu Ma"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.MA"
+      ],
+      "published": "2026-05-20T22:02:00+00:00",
+      "link": "https://arxiv.org/pdf/2605.21768v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fair credit assignment for LLM agents with memory",
+      "llm_evidence_cn": "针对记忆增强LLM智能体的公平信用分配",
+      "llm_evidence": "针对记忆增强LLM智能体的公平信用分配",
+      "canonical_evidence": "针对记忆增强LLM智能体的公平信用分配",
+      "llm_tldr_en": "Memory-R2 addresses unfair credit assignment in training memory-augmented LLM agents with RL, proposing a method to handle varying memory states across rollouts.",
+      "llm_tldr_cn": "记忆增强型LLM智能体在跨会话环境中训练时，由于不同轨迹写入、更新或删除不同记忆，导致轨迹级比较不公平。本文提出Memory-R2框架，通过设计公平信用分配机制，解决了组相对方法（如GRPO）在此场景下的偏差问题，实现了对长期依赖任务的更精确信用评估。实验表明该方法显著提升了长周期任务的训练效果。",
+      "llm_tldr": "记忆增强型LLM智能体在跨会话环境中训练时，由于不同轨迹写入、更新或删除不同记忆，导致轨迹级比较不公平。本文提出Memory-R2框架，通过设计公平信用分配机制，解决了组相对方法（如GRPO）在此场景下的偏差问题，实现了对长期依赖任务的更精确信用评估。实验表明该方法显著提升了长周期任务的训练效果。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.31509v1",
+      "source": "arxiv",
+      "title": "Skill Reuse as Compression in Agentic RL",
+      "abstract": "Large language model agents trained with reinforcement learning (RL) often learn brittle, task-specific shortcuts. We hypothesize that agents generalize better when their successful trajectories are structurally compressible, decomposed into a small set of reusable abstract patterns. To formalize this, we introduce ReuseRL, which grounds agentic RL in the Minimum Description Length (MDL) principle. ReuseRL extracts a shared skill dictionary from successful trajectories and augments the RL objective with a segmentation cost, explicitly penalizing idiosyncratic behaviors that encode poorly. We prove a PAC-Bayes generalization bound for this compression penalty. Across ALFWorld, TextWorld-Cooking, and Countdown-Stepwise, ReuseRL improves in- and out-of-distribution success over vanilla GRPO and strong round-length baselines.",
+      "authors": [
+        "Zhikun Xu",
+        "Yu Feng",
+        "Jacob Dineen",
+        "Taiwei Shi",
+        "Jieyu Zhao",
+        "Ben Zhou"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T16:28:34+00:00",
+      "link": "https://arxiv.org/pdf/2605.31509v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "skill reuse grounded in MDL principle for agentic RL generalization",
+      "llm_evidence_cn": "基于最小描述长度原则的技能重用，提升智能体RL泛化性",
+      "llm_evidence": "基于最小描述长度原则的技能重用，提升智能体RL泛化性",
+      "canonical_evidence": "基于最小描述长度原则的技能重用，提升智能体RL泛化性",
+      "llm_tldr_en": "Introduces ReuseRL, grounding agentic RL in MDL principle by extracting reusable skill dictionaries and penalizing idiosyncratic behaviors for better generalization.",
+      "llm_tldr_cn": "大语言模型代理通过强化学习训练后常学到脆弱的任务特定捷径。本文假设成功轨迹可压缩为少量可重用抽象模式。ReuseRL基于最小描述长度原则，从成功轨迹中提取共享技能字典，并在RL目标中加入分割成本，惩罚编码效率低的行为。理论上证明了PAC-Bayes泛化界。在ALFWorld等环境中，ReuseRL提升了分布内和分布外的成功率，验证了压缩促进泛化的思路。",
+      "llm_tldr": "大语言模型代理通过强化学习训练后常学到脆弱的任务特定捷径。本文假设成功轨迹可压缩为少量可重用抽象模式。ReuseRL基于最小描述长度原则，从成功轨迹中提取共享技能字典，并在RL目标中加入分割成本，惩罚编码效率低的行为。理论上证明了PAC-Bayes泛化界。在ALFWorld等环境中，ReuseRL提升了分布内和分布外的成功率，验证了压缩促进泛化的思路。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.24220v1",
+      "source": "arxiv",
+      "title": "Polar: Agentic RL on Any Harness at Scale",
+      "abstract": "Reinforcement learning for language agents increasingly depends on custom harnesses that manage long-running context, multi-turn tool use and multi-agent orchestration. However, porting these harnesses into RL environment interfaces remains difficult and often loses important training signals. We bridge this gap with polar, a rollout framework for scalable asynchronous RL over arbitrary agent harnesses. Polar treats the agent harness as a black box: it proxies LLM API calls, records token-level model interactions, and reconstructs token-faithful trajectories for training. Each rollout node efficiently manages runtime prewarming, agent execution, trajectory reconstruction, and evaluation in parallel, exposing asynchronous service endpoints that can be consumed by independent trainers at scale. This decoupled design makes Polar agnostic to agent harnesses, training infrastructure, and RL algorithms while improving compute utilization for long-running agent workloads. We validate polar by training agents on software-engineering tasks with popular coding harnesses. Using simple GRPO, polar improves Qwen3.5-4B by 22.6, 4.8, 0.6 and 6.2 points on SWE-Bench Verified with the Codex, Claude Code, Qwen Code and Pi harnesses, respectively. We further demonstrate Polar for offline data generation over custom harnesses and ablate trajectory reconstruction strategies. Polar rewrites its preceding work, Prorl Agent, and has been registered as one of NeMo Gym environments.",
+      "authors": [
+        "Binfeng Xu",
+        "Hao Zhang",
+        "Shaokun Zhang",
+        "Songyang Han",
+        "Mingjie Liu",
+        "Jian Hu",
+        "Shizhe Diao",
+        "Zhenghui Jin",
+        "Yunheng Zou",
+        "Michael Demoret",
+        "Jan Kautz",
+        "Yi Dong"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC"
+      ],
+      "published": "2026-05-22T21:06:12+00:00",
+      "link": "https://arxiv.org/pdf/2605.24220v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "scalable RL framework for agentic tasks",
+      "llm_evidence_cn": "面向智能体任务的可扩展强化学习框架",
+      "llm_evidence": "面向智能体任务的可扩展强化学习框架",
+      "canonical_evidence": "面向智能体任务的可扩展强化学习框架",
+      "llm_tldr_en": "Polar is a rollout framework that enables scalable asynchronous RL over arbitrary agent harnesses by proxying LLM calls and reconstructing token-faithful trajectories.",
+      "llm_tldr_cn": "针对语言智能体的强化学习受限于自定义接口难以移植至RL环境的问题，本文提出Polar，一种可扩展的异步RL回滚框架。Polar将智能体接口视为黑盒，通过代理LLM API调用、记录令牌级交互并重建忠实轨迹，实现任意接口上的RL训练。实验表明该框架能高效管理多轮工具使用和多智能体编排，为智能体RL提供统一的训练基础设施。",
+      "llm_tldr": "针对语言智能体的强化学习受限于自定义接口难以移植至RL环境的问题，本文提出Polar，一种可扩展的异步RL回滚框架。Polar将智能体接口视为黑盒，通过代理LLM API调用、记录令牌级交互并重建忠实轨迹，实现任意接口上的RL训练。实验表明该框架能高效管理多轮工具使用和多智能体编排，为智能体RL提供统一的训练基础设施。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2605.21932v1",
+      "source": "arxiv",
+      "title": "Auction-Consensus Algorithm with Learned Bidding Scheme for Multi-Robot Systems",
+      "abstract": "Multi-Robot Task Allocation (MRTA) is a central challenge in decentralized multi-agent systems, where teams of robots must cooperatively assign and execute tasks under limited communication while optimizing global performance objectives. Auction-consensus algorithms, such as the Consensus-Based Bundle Algorithm (CBBA), provide scalable decentralized coordination with provable convergence, but rely on hand-crafted greedy scoring functions that often lead to suboptimal task allocations. This paper proposes a learning-enhanced auction-consensus framework in which CBBA's deterministic bidding mechanism is replaced by a neural bidding policy trained using reinforcement learning. Under a centralized training and decentralized execution paradigm, agents learn to compute task bids from partial local observations while retaining the standard auction and consensus phases for decentralized coordination. The learned bidding policy is trained using Proximal Policy Optimization with rewards shaped by proximity to globally optimal solutions obtained via mixed-integer linear programming. Multiple neural architectures are evaluated, including a Neural Additive Model, the Long Short-Term Memory (LSTM) model, and the Set Transformer Model. Experimental results across varying swarm sizes demonstrate that learned bidding policies can improve solution quality over classical CBBA while preserving decentralized execution. The proposed approach highlights the effectiveness of integrating reinforcement learning with classical distributed coordination algorithms, offering a scalable pathway toward higher-quality decentralized multi-robot task allocation.",
+      "authors": [
+        "Jose Rodriguez",
+        "Constantine Tarawneh",
+        "Sven Koenig",
+        "Wenjie Dong",
+        "Qi Lu"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-05-21T03:00:47+00:00",
+      "link": "https://arxiv.org/pdf/2605.21932v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "uses RL to learn bidding policy in auction-consensus for multi-robot task allocation",
+      "llm_evidence_cn": "使用强化学习学习拍卖-共识中的投标策略用于多机器人任务分配",
+      "llm_evidence": "使用强化学习学习拍卖-共识中的投标策略用于多机器人任务分配",
+      "canonical_evidence": "使用强化学习学习拍卖-共识中的投标策略用于多机器人任务分配",
+      "llm_tldr_en": "Proposes learning-enhanced auction-consensus for multi-robot systems, replacing hand-crafted greedy scoring with a neural bidding policy trained via centralized training decentralized execution.",
+      "llm_tldr_cn": "多机器人任务分配中，基于拍卖-共识的算法依赖手工贪心评分，导致次优分配。本文提出学习增强的CBBA框架，用神经投标策略代替确定性投标机制，通过集中训练分散执行范式训练。仿真实验表明，学习到的投标策略显著提高了任务分配质量，在多个指标上优于传统方法。",
+      "llm_tldr": "多机器人任务分配中，基于拍卖-共识的算法依赖手工贪心评分，导致次优分配。本文提出学习增强的CBBA框架，用神经投标策略代替确定性投标机制，通过集中训练分散执行范式训练。仿真实验表明，学习到的投标策略显著提高了任务分配质量，在多个指标上优于传统方法。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.25746v1",
+      "source": "arxiv",
+      "title": "Multi-Agent Coordination Adaptation via Structure-Guided Orchestration",
+      "abstract": "As large language model (LLM)-based multi-agent systems scale to handle increasingly complex tasks, balancing structural stability and dynamic adaptability becomes increasingly challenging. Existing systems typically adopt either structure-centric methods, committing to structures determined upfront that limit fine-grained control, or orchestration-centric methods, adapting decisions dynamically while leaving coordination structure implicit and unstable. To address this challenge, we revisit multi-agent coordination from a probabilistic perspective, casting it as posterior inference over the joint distribution of structure and orchestration. We introduce MACA, an automated coordination framework that learns a task- and budget-conditioned structural prior over agent participation and interactions. This prior guides a policy-based orchestration as an approximation to posterior inference, enabling efficient solutions with fine-grained control. Across benchmarks, MACA outperforms adaptive multi-agent baselines by an average of 8.42% while using 43.19% fewer tokens. Further investigation reveals that joint adaptation of structure and orchestration suppresses redundant interactions, converging coordination toward task-effective execution.",
+      "authors": [
+        "Haoran Li",
+        "Shulun Chen",
+        "Shaoyuan Sun",
+        "Hanchen Wang"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "published": "2026-05-25T11:59:58+00:00",
+      "link": "https://arxiv.org/pdf/2605.25746v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "LLM-based multi-agent coordination adaptation via probabilistic inference",
+      "llm_evidence_cn": "基于概率推理的LLM多智能体协调自适应方法",
+      "llm_evidence": "基于概率推理的LLM多智能体协调自适应方法",
+      "canonical_evidence": "基于概率推理的LLM多智能体协调自适应方法",
+      "llm_tldr_en": "MACA casts multi-agent coordination as posterior inference over structure and orchestration, learning task- and budget-conditioned structural priors for adaptive coordination.",
+      "llm_tldr_cn": "大型语言模型多智能体系统在结构稳定性和动态适应性之间难以平衡。本文提出MACA框架，从概率视角出发，将协调建模为结构和编排的联合后验推断，学习任务和预算调节的结构先验。该方法自动学习协调结构，在保持稳定性的同时实现动态调整。实验表明MACA在复杂任务上优于固定结构和纯编排方法。",
+      "llm_tldr": "大型语言模型多智能体系统在结构稳定性和动态适应性之间难以平衡。本文提出MACA框架，从概率视角出发，将协调建模为结构和编排的联合后验推断，学习任务和预算调节的结构先验。该方法自动学习协调结构，在保持稳定性的同时实现动态调整。实验表明MACA在复杂任务上优于固定结构和纯编排方法。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent cooperation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2605.30653v1",
+      "source": "arxiv",
+      "title": "Counterfactual Graph for Multi-Agent LLM Calibration",
+      "abstract": "Multi-agent LLM systems often treat agreement as evidence: when many agents in a panel give the same answer, that answer is assumed to be more reliable. We show that this assumption can fail after agents communicate. Communication can induce correlated failures and false consensus, so the same vote share may reflect reliable agreement in one topology but over-confidence in another. We propose CAGE-CAL, a counterfactual agent-graph calibration framework for multi-agent LLMs. For each query, CAGE-CAL compares an observed post-communication agent graph with a matched counterfactual no-communication graph, capturing both pairwise failure correlations and group-level dependencies. Rather than simply counting how many agents agree, CAGE-CAL estimates the counterfactual shift between observed and no-communication dependence, and calibrates confidence accordingly. Across five benchmarks, CAGE-CAL improves reliability discrimination with competitive ECE, and its calibrated confidence further improves topology selection over the best fixed-topology strategy.",
+      "authors": [
+        "Jiatan Huang",
+        "Mingchen Li",
+        "Ziming Li",
+        "Sunjae Kwon",
+        "Hong Yu",
+        "Chuxu Zhang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-05-28T23:16:29+00:00",
+      "link": "https://arxiv.org/pdf/2605.30653v1",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Counterfactual graph calibration for multi-agent LLM communication effects",
+      "llm_evidence_cn": "反事实图校准分析多智能体LLM通信影响",
+      "llm_evidence": "反事实图校准分析多智能体LLM通信影响",
+      "canonical_evidence": "反事实图校准分析多智能体LLM通信影响",
+      "llm_tldr_en": "CAGE-CAL proposes a counterfactual agent-graph calibration for multi-agent LLMs, detecting false consensus induced by communication through graph comparison.",
+      "llm_tldr_cn": "多智能体LLM系统常将通信后的一致视为可靠，但通信可能引发关联失败和虚假共识。本文提出CAGE-CAL，通过比较观察到的后通信图与匹配的无通信反事实图，估计一致性的真实可靠性。实验表明该方法能有效校准投票可信度，提升多智能体系统鲁棒性。",
+      "llm_tldr": "多智能体LLM系统常将通信后的一致视为可靠，但通信可能引发关联失败和虚假共识。本文提出CAGE-CAL，通过比较观察到的后通信图与匹配的无通信反事实图，估计一致性的真实可靠性。实验表明该方法能有效校准投票可信度，提升多智能体系统鲁棒性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2605.26684v2",
+      "source": "arxiv",
+      "title": "Beyond Trajectory-Level Attribution: Graph-Based Credit Assignment for Agentic Reinforcement Learning",
+      "abstract": "Group-based reinforcement learning (RL) methods have achieved remarkable success in improving the performance of large language models (LLMs) and have been rapidly extended to agentic tasks. However, their credit assignment relies heavily on coarse-grained trajectory-level attribution according to final outcomes, making it difficult to capture the contribution of individual steps, such as valuable steps obscured within failed trajectories. To uncover latent information and enable more faithful step-level credit assignment, we propose Graph-based Group Policy Optimization (GraphGPO), which first aggregates all rollout trajectories into a unified state-transition graph and then estimates the distance from each state to the task goal using the global information encoded in the graph. Finally, GraphGPO assigns credit to each edge by estimating a graph-based advantage, based on how much the transition reduces the distance to the task goal. In this way, GraphGPO significantly improves training efficiency and achieves state-of-the-art performance across a range of challenging benchmarks.",
+      "authors": [
+        "Xin Cheng",
+        "Shuo He",
+        "Lang Feng",
+        "HaiYang Xu",
+        "Ming Yan",
+        "Lei Feng",
+        "Bo An"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-26T08:23:34+00:00",
+      "link": "https://arxiv.org/pdf/2605.26684v2",
+      "tags": [
+        "keyword:masrl",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "graph-based credit assignment for agentic RL, improving step-level attribution",
+      "llm_evidence_cn": "面向智能体强化学习的图基信用分配，改进步骤级归因",
+      "llm_evidence": "面向智能体强化学习的图基信用分配，改进步骤级归因",
+      "canonical_evidence": "面向智能体强化学习的图基信用分配，改进步骤级归因",
+      "llm_tldr_en": "GraphGPO aggregates rollout trajectories into a state-transition graph and estimates state distances for fine-grained step-level credit assignment in agentic RL.",
+      "llm_tldr_cn": "现有组强化学习方法在智能体任务中依赖粗粒度轨迹级信用分配，忽略有价值步骤。本文提出GraphGPO，将多条轨迹聚合为状态转移图，通过估计各状态到成功终点的距离实现步骤级信用分配。在LLM智能体推理和工具使用任务中，GraphGPO显著提升了学习效率和任务成功率，为智能体强化学习提供了更精细的信用分配方法。",
+      "llm_tldr": "现有组强化学习方法在智能体任务中依赖粗粒度轨迹级信用分配，忽略有价值步骤。本文提出GraphGPO，将多条轨迹聚合为状态转移图，通过估计各状态到成功终点的距离实现步骤级信用分配。在LLM智能体推理和工具使用任务中，GraphGPO显著提升了学习效率和任务成功率，为智能体强化学习提供了更精细的信用分配方法。",
+      "llm_tags": [
+        "query:agent-papers:composite"
+      ],
+      "matched_query_tag": "query:agent-papers:composite",
+      "matched_query_text": "Papers central to 近期 LLM Agent 强化学习、递归智能体、自进化智能体等相关论文, especially work that connects or combines: recursive self-improving agents for complex tasks; self-improving agents through reinforcement learning; self-evolving recursive agent; Search for recursive agents with self improvement mechanisms; Agentic reinforcement learning for large language model agents with recursive self improvement; Multi agent collaboration and long horizon reasoning in complex task solving.",
+      "matched_requirement_id": "req-composite-agent-papers",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    }
+  ]
+}
