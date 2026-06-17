@@ -6,73 +6,57 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-06-08 ~ 2026-06-17
-- 运行时间：2026-06-17 05:03:47 UTC
+- 最新运行日期：2026-06-17
+- 运行时间：2026-06-17 21:29:50 UTC
 - 运行状态：成功
-- 本次总论文数：17
-- 精读区：6
-- 速读区：11
+- 本次总论文数：11
+- 精读区：5
+- 速读区：6
 
 ### 今日简报（AI）
-1) 本期聚焦多Agent协作与共识机制，精读两篇高分论文，速读三篇8分相关研究。  
-2) 最值得关注的是基于共识的通信与知识分享（CCKS）以及角色分解的多Agent训练方法，两者均旨在提升协作效率与质量。  
-3) 建议深入阅读CCKS与角色分解论文，后续可关注基于共识的ad hoc团队协作和世界模型中的队友建模方向。
-- 详情：[/20260608-20260617/README](/20260608-20260617/README)
+今日收录11篇论文，精读2篇、速读4篇，核心聚焦多智能体系统中通信效率与任务结构限制问题。
+
+精读推荐的《What Should Agents Say?》提出动作-状态通信方法提升多智能体协作效率，《Ahoy》则探索用大语言模型执行多智能体交互协议，是两篇高价值工作。
+
+建议重点关注异构智能体间的密集隐式通信《See What I See, Know What I Think》以及弹性共识机制《Resilient Consensus in Agentic AI》的后续应用。
+- 详情：[/202606/17/README](/202606/17/README)
 
 ### 精读区论文标签
-1. [CCKS: Consensus-based Communication and Knowledge Sharing](/20260608-20260617/2606.12281v1-ccks-consensus-based-communication-and-knowledge-sharing)  
-   标签：评分：10.0/10、query:masrl
-   evidence：基于共识的通信用于合作多智能体强化学习
-2. [Divide and Cooperate: Role-Decomposed Multi-Agent LLM Training with Cross-Agent Learning Signals](/20260608-20260617/2606.10684v1-divide-and-cooperate-role-decomposed-multi-agent-llm-training-with-cross-agent-learning-signals)  
-   标签：评分：9.0/10、query:masrl
-   evidence：基于角色分解的多智能体LLM训练与跨智能体信用分配
-3. [Role-Agent: Bootstrapping LLM Agents via Dual-Role Evolution](/20260608-20260617/2606.10917v1-role-agent-bootstrapping-llm-agents-via-dual-role-evolution)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：通过双角色自举实现自进化LLM agent
-4. [Phi-Actor-Critic: Steering General-Sum Games to Pareto-Efficient Correlated Equilibria](/20260608-20260617/2606.11284v1-phi-actor-critic-steering-general-sum-games-to-pareto-efficient-correlated-equilibria)  
-   标签：评分：9.0/10、query:masrl
-   evidence：面向一般和博弈的多智能体强化学习
-5. [Recursive Agent Harnesses](/20260608-20260617/2606.13643v1-recursive-agent-harnesses)  
-   标签：评分：9.0/10、query:agent-papers
-   evidence：递归智能体框架用于自改进多智能体推理
-6. [Graph-based Target Back-Propagation for Context Adaptation in Multi-LLM Agentic Systems](/20260608-20260617/2606.14155v1-graph-based-target-back-propagation-for-context-adaptation-in-multi-llm-agentic-systems)  
-   标签：评分：9.0/10、query:masrl
-   evidence：多LLM agent系统中的信用分配通过图反向传播
+1. [What Should Agents Say? Action-state Communication for Efficient Multi-Agent Systems](/202606/17/2606.05304v1-what-should-agents-say-action-state-communication-for-efficient-multi-agent-systems)  
+   标签：评分：8.0/10、query:masrl
+   evidence：优化多智能体LLM系统中的智能体间通信
+2. [Ahoy: LLMs Enacting Multiagent Interaction Protocols](/202606/17/2606.05390v1-ahoy-llms-enacting-multiagent-interaction-protocols)  
+   标签：评分：8.0/10、query:masrl
+   evidence：LLM智能体执行多智能体交互协议
+3. [Decentralized Multi-Agent Systems with Shared Context](/202606/17/2606.10662v1-decentralized-multi-agent-systems-with-shared-context)  
+   标签：评分：8.0/10、query:masrl
+   evidence：通过共享上下文实现去中心化多智能体通信
+4. [HERO: Hindsight-Enhanced Reflection from Environment Observations for Agentic Self-Distillation](/202606/17/2606.11559v1-hero-hindsight-enhanced-reflection-from-environment-observations-for-agentic-self-distillation)  
+   标签：评分：8.0/10、query:masrl
+   evidence：通过事后反思进行强化学习信用分配
+5. [The Internet of Agentic AI: Communication, Coordination, and Collective Intelligence at Scale](/202606/17/2606.12835v1-the-internet-of-agentic-ai-communication-coordination-and-collective-intelligence-at-scale)  
+   标签：评分：8.0/10、query:masrl
+   evidence：多智能体通信与协调
 
 ### 速读区论文标签
-1. [PatchBoard: Schema-Grounded State Mutation for Reliable and Auditable LLM Multi-Agent Collaboration](/20260608-20260617/2605.29313v1-patchboard-schema-grounded-state-mutation-for-reliable-and-auditable-llm-multi-agent-collaboration)  
+1. [See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents](/202606/17/2606.13594v1-see-what-i-see-know-what-i-think-dense-latent-communication-across-heterogeneous-agents)  
    标签：评分：8.0/10、query:masrl
-   evidence：基于schema的状态突变用于可靠的LLM多智能体协作
-2. [CONCAT: Consensus- and Confidence-Driven Ad Hoc Teaming for Efficient LLM-Based Multi-Agent Systems](/20260608-20260617/2605.29612v1-concat-consensus--and-confidence-driven-ad-hoc-teaming-for-efficient-llm-based-multi-agent-systems)  
+   evidence：异构智能体间利用KV缓存的密集潜在通信
+2. [How Task Structure Limits Multi-Agent Success: An Information-Theoretic Analysis](/202606/17/2606.13733v1-how-task-structure-limits-multi-agent-success-an-information-theoretic-analysis)  
    标签：评分：8.0/10、query:masrl
-   evidence：基于共识和置信度的无训练即兴组队框架，用于LLM多智能体系统
-3. [Dreaming Of Others: Latent Teammate Modeling In World Models For Multi-Agent Reinforcement Learning](/20260608-20260617/2605.31361v1-dreaming-of-others-latent-teammate-modeling-in-world-models-for-multi-agent-reinforcement-learning)  
+   evidence：多智能体协作限制的信息论分析
+3. [Resilient Consensus in Agentic AI](/202606/17/2606.15024v1-resilient-consensus-in-agentic-ai)  
    标签：评分：8.0/10、query:masrl
-   evidence：在多智能体强化学习的世界模型中进行潜在队友建模
-4. [Episodic Memory Temporal Consistency for Cooperative Multi-Agent Reinforcement Learning](/20260608-20260617/2606.04492v1-episodic-memory-temporal-consistency-for-cooperative-multi-agent-reinforcement-learning)  
+   evidence：多智能体共识与合作
+4. [Multi-agent Framework for Time-Sensitive Complementary Collaboration in Minecraft](/202606/17/2606.15684v1-multi-agent-framework-for-time-sensitive-complementary-collaboration-in-minecraft)  
    标签：评分：8.0/10、query:masrl
-   evidence：基于情节记忆时间一致性的合作多智能体强化学习，应对稀疏奖励
-5. [Claw-R1: A Step-Level Data Middleware System for Agentic Reinforcement Learning](/20260608-20260617/2606.09138v1-claw-r1-a-step-level-data-middleware-system-for-agentic-reinforcement-learning)  
-   标签：评分：7.0/10、query:masrl
-   evidence：智能体强化学习训练数据中间件
-6. [3SPO: State-Score-Supervised Policy Optimization for LLM Agents](/20260608-20260617/2606.09961v1-3spo-state-score-supervised-policy-optimization-for-llm-agents)  
-   标签：评分：7.0/10、query:agent-papers
-   evidence：面向LLM agent的状态评分监督策略优化，实现单步信用分配
-7. [Effective Reinforcement Learning for Agentic Search by Recycling Zero-Variance Queries During Training](/20260608-20260617/2606.10709v1-effective-reinforcement-learning-for-agentic-search-by-recycling-zero-variance-queries-during-training)  
-   标签：评分：7.0/10、query:agent-papers
-   evidence：训练LLM agent的强化学习零方差查询回收
-8. [Reward Modeling for Multi-Agent Orchestration](/20260608-20260617/2606.13598v1-reward-modeling-for-multi-agent-orchestration)  
-   标签：评分：7.0/10、query:masrl
-   evidence：多智能体LLM编排的奖励建模
-9. [Game-Theoretic Area Coverage Control with Cooperative-Adversarial Multi-Agent Systems](/20260608-20260617/2606.10201v1-game-theoretic-area-coverage-control-with-cooperative-adversarial-multi-agent-systems)  
-   标签：评分：6.0/10、query:masrl
-   evidence：合作-对抗多智能体区域覆盖博弈
-10. [Game-Theoretic Multi-Agent Control for Robust Contextual Reasoning in LLMs](/20260608-20260617/2606.10322v1-game-theoretic-multi-agent-control-for-robust-contextual-reasoning-in-llms)  
-   标签：评分：6.0/10、query:masrl
-   evidence：博弈论多智能体控制用于LLM上下文稳定
-11. [HIPIF: Hierarchical Planning and Information Folding for Long-Horizon LLM Agent Learning](/20260608-20260617/2606.10507v1-hipif-hierarchical-planning-and-information-folding-for-long-horizon-llm-agent-learning)  
-   标签：评分：6.0/10、query:agent-papers
-   evidence：长程LLM智能体学习，层次规划与信用分配
+   evidence：基于Minecraft的时间敏感互补多智能体协作
+5. [PACT: Privileged Trace Co-Training for Multi-Turn Tool-Use Agents](/202606/17/2606.16215v1-pact-privileged-trace-co-training-for-multi-turn-tool-use-agents)  
+   标签：评分：8.0/10、query:masrl
+   evidence：多轮智能体强化学习中的信用分配
+6. [Game-Theoretic Multi-Agent Reinforcement Learning for Swarm Trajectory Planning in Low-Altitude Wireless Networks](/202606/17/2606.16386v1-game-theoretic-multi-agent-reinforcement-learning-for-swarm-trajectory-planning-in-low-altitude-wireless-networks)  
+   标签：评分：8.0/10、query:masrl
+   evidence：多智能体强化学习的无人机轨迹规划
 
 
 <div class="dpr-home-promo-card">
