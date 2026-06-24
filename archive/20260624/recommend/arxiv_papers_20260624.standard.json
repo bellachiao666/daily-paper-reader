@@ -1,0 +1,274 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-06-24T21:04:33.014569+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 0,
+    "deep_divecandidates": 6,
+    "deep_cap": 5,
+    "deep_selected": 5,
+    "quick_candidates": 1,
+    "quick_skim_target": 10,
+    "quick_selected": 1
+  },
+  "deep_dive": [
+    {
+      "id": "2606.20701v1",
+      "source": "arxiv",
+      "title": "BARD-MARL: Byzantine-Agent Detection for Learned Communication in Multi-Agent Reinforcement Learning",
+      "abstract": "Learned communication improves coordination in cooperative multi-agent reinforcement learning, but it also creates a trust problem: a trained policy may route information through agents that have become faulty or adversarial. This paper studies Byzantine-agent detection for learned-communication MARL in adaptive traffic signal control. We propose BARD-MARL, a post-hoc diagnostic layer on top of BayesG, which is used as an attributed communication substrate rather than as a contribution of this paper. BARD-MARL combines two agent-level evidence streams: policy-graph features extracted from state-action trajectories and Bayesian trust statistics computed from BayesG latent mask probabilities. Across fixed-action, observation-flip, random-noise, and coordinated attacks in SUMO traffic grids, the results show that these signals are complementary rather than universally dominant. On a 25-agent grid, BARD-MARL reaches 0.843 AUC-ROC under a 10% observation-flip attack, while policy-graph-only detection reaches 0.917 AUC-ROC under a 10% coordinated attack. On a 100-agent grid, the unified BARD-MARL variant reaches 0.982 AUC-ROC for both 10% fixed-action and 10% coordinated attacks. The study shows that learned communication policies expose useful diagnostic evidence, but credible resilience claims require attack-specific ablations and explicit separation between coordination, detection, and mitigation.",
+      "authors": [
+        "Almond Kiruthu Murimi"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA",
+        "cs.DC",
+        "cs.LG"
+      ],
+      "published": "2026-06-15T13:52:25+00:00",
+      "link": "https://arxiv.org/pdf/2606.20701v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Byzantine-agent detection for learned communication in MARL",
+      "llm_evidence_cn": "多智能体强化学习中学习通信的拜占庭智能体检测",
+      "llm_evidence": "多智能体强化学习中学习通信的拜占庭智能体检测",
+      "canonical_evidence": "多智能体强化学习中学习通信的拜占庭智能体检测",
+      "llm_tldr_en": "BARD-MARL combines policy-graph features and Bayesian trust statistics to detect faulty or adversarial agents in learned-communication MARL.",
+      "llm_tldr_cn": "BARD-MARL研究合作多智能体强化学习中学习通信的信任问题。它提出一种事后诊断层，结合策略图特征和贝叶斯信任统计量来检测拜占庭智能体。在自适应交通信号控制场景中，该方法有效识别了固定动作和观察攻击下的恶意智能体，保障了通信的鲁棒性。",
+      "llm_tldr": "BARD-MARL研究合作多智能体强化学习中学习通信的信任问题。它提出一种事后诊断层，结合策略图特征和贝叶斯信任统计量来检测拜占庭智能体。在自适应交通信号控制场景中，该方法有效识别了固定动作和观察攻击下的恶意智能体，保障了通信的鲁棒性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.20701v1"
+    },
+    {
+      "id": "2606.20962v1",
+      "source": "arxiv",
+      "title": "Heterogeneous Policy Networks for Composite Robot Team Communication and Coordination",
+      "abstract": "High-performing human-human teams learn intelligent and efficient communication and coordination strategies to maximize their joint utility. These teams implicitly understand the different roles of heterogeneous team members and adapt their communication protocols accordingly. Multi-Agent Reinforcement Learning (MARL) has attempted to develop computational methods for synthesizing such joint coordination-communication strategies, but emulating heterogeneous communication patterns across agents with different state, action, and observation spaces has remained a challenge. Without properly modeling agent heterogeneity, as in prior MARL work that leverages homogeneous graph networks, communication becomes less helpful and can even deteriorate the team's performance. In the past, we proposed Heterogeneous Policy Networks (HetNet) to learn efficient and diverse communication models for coordinating cooperative heterogeneous teams. In this extended work, we extend Heterogeneous Policy Networks (HetNet) to support scaling heterogeneous robot teams. Building on heterogeneous graph-attention networks, we show that HetNet not only facilitates learning heterogeneous collaborative policies but also enables end-to-end training for learning highly efficient binarized messaging. Our empirical evaluation shows that HetNet sets a new state of the art in learning coordination and communication strategies for heterogeneous multi-agent teams by achieving an 5.84% to 707.65% performance improvement over the next-best baseline across multiple domains while simultaneously achieving a 200x reduction in the required communication bandwidth.",
+      "authors": [
+        "Esmaeil Seraj",
+        "Rohan Paleja",
+        "Luis Pimentel",
+        "Kin Man Lee",
+        "Zheyuan Wang",
+        "Daniel Martin",
+        "Matthew Sklar",
+        "John Zhang",
+        "Zahi Kakish",
+        "Matthew Gombolay"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.MA"
+      ],
+      "published": "2026-06-18T21:58:14+00:00",
+      "link": "https://arxiv.org/pdf/2606.20962v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "heterogeneous communication and coordination in MARL",
+      "llm_evidence_cn": "MARL中异质通信与协调",
+      "llm_evidence": "MARL中异质通信与协调",
+      "canonical_evidence": "MARL中异质通信与协调",
+      "llm_tldr_en": "Proposes Heterogeneous Policy Networks for MARL to model diverse communication patterns across agents with different capabilities, improving coordination and task performance in composite robot teams.",
+      "llm_tldr_cn": "现有MARL通信方法采用同构图网络，忽略了异质智能体间的不同通信协议。本文提出异质策略网络，显式建模不同状态、动作和观测空间的智能体间的通信模式。实验表明该方法提升了复合机器人团队的协调效率和任务成功率。",
+      "llm_tldr": "现有MARL通信方法采用同构图网络，忽略了异质智能体间的不同通信协议。本文提出异质策略网络，显式建模不同状态、动作和观测空间的智能体间的通信模式。实验表明该方法提升了复合机器人团队的协调效率和任务成功率。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.20962v1"
+    },
+    {
+      "id": "2606.21666v1",
+      "source": "arxiv",
+      "title": "Hallucination as Context Drift: Synchronization Protocols for Multi-Agent LLM Systems",
+      "abstract": "Multi-agent LLM systems routinely produce hallucinated outputs that cannot be explained by model deficiencies alone. A significant class of these failures arises not from model incapacity but from context drift: the divergence of internal knowledge states between concurrent agents. When agents enter a collaborative task with mismatched or stale representations of shared world state, their joint reasoning produces contradictions that manifest as hallucination. We define the Context Divergence Score (CDS), a lightweight scalar metric quantifying knowledge-state discrepancy between agent pairs across spatial, temporal, and task dimensions, and propose the Shared State Verification Protocol (SSVP), which lets agents periodically exchange compressed state summaries and flag high-divergence conditions before joint reasoning. We evaluate SSVP across two domains (multi-agent travel and software project planning) using Claude Haiku. In controlled experiments (n=30 per condition, travel; n=10, software) across 8 scenarios, naive full-broadcast synchronization increases hallucination rate by 34% above the no-sync baseline (HR: 0.658 vs. 0.492, p=0.0022, d=1.18), a contamination effect from propagating erroneous agent states. SSVP avoids this failure mode while showing modest, consistent reduction (HR: 0.463, d=0.30) and achieves significantly lower hallucination than full-broadcast (p=0.0005, d=1.47) using 58% fewer API calls. The contamination effect does not replicate in the software domain, where all conditions converge to low HR (<0.2), confirming it is specific to tasks where one erroneous shared belief cascades across evaluation dimensions. Our results reframe hallucination mitigation as a distributed systems problem and establish context synchronization as a first-class primitive in multi-agent LLM design.",
+      "authors": [
+        "Carson Rodrigues"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "published": "2026-06-19T18:17:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.21666v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent communication synchronization protocol",
+      "llm_evidence_cn": "多智能体通信同步协议",
+      "llm_evidence": "多智能体通信同步协议",
+      "canonical_evidence": "多智能体通信同步协议",
+      "llm_tldr_en": "Identifies context drift as a cause of hallucination in multi-agent LLM systems and proposes Shared State Verification Protocol (SSVP) for periodic knowledge-state synchronization.",
+      "llm_tldr_cn": "多智能体LLM系统的幻觉问题不仅源于模型缺陷，还因智能体间上下文漂移导致。本文定义上下文分歧分数（CDS）量化知识状态差异，并提出共享状态验证协议（SSVP），使智能体定期交换和同步上下文，减少联合推理中的矛盾。实验证明该协议有效降低幻觉率，提升了协作推理的可靠性。",
+      "llm_tldr": "多智能体LLM系统的幻觉问题不仅源于模型缺陷，还因智能体间上下文漂移导致。本文定义上下文分歧分数（CDS）量化知识状态差异，并提出共享状态验证协议（SSVP），使智能体定期交换和同步上下文，减少联合推理中的矛盾。实验证明该协议有效降低幻觉率，提升了协作推理的可靠性。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent communication",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.21666v1"
+    },
+    {
+      "id": "2606.22995v1",
+      "source": "arxiv",
+      "title": "Group-Graph Policy Optimization for Long-Horizon Agentic Reinforcement Learning",
+      "abstract": "Group-based Reinforcement Learning (RL) has significantly enhanced Large Language Models (LLMs) in agentic scenarios. To achieve finer-grained policy updates, recent agentic RL frameworks have shifted from trajectory-level to step-level training. However, long-horizon agentic RL suffers from severe reward sparsity and delay, as feedback is often deferred for dozens of interaction steps. While existing step-level frameworks refine training granularity, their credit assignment remains coarse-grained and still treats agent exploration as isolated, linear trajectories. This oversimplified perspective ignores the inherent graph structure of state transitions, leading to high-variance state-value estimation and myopic, localized credit assignment. To overcome these critical bottlenecks, we propose Group-Graph Policy Optimization (G2PO), a novel group-based RL algorithm tailored for multi-turn agentic tasks. G2PO explicitly transforms linear interaction trajectories into a global state-transition graph. By aggregating identical observations across different trajectories, we introduce group-aggregation state-value estimation that reduces sampling variance and trajectory-dependent bias. Furthermore, we redefine agent actions as transitions between state nodes and propose an edge-centric advantage estimation strategy. By globally standardizing Temporal Difference (TD) errors across the entire graph, G2PO explicitly identifies and prioritizes critical transitions that drive absolute task progress. Extensive experiments on representative long-horizon benchmarks-WebShop, ALFWorld, and AppWorld-demonstrate that G2PO substantially outperforms state-of-the-art prompt-based and RL baselines, achieving remarkable success rate improvements of up to 22.2% over GRPO.",
+      "authors": [
+        "Yunan Wang",
+        "Minghui Song",
+        "Zihan Zhang",
+        "Shaohan Huang",
+        "Haizhen Huang",
+        "Furu Wei",
+        "Weiwei Deng",
+        "Feng Sun",
+        "Qi Zhang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-22T08:12:47+00:00",
+      "link": "https://arxiv.org/pdf/2606.22995v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "credit assignment in long-horizon agentic reinforcement learning",
+      "llm_evidence_cn": "长程智能体强化学习中的信用分配",
+      "llm_evidence": "长程智能体强化学习中的信用分配",
+      "canonical_evidence": "长程智能体强化学习中的信用分配",
+      "llm_tldr_en": "Group-Graph Policy Optimization addresses reward sparsity in long-horizon agentic RL by modeling state transitions as a graph for fine-grained credit assignment.",
+      "llm_tldr_cn": "长程智能体强化学习面临严重的奖励稀疏和延迟问题，现有步级训练虽细化粒度但信用分配仍粗放。本文提出组图策略优化（Group-Graph PO），将状态转移建模为图结构，利用图神经网络估计状态值，从而更精细地分配信用。在多个长程智能体任务中，该方法在收敛速度和最终性能上均优于基线，有效缓解了局部信用分配问题。",
+      "llm_tldr": "长程智能体强化学习面临严重的奖励稀疏和延迟问题，现有步级训练虽细化粒度但信用分配仍粗放。本文提出组图策略优化（Group-Graph PO），将状态转移建模为图结构，利用图神经网络估计状态值，从而更精细地分配信用。在多个长程智能体任务中，该方法在收敛速度和最终性能上均优于基线，有效缓解了局部信用分配问题。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "credit assignment in multi-agent RL",
+      "matched_requirement_id": "req-10",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.22995v1"
+    },
+    {
+      "id": "2606.24010v1",
+      "source": "arxiv",
+      "title": "Safe and Generalizable Hierarchical Multi-Agent RL via Constraint Manifold Control",
+      "abstract": "Multi-agent systems are widely used in safety-critical applications that require coordinated behavior under strict safety constraints. Existing approaches face a fundamental trade-off: learning-based methods achieve strong empirical performance but lack theoretical safety guarantees, while control-theoretic methods enforce safety but often lead to overly conservative and inefficient behaviors. We propose a hierarchical multi-agent reinforcement learning framework that enforces hard safety constraints under mild assumptions at low level via a constraint manifold, while enabling effective coordination through high-level policy learning. Our approach provides theoretical safety guarantees in the multi-agent setting and yields stationary learning dynamics, thereby enabling stable and efficient training. Empirically, our method achieves competitive performance while maintaining nearly perfect safety rates, and generalizes effectively to varying numbers of agents and obstacles.",
+      "authors": [
+        "Zihao Guo",
+        "Jianing Zhao",
+        "Ling Li",
+        "Hao Liang",
+        "Giuseppe Loianno",
+        "Yali Du"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-22T23:32:23+00:00",
+      "link": "https://arxiv.org/pdf/2606.24010v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "hierarchical multi-agent reinforcement learning with safety guarantees",
+      "llm_evidence_cn": "具有安全性保证的分层多智能体强化学习",
+      "llm_evidence": "具有安全性保证的分层多智能体强化学习",
+      "canonical_evidence": "具有安全性保证的分层多智能体强化学习",
+      "llm_tldr_en": "Proposes a hierarchical multi-agent RL framework that enforces hard safety constraints via a constraint manifold while enabling effective coordination.",
+      "llm_tldr_cn": "安全关键多智能体系统需要在协调中保证安全性，但现有方法在安全保证和性能间存在权衡。本文提出分层多智能体强化学习框架，低层通过约束流形强制执行硬安全约束，高层学习策略以实现有效协调。在多个安全关键多智能体任务中，该方法在满足严格安全约束的同时，实现了接近最优的协调性能，并展示了良好的泛化能力。",
+      "llm_tldr": "安全关键多智能体系统需要在协调中保证安全性，但现有方法在安全保证和性能间存在权衡。本文提出分层多智能体强化学习框架，低层通过约束流形强制执行硬安全约束，高层学习策略以实现有效协调。在多个安全关键多智能体任务中，该方法在满足严格安全约束的同时，实现了接近最优的协调性能，并展示了良好的泛化能力。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.24010v1"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2606.24601v1",
+      "source": "arxiv",
+      "title": "ASALT: Adaptive State Alignment for Lateral Transfer in Multi-agent Reinforcement Learning",
+      "abstract": "Multi-agent reinforcement learning (MARL) addresses the problem of training multiple agents that pursue collaborative, competitive, or mixed objectives. Prior work has investigated transfer learning between source and target domains in MARL; however, the majority of existing approaches impose the constraint that the dimensionalities of the observation space and the global state space must be identical across domains. In this paper, we introduce a method that explicitly accommodates mismatched state-space dimensionalities between source and target domains. The proposed approach, ASALT, incorporates both observation-level and state-level adapters that map the target-domain observations and global states into a shared embedding space, thereby enabling more effective transfer of knowledge across both actors and critics. These adapters can generate embeddings that support efficient strategy transfer across heterogeneous domains. Experimental results on multiple configurations in standard benchmark environments demonstrate that ASALT surpasses existing baselines in terms of sample efficiency and global return in cooperative settings, but its effectiveness depends on the degree of mismatch between source and target domains. Furthermore, our findings indicate that ASALT mitigates negative transfer, which frequently constitutes a major obstacle when transferring policies between domains with differing observation and action spaces.",
+      "authors": [
+        "Anurag Akula",
+        "Satheesh K. Perepu",
+        "Abhishek Sarkar",
+        "Kaushik Dey"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-06-23T14:03:36+00:00",
+      "link": "https://arxiv.org/pdf/2606.24601v1",
+      "tags": [
+        "keyword:Agent-Papers",
+        "keyword:masrl",
+        "query:Agent-Papers",
+        "query:masrl"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent reinforcement learning with transfer learning across different state dimensionalities",
+      "llm_evidence_cn": "多智能体强化学习，处理不同状态维度的迁移学习",
+      "llm_evidence": "多智能体强化学习，处理不同状态维度的迁移学习",
+      "canonical_evidence": "多智能体强化学习，处理不同状态维度的迁移学习",
+      "llm_tldr_en": "ASALT introduces a multi-agent RL transfer method that adapts to mismatched state space dimensions using observation-level and state-level adapters.",
+      "llm_tldr_cn": "ASALT提出了一种多智能体强化学习迁移方法，通过观测级和状态级适配器，将目标域观测和全局状态映射到共享嵌入空间，从而允许源域和目标域状态维度不同。该方法扩展了MARL迁移的适用性，实验表明其能有效提升迁移性能。",
+      "llm_tldr": "ASALT提出了一种多智能体强化学习迁移方法，通过观测级和状态级适配器，将目标域观测和全局状态映射到共享嵌入空间，从而允许源域和目标域状态维度不同。该方法扩展了MARL迁移的适用性，实验表明其能有效提升迁移性能。",
+      "llm_tags": [
+        "query:masrl"
+      ],
+      "matched_query_tag": "query:masrl",
+      "matched_query_text": "multi-agent reinforcement learning",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2606.24601v1",
+      "quick_tier": "8plus"
+    }
+  ]
+}
